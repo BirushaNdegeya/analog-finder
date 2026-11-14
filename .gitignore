@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environments & IDEs
+.env
+.venv
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Large Geospatial Datasets (keep raw raster files out of git)
+data/raw/*
+!data/raw/.gitkeep
+data/raw/targets/*
+!data/raw/targets/.gitkeep
+data/raw/climate/*
+!data/raw/climate/.gitkeep
+
+# Streamlit
+.streamlit/

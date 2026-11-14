@@ -1,0 +1,24 @@
+# Target Planetary Site Profiles
+# NASA Space Apps Challenge 2026 - GeoCongo AI
+#
+# Topography: derived directly from planetary DEM (LOLA on Lunar Reconnaissance Orbiter / MOLA on Mars Global Surveyor).
+# Other indicators: expected parameters with peer-reviewed literature citations.
+# Values with null are omitted without penalizing missing criteria (relative confidence reflects data completeness).
+
+marius_hills:
+  name: "Marius Hills (Moon)"
+  body: "Moon"
+  lat: 14.1
+  lon: -56.0
+  lead_collector: "Gérard"
+  dem_raster: "data/raw/targets/marius_hills_dem.tif"  # High-resolution LOLA/LROC metric DEM
+  reference_catalog: "https://pgda.gsfc.nasa.gov/search?quicksearchcat=89"
+  description: "Volcanic dome complex in Oceanus Procellarum featuring the Marius Hills pit crater (probable lava tube skylight)."
+  indicators:
+    basalte:            {mean: null, std: null, source: "Clementine / LRO spectral data (Oceanus Procellarum mare basalt composition)"}
+    oxydes_fer:         {mean: null, std: null, source: "Lunar Prospector FeO wt% baseline maps"}
+    argiles:            {mean: null, std: null, source: "Expected ~0 (negligible aqueous alteration on lunar surface)"}
+    sol_nu:             {mean: null, std: null, source: "Expected 1.0 (zero vegetative cover)"}
+    aridite:            {mean: null, std: null, source: "Expected 0.0 mm/yr (total absence of precipitation)"}
+    cavites:            {mean: null, std: null, source: "Marius Hills Pit Crater skylight (JAXA SELENE / NASA LROC inventory)"}
+    basalte_accessible: {mean: null, std: null, source: "Mare basalt regolith interface"}

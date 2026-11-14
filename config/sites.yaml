@@ -1,0 +1,83 @@
+# Candidate Sites for Terrestrial Planetary Analogs
+# Bounding box format: [west, south, east, north] in degrees (EPSG:4326), ~20-30 km window.
+# NASA Space Apps Challenge 2026 - GeoCongo AI Team
+
+target: marius_hills
+expected_top:            # Sites expected to rank highest for basaltic lunar target
+  - hawaii
+  - lanzarote
+  - lava_beds
+negative_control: foret_congo
+
+sites:
+  - id: virunga
+    name: "Virunga Volcanic Province (DR Congo)"
+    role: case_study
+    bbox: [29.10, -1.60, 29.40, -1.35]
+    lead_collector: "Nicolas"
+    processes: "Active alkaline volcanism, fresh basaltic lava flows, collapse pits, Nyamuragira lava tubes."
+    local_data: "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions)."
+
+  - id: harrat_khaybar
+    name: "Harrat Khaybar (Saudi Arabia)"
+    role: candidate_lesser_known
+    bbox: [39.80, 25.60, 40.00, 25.80]
+    lead_collector: "Nicolas"
+    processes: "Intraplate bimodal volcanic field, extensive basaltic lava tubes (Umm Jirsan), hyper-arid preservation."
+    local_data: "Morphological inventory of lava tubes, Copernicus DEM and Sentinel-2 composites."
+
+  - id: suswa
+    name: "Mount Suswa Caldera (Kenya)"
+    role: candidate_lesser_known
+    bbox: [36.25, -1.27, 36.45, -1.07]
+    lead_collector: "Diego"
+    processes: "Shield volcano with double caldera, complex braided lava tube networks in phonolitic-trachytic rocks."
+    local_data: "Speleological survey literature and satellite terrain models."
+
+  - id: hawaii
+    name: "Hawaii (Kilauea / Mauna Loa, USA)"
+    role: known_analog
+    bbox: [-155.40, 19.33, -155.20, 19.53]
+    lead_collector: "Diego"
+    processes: "Active tholeiitic shield basalt, extensive pahoehoe flow fields, active and relict lava tubes, NASA analog test site."
+    local_data: "USGS Hawaiian Volcano Observatory geological maps and high-res DEMs."
+
+  - id: lanzarote
+    name: "Lanzarote - Timanfaya (Canary Islands, Spain)"
+    role: known_analog
+    bbox: [-13.85, 28.93, -13.65, 29.07]
+    lead_collector: "Bosworth"
+    processes: "Historical basaltic fissure eruptions (1730-1736), pristine volcanic terrain, ESA PANGAEA astronaut training site."
+    local_data: "Simplified geological map of Lanzarote (ResearchGate) and CHELSA / Meteostat climate records."
+
+  - id: lava_beds
+    name: "Lava Beds National Monument (California, USA)"
+    role: known_analog
+    bbox: [-121.60, 41.62, -121.40, 41.80]
+    lead_collector: "Bosworth"
+    processes: "Medicine Lake basaltic shield volcano, highest concentration of accessible lava tube caves in North America."
+    local_data: "NPS Geodiversity Atlas geological map and USGS 3DEP elevation products."
+
+  - id: atacama
+    name: "Atacama Desert (Chile)"
+    role: cross_validation
+    bbox: [-70.10, -24.20, -69.90, -24.00]
+    lead_collector: "Nicolas"
+    processes: "Extreme hyper-aridity, high solar radiation, duricrusts, severe lack of vegetation; Mars analog control."
+    local_data: "Regional geological and meteorological observatory data."
+
+  - id: vallee_mort
+    name: "Death Valley (California, USA)"
+    role: cross_validation
+    bbox: [-116.97, 36.35, -116.77, 36.55]
+    lead_collector: "Diego"
+    processes: "Extensional tectonic basin, alluvial fans, salt flats, extreme thermal amplitude and aridity."
+    local_data: "USGS geological maps and weather station series."
+
+  - id: foret_congo
+    name: "Central Congo Rainforest (DR Congo)"
+    role: negative_control
+    bbox: [21.90, -0.10, 22.10, 0.10]
+    lead_collector: "Bosworth"
+    processes: "Dense equatorial canopy, high annual rainfall (>1800 mm), deep organic soils, total lack of planetary analog fidelity."
+    local_data: "NASA/Copernicus global datasets for negative control verification."
