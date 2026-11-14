@@ -224,30 +224,55 @@ For geohazard monitoring, the ingestion pipeline loads paired multi-temporal sce
 
 ---
 
-## 7. Execution & Decision-Support Dashboard
+## 7. Execution, Decision-Support Dashboard & REST API
 
-### 1. Execute Pipeline
+### 7.1 Execute Dual-Mode Pipeline
+
+The pipeline operates in three modes: `analog` (planetary simulation), `temporal` (geohazard deformation), or `all`:
 
 ```bash
-# Option A: Synthetic mode (for testing pipeline and UI without network or external rasters)
-python -m analog_finder.pipeline --synthetic
+# Synthetic demo mode (safe offline run — fast and fully populated)
+python -m analog_finder.pipeline --mode all --synthetic
 
-# Option B: Real satellite mode (queries Planetary Computer STAC + local rasters)
-python -m analog_finder.pipeline
+# Mode A only: Planetary analog scoring (writes data/processed/scores.json)
+python -m analog_finder.pipeline --mode analog --synthetic
+
+# Mode B only: Geohazard risk monitoring (writes data/processed/changes.json)
+python -m analog_finder.pipeline --mode temporal --synthetic
+
+# Real satellite mode (Planetary Computer STAC + local rasters)
+python -m analog_finder.pipeline --mode all
 ```
 
-The pipeline writes results to `data/processed/scores.json`, containing:
-- Candidate sites ranked with Wasserstein similarity across the 8 indicators.
-- Per-criterion scores (`topography`, `geology`, `environment`, `resources`).
-- Global similarity score weighted dynamically.
-- Scientific validity card with 5 classification buckets.
-- Spearman sensitivity validation metrics and negative control ranking.
+Output artifacts:
+- `data/processed/scores.json`: Candidate sites ranked by Wasserstein distance relative to the planetary target.
+- `data/processed/changes.json`: Multi-temporal deformation indices, KS-test significance, and 4-tier alert status for geohazard zones.
 
-### 2. Launch the Streamlit Interactive Dashboard
+### 7.2 Launch the Streamlit Interactive Dashboard
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
+
+### 7.3 Launch the FastAPI REST Backend
+
+Analog Finder exposes an enterprise-grade REST API powering external GIS clients, municipal early-warning dashboards, and mission planning systems:
+
+```bash
+uvicorn analog_finder.api.app:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Interactive documentation and OpenAPI Swagger UI:
+- **Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+#### Key Endpoints:
+- `GET /v1/health` : Engine status, version, and active mathematical transport modules.
+- `GET /v1/sites` : Catalog of terrestrial analog candidates (`sites.yaml`).
+- `GET /v1/targets` : Catalog of lunar and Martian targets (`targets.yaml`).
+- `GET /v1/temporal-pairs` : Catalog of monitored geohazard zones (`temporal_pairs.yaml`).
+- `GET /v1/indicators` : Complete definitions, physical units, and criteria mappings.
+- `POST /v1/analyze` : Unified analysis engine accepting either `mode="analog"` or `mode="temporal"`.
 
 #### Dashboard Features:
 1. **Interactive Global Map & Ranking**:
