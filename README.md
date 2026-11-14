@@ -158,3 +158,45 @@ Precipitation  ──→  "aridite"
 
 > [!TIP]
 > The Sentinel-2 reflectance formula `(DN − 1000) / 10 000` applies to **ESA Baseline ≥ 04.00** (January 2022 onward). Values are clipped to `[0.0, 1.0]` to suppress physically meaningless negative reflectances on dark basalt in shadow.
+
+---
+
+## 7. Execution & Decision-Support Dashboard
+
+### 1. Execute Pipeline
+
+```bash
+# Option A: Synthetic mode (for testing pipeline and UI without network or external rasters)
+python -m analog_finder.pipeline --synthetic
+
+# Option B: Real satellite mode (queries Planetary Computer STAC + local rasters)
+python -m analog_finder.pipeline
+```
+
+The pipeline writes results to `data/processed/scores.json`, containing:
+- Candidate sites ranked with Wasserstein similarity across the 8 indicators.
+- Per-criterion scores (`topography`, `geology`, `environment`, `resources`).
+- Global similarity score weighted dynamically.
+- Scientific validity card with 5 classification buckets.
+- Spearman sensitivity validation metrics and negative control ranking.
+
+### 2. Launch the Streamlit Interactive Dashboard
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+#### Dashboard Features:
+1. **Interactive Global Map & Ranking**:
+   - Georeferenced view of candidate sites color-coded by similarity tier (Green: $\ge 0.70$, Yellow: $0.40 - 0.70$, Red: $< 0.40$).
+   - Symbolic lunar/Martian target reference coordinates.
+   - Dynamic weight sliders in the sidebar enabling custom mission scenario tuning.
+2. **Site Detail & Scientific Validity Card**:
+   - Radar chart profile comparing multi-criteria performance.
+   - Qualitative analog validity card categorizing reproduced vs. non-reproduced parameters.
+   - Recommended testable use cases (e.g. mobility, drill testing, EVA logistics).
+   - Median measured indicator values vs. target values.
+3. **Validation Tab**:
+   - Automated rank verification for known lunar analogs.
+   - Negative control verification (confirming non-analogs like rainforest rank last).
+   - Dirichlet Monte Carlo sensitivity analysis ($\rho$ stability score).

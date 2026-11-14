@@ -1,0 +1,1038 @@
+{
+  "synthetic": true,
+  "target": {
+    "id": "marius_hills",
+    "name": "Marius Hills (Moon)",
+    "lat": 14.1,
+    "lon": -56.0
+  },
+  "sites": [
+    {
+      "id": "virunga",
+      "name": "Virunga Volcanic Province (DR Congo)",
+      "role": "case_study",
+      "lat": -1.475,
+      "lon": 29.25,
+      "indicators": {
+        "pente": 0.7712,
+        "rugosite": 0.7995,
+        "basalte": 0.6138,
+        "oxydes_fer": 0.0526,
+        "argiles": 0.3292,
+        "sol_nu": 0.5593,
+        "aridite": 0.9686,
+        "cavites": 0.0,
+        "basalte_accessible": 0.9009
+      },
+      "criteria": {
+        "topographie": 0.7854,
+        "geologie": 0.3319,
+        "environnement": 0.7639,
+        "ressources": 0.4504
+      },
+      "confidence": 1.0,
+      "global": 0.5829,
+      "explanation": "Strong analog match: Topography, Environment. Low resemblance: Geology.",
+      "values": {
+        "pente": {
+          "site": 9.315990483731209,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 2.489597992211099,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.45310989089958764,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 0.7291771503250035,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.4460924984545962,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.9745154446493669,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 347.69797839007094,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.02508234773977503,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.5412858848040925,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Topography",
+          "Environment"
+        ],
+        "partiel": [
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [
+          "Geology"
+        ],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Active alkaline volcanism, fresh basaltic lava flows, collapse pits, Nyamuragira lava tubes.",
+      "local_data": "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions)."
+    },
+    {
+      "id": "harrat_khaybar",
+      "name": "Harrat Khaybar (Saudi Arabia)",
+      "role": "candidate_lesser_known",
+      "lat": 25.700000000000003,
+      "lon": 39.9,
+      "indicators": {
+        "pente": 0.6872,
+        "rugosite": 0.6914,
+        "basalte": 0.7711,
+        "oxydes_fer": 0.6571,
+        "argiles": 0.3563,
+        "sol_nu": 0.5213,
+        "aridite": 0.9771,
+        "cavites": 0.3295,
+        "basalte_accessible": 0.8371
+      },
+      "criteria": {
+        "topographie": 0.6893,
+        "geologie": 0.5948,
+        "environnement": 0.7492,
+        "ressources": 0.5833
+      },
+      "confidence": 1.0,
+      "global": 0.6541,
+      "explanation": "Strong analog match: Environment.",
+      "values": {
+        "pente": {
+          "site": 9.843923955950864,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 2.231040305845041,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.5458477289942107,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.3665822340677856,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.4349207290424815,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 1.0151335271386208,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 331.4817749951683,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.01635247921348754,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.4227967362336513,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Environment"
+        ],
+        "partiel": [
+          "Topography",
+          "Geology",
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Intraplate bimodal volcanic field, extensive basaltic lava tubes (Umm Jirsan), hyper-arid preservation.",
+      "local_data": "Morphological inventory of lava tubes, Copernicus DEM and Sentinel-2 composites."
+    },
+    {
+      "id": "suswa",
+      "name": "Mount Suswa Caldera (Kenya)",
+      "role": "candidate_lesser_known",
+      "lat": -1.17,
+      "lon": 36.35,
+      "indicators": {
+        "pente": 0.4447,
+        "rugosite": 0.8559,
+        "basalte": 0.6587,
+        "oxydes_fer": 0.3534,
+        "argiles": 0.0,
+        "sol_nu": 0.959,
+        "aridite": 0.9901,
+        "cavites": 0.0781,
+        "basalte_accessible": 0.6681
+      },
+      "criteria": {
+        "topographie": 0.6503,
+        "geologie": 0.3374,
+        "environnement": 0.9745,
+        "ressources": 0.3731
+      },
+      "confidence": 1.0,
+      "global": 0.5838,
+      "explanation": "Strong analog match: Environment. Low resemblance: Geology, In-Situ Resources.",
+      "values": {
+        "pente": {
+          "site": 11.339127423416297,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 2.670465441600358,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.9184473576727413,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.513248593891794,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.6377063425626703,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.6975350423662099,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 284.3640670053644,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.015122282386369678,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.6614677980016255,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Environment"
+        ],
+        "partiel": [
+          "Topography"
+        ],
+        "non_reproduit": [
+          "Geology",
+          "In-Situ Resources"
+        ],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability"
+        ]
+      },
+      "processes": "Shield volcano with double caldera, complex braided lava tube networks in phonolitic-trachytic rocks.",
+      "local_data": "Speleological survey literature and satellite terrain models."
+    },
+    {
+      "id": "hawaii",
+      "name": "Hawaii (Kilauea / Mauna Loa, USA)",
+      "role": "known_analog",
+      "lat": 19.43,
+      "lon": -155.3,
+      "indicators": {
+        "pente": 0.9309,
+        "rugosite": 0.6605,
+        "basalte": 0.6851,
+        "oxydes_fer": 0.5822,
+        "argiles": 0.1259,
+        "sol_nu": 0.7292,
+        "aridite": 0.9907,
+        "cavites": 0.6008,
+        "basalte_accessible": 0.7464
+      },
+      "criteria": {
+        "topographie": 0.7957,
+        "geologie": 0.4644,
+        "environnement": 0.8599,
+        "ressources": 0.6736
+      },
+      "confidence": 1.0,
+      "global": 0.6984,
+      "explanation": "Strong analog match: Topography, Environment.",
+      "values": {
+        "pente": {
+          "site": 7.661311593671057,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 3.8264457572889956,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.9013545026657495,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.409638425410245,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.5671123880259636,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.8747421054603864,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 306.96935677363666,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.02187179822559289,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.62812608780882,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Topography",
+          "Environment"
+        ],
+        "partiel": [
+          "Geology",
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Active tholeiitic shield basalt, extensive pahoehoe flow fields, active and relict lava tubes, NASA analog test site.",
+      "local_data": "USGS Hawaiian Volcano Observatory geological maps and high-res DEMs."
+    },
+    {
+      "id": "lanzarote",
+      "name": "Lanzarote - Timanfaya (Canary Islands, Spain)",
+      "role": "known_analog",
+      "lat": 29.0,
+      "lon": -13.75,
+      "indicators": {
+        "pente": 0.4562,
+        "rugosite": 0.9553,
+        "basalte": 0.6834,
+        "oxydes_fer": 0.0,
+        "argiles": 0.6427,
+        "sol_nu": 0.8893,
+        "aridite": 0.9859,
+        "cavites": 0.4781,
+        "basalte_accessible": 0.5282
+      },
+      "criteria": {
+        "topographie": 0.7057,
+        "geologie": 0.4421,
+        "environnement": 0.9376,
+        "ressources": 0.5031
+      },
+      "confidence": 1.0,
+      "global": 0.6471,
+      "explanation": "Strong analog match: Topography, Environment.",
+      "values": {
+        "pente": {
+          "site": 11.282866775990659,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 2.9868719003405575,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.9096351666526332,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.697495244341771,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.2808454750131135,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.7718973463935463,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 319.5230409890113,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.017033432654977365,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.7331377429380531,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Topography",
+          "Environment"
+        ],
+        "partiel": [
+          "Geology",
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Historical basaltic fissure eruptions (1730-1736), pristine volcanic terrain, ESA PANGAEA astronaut training site.",
+      "local_data": "Simplified geological map of Lanzarote (ResearchGate) and CHELSA / Meteostat climate records."
+    },
+    {
+      "id": "lava_beds",
+      "name": "Lava Beds National Monument (California, USA)",
+      "role": "known_analog",
+      "lat": 41.709999999999994,
+      "lon": -121.5,
+      "indicators": {
+        "pente": 0.5093,
+        "rugosite": 0.6575,
+        "basalte": 0.8854,
+        "oxydes_fer": 0.769,
+        "argiles": 0.7987,
+        "sol_nu": 0.5982,
+        "aridite": 0.9531,
+        "cavites": 0.197,
+        "basalte_accessible": 0.6309
+      },
+      "criteria": {
+        "topographie": 0.5834,
+        "geologie": 0.8177,
+        "environnement": 0.7756,
+        "ressources": 0.4139
+      },
+      "confidence": 1.0,
+      "global": 0.6477,
+      "explanation": "Strong analog match: Geology, Environment.",
+      "values": {
+        "pente": {
+          "site": 5.052247189046318,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 3.823257260497841,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.7704144452807331,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.3114426370049728,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.0050218946505756,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.4333220854821845,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 229.77147225034292,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.01574205885130954,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.3222885771142985,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Geology",
+          "Environment"
+        ],
+        "partiel": [
+          "Topography",
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Medicine Lake basaltic shield volcano, highest concentration of accessible lava tube caves in North America.",
+      "local_data": "NPS Geodiversity Atlas geological map and USGS 3DEP elevation products."
+    },
+    {
+      "id": "atacama",
+      "name": "Atacama Desert (Chile)",
+      "role": "cross_validation",
+      "lat": -24.1,
+      "lon": -70.0,
+      "indicators": {
+        "pente": 0.7708,
+        "rugosite": 0.5494,
+        "basalte": 0.7118,
+        "oxydes_fer": 0.7361,
+        "argiles": 0.0604,
+        "sol_nu": 0.8607,
+        "aridite": 0.9881,
+        "cavites": 0.2087,
+        "basalte_accessible": 0.8195
+      },
+      "criteria": {
+        "topographie": 0.6601,
+        "geologie": 0.5028,
+        "environnement": 0.9244,
+        "ressources": 0.5141
+      },
+      "confidence": 1.0,
+      "global": 0.6503,
+      "explanation": "Strong analog match: Environment.",
+      "values": {
+        "pente": {
+          "site": 9.370616108395474,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 4.1450652651283555,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.8795271593787233,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.321475994856818,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.6003519904140415,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.6075631341468888,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 283.77654060051805,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.024163623391466132,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.41236341280026045,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Environment"
+        ],
+        "partiel": [
+          "Topography",
+          "Geology",
+          "In-Situ Resources"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability",
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ]
+      },
+      "processes": "Extreme hyper-aridity, high solar radiation, duricrusts, severe lack of vegetation; Mars analog control.",
+      "local_data": "Regional geological and meteorological observatory data."
+    },
+    {
+      "id": "vallee_mort",
+      "name": "Death Valley (California, USA)",
+      "role": "cross_validation",
+      "lat": 36.45,
+      "lon": -116.87,
+      "indicators": {
+        "pente": 0.5327,
+        "rugosite": 0.8004,
+        "basalte": 0.934,
+        "oxydes_fer": 0.3996,
+        "argiles": 0.9069,
+        "sol_nu": 0.5017,
+        "aridite": 0.9722,
+        "cavites": 0.6948,
+        "basalte_accessible": 0.8665
+      },
+      "criteria": {
+        "topographie": 0.6665,
+        "geologie": 0.7468,
+        "environnement": 0.737,
+        "ressources": 0.7806
+      },
+      "confidence": 1.0,
+      "global": 0.7327,
+      "explanation": "Strong analog match: Geology, Environment, In-Situ Resources.",
+      "values": {
+        "pente": {
+          "site": 5.176993577314968,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 3.524305776823911,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.6605630256450974,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.4996502196196795,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 1.066228057258868,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 1.0242827866173985,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 338.1216652057849,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.021454959901322075,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.5653685363954499,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Geology",
+          "Environment",
+          "In-Situ Resources"
+        ],
+        "partiel": [
+          "Topography"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Geology: Surface regolith mechanics, spectral sensor calibration, geological tools",
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain",
+          "In-Situ Resources: Subterranean habitat exploration (lava tubes), ISRU regolith testing"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability"
+        ]
+      },
+      "processes": "Extensional tectonic basin, alluvial fans, salt flats, extreme thermal amplitude and aridity.",
+      "local_data": "USGS geological maps and weather station series."
+    },
+    {
+      "id": "foret_congo",
+      "name": "Central Congo Rainforest (DR Congo)",
+      "role": "negative_control",
+      "lat": 0.0,
+      "lon": 22.0,
+      "indicators": {
+        "pente": 0.0,
+        "rugosite": 0.0,
+        "basalte": 0.0,
+        "oxydes_fer": 0.2223,
+        "argiles": 0.1824,
+        "sol_nu": 0.0,
+        "aridite": 0.0,
+        "cavites": 0.3001,
+        "basalte_accessible": 0.0
+      },
+      "criteria": {
+        "topographie": 0.0,
+        "geologie": 0.1349,
+        "environnement": 0.0,
+        "ressources": 0.15
+      },
+      "confidence": 1.0,
+      "global": 0.0712,
+      "explanation": "No criteria show strong analog match. Low resemblance: Topography, Geology, Environment, In-Situ Resources.",
+      "values": {
+        "pente": {
+          "site": 1.965322368391269,
+          "target": 8.0,
+          "unit": "°"
+        },
+        "rugosite": {
+          "site": 0.5038046708873027,
+          "target": 3.0,
+          "unit": "°"
+        },
+        "basalte": {
+          "site": 0.049931198564151305,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "oxydes_fer": {
+          "site": 1.5847647399195122,
+          "target": 1.2,
+          "unit": "Red/Blue ratio"
+        },
+        "argiles": {
+          "site": 0.6693161980640817,
+          "target": 1.1,
+          "unit": "SWIR1/SWIR2 ratio"
+        },
+        "sol_nu": {
+          "site": 0.05069709501506064,
+          "target": 0.7,
+          "unit": "fraction"
+        },
+        "aridite": {
+          "site": 1803.3996572948008,
+          "target": 300.0,
+          "unit": "mm/year"
+        },
+        "cavites": {
+          "site": 0.023723735241579766,
+          "target": 0.02,
+          "unit": "areal fraction"
+        },
+        "basalte_accessible": {
+          "site": 0.010336228988920821,
+          "target": 0.5,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [],
+        "partiel": [],
+        "non_reproduit": [
+          "Topography",
+          "Geology",
+          "Environment",
+          "In-Situ Resources"
+        ],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [],
+        "usages_partiels": []
+      },
+      "processes": "Dense equatorial canopy, high annual rainfall (>1800 mm), deep organic soils, total lack of planetary analog fidelity.",
+      "local_data": "NASA/Copernicus global datasets for negative control verification."
+    }
+  ],
+  "validation": {
+    "expectations": {
+      "top_k": 4,
+      "known_analogs": {
+        "hawaii": {
+          "rank": 2,
+          "in_top": true
+        },
+        "lanzarote": {
+          "rank": 6,
+          "in_top": false
+        },
+        "lava_beds": {
+          "rank": 5,
+          "in_top": false
+        }
+      },
+      "negative_control_rank": 9,
+      "negative_control_last": true,
+      "passed": false
+    },
+    "sensitivity": {
+      "spearman_mean": 0.7545,
+      "per_site": {
+        "virunga": {
+          "rank_base": 8,
+          "rank_min": 2,
+          "rank_max": 8
+        },
+        "harrat_khaybar": {
+          "rank_base": 3,
+          "rank_min": 3,
+          "rank_max": 8
+        },
+        "suswa": {
+          "rank_base": 7,
+          "rank_min": 1,
+          "rank_max": 8
+        },
+        "hawaii": {
+          "rank_base": 2,
+          "rank_min": 1,
+          "rank_max": 6
+        },
+        "lanzarote": {
+          "rank_base": 6,
+          "rank_min": 1,
+          "rank_max": 6
+        },
+        "lava_beds": {
+          "rank_base": 5,
+          "rank_min": 1,
+          "rank_max": 8
+        },
+        "atacama": {
+          "rank_base": 4,
+          "rank_min": 1,
+          "rank_max": 7
+        },
+        "vallee_mort": {
+          "rank_base": 1,
+          "rank_min": 1,
+          "rank_max": 8
+        },
+        "foret_congo": {
+          "rank_base": 9,
+          "rank_min": 9,
+          "rank_max": 9
+        }
+      }
+    }
+  }
+}
