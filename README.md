@@ -120,3 +120,41 @@ The global similarity score is a **weighted average** of the four criterion scor
 
 > [!WARNING]
 > **Scientific limitations:** Temperature extremes, liquid water / ice, electrostatic lunar dust, 1/6 g gravity, and hard-vacuum conditions are **not evaluated** by this tool. These are listed in each site's validity card as "Never reproducible on Earth".
+
+---
+
+## 6. Geospatial Data Sources & Indicator Computation
+
+### Satellite & Planetary Data Sources
+
+| Data Product | Collection / Dataset | Access | Used For |
+|:---|:---|:---|:---|
+| **Copernicus DEM GLO-30** | `cop-dem-glo-30` | [Microsoft Planetary Computer](https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-30) | Slope, Roughness, Pit detection |
+| **Sentinel-2 L2A** | `sentinel-2-l2a` | Microsoft Planetary Computer | Bare soil, Iron oxides, Clay minerals, Accessible basalt |
+| **LOLA / LROC DEM** (Moon) | NASA PGDA | [pgda.gsfc.nasa.gov](https://pgda.gsfc.nasa.gov/search?quicksearchcat=89) | Marius Hills target slope & roughness |
+| **CHELSA / WorldClim** | Annual precipitation | [envicloud.wsl.ch](https://envicloud.wsl.ch) | Aridity indicator |
+| **Local basalt masks** | Georeferenced geological maps | NPS, ResearchGate, national surveys | Basalt fraction, Accessible basalt |
+
+### Indicator Computation Pipeline
+
+```
+DEM (30 m)  ──→  resample to 100 m  ──→  slope_deg()  ──→  "pente"
+                                     ──→  local_std()  ──→  "rugosite"
+            ──→  native 30 m         ──→  closed_depressions()  ──→  "cavites"
+
+Sentinel-2 L2A  ──→  SCL cloud mask  ──→  to_reflectance()
+               ──→  NDVI < 0.15      ──→  local_fraction()  ──→  "sol_nu"
+               ──→  B04 / B02        ──→  "oxydes_fer"
+               ──→  B11 / B12        ──→  "argiles"
+
+Basalt mask  ──→  local_fraction()  ──→  "basalte"
+             × sol_nu               ──→  "basalte_accessible"
+
+Precipitation  ──→  "aridite"
+```
+
+> [!NOTE]
+> DEM and Sentinel-2 arrays may have slightly different grid dimensions due to bounding-box and resolution rounding. The pipeline verifies shape compatibility before computing `basalte_accessible`. When shapes differ, `basalte_accessible` is skipped rather than producing incorrect results.
+
+> [!TIP]
+> The Sentinel-2 reflectance formula `(DN − 1000) / 10 000` applies to **ESA Baseline ≥ 04.00** (January 2022 onward). Values are clipped to `[0.0, 1.0]` to suppress physically meaningless negative reflectances on dark basalt in shadow.
