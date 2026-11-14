@@ -200,3 +200,121 @@ streamlit run app/streamlit_app.py
    - Automated rank verification for known lunar analogs.
    - Negative control verification (confirming non-analogs like rainforest rank last).
    - Dirichlet Monte Carlo sensitivity analysis ($\rho$ stability score).
+
+---
+
+## 8. Scientific Analog Validity Framework
+
+No terrestrial environment is an exact replica of the Moon or Mars. Presenting a site as a "universal analog" is scientifically invalid and potentially hazardous for space mission planning. 
+
+Analog Finder enforces an explicit **Validity Card** categorizing site parameters into five transparent tiers:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        ANALOG VALIDITY CARD                            │
+├──────────────────────────┬─────────────────────────────────────────────┤
+│ 1. Reproduced            │ Score ≥ 0.70 (Distribution closely matches) │
+│ 2. Partially Reproduced  │ 0.40 ≤ Score < 0.70 (Overlap with variance) │
+│ 3. Not Reproduced        │ Score < 0.40 (Significant divergence)       │
+│ 4. Not Evaluated         │ Missing data or no baseline established     │
+│ 5. Never Reproducible    │ Fundamental physical divergence on Earth   │
+└──────────────────────────┴─────────────────────────────────────────────┘
+```
+
+### Actionable Mission Testing Domains
+Based on reproduced criteria, Analog Finder suggests appropriate experimental activities:
+- **Rover Mobility & Traction Testing**: Requires topographic fidelity (slope and roughness match).
+- **Lava Tube Exploration & Cavity Mapping**: Requires volcanic cavity and collapse structure presence.
+- **EVA Suit Ergonomics & Traverse Logistics**: Applicable in hyper-arid, bare volcanic terrain.
+- **ISRU & Regolith Excavation**: Requires high surface basalt concentration and minimal organic soil cover.
+
+---
+
+## 9. Environmental Divergence & Limitations
+
+### Parameters Never Reproducible on Earth
+The following planetary surface conditions **cannot** be replicated naturally anywhere on Earth and require specialized laboratory chambers:
+- **Surface Gravity**: Earth ($1.0\,g$) vs. Lunar ($0.166\,g$, $1/6\,g$) vs. Mars ($0.38\,g$).
+- **Atmospheric Pressure**: Earth ($\approx 1013\,\text{hPa}$) vs. Moon ($10^{-12}\,\text{hPa}$, hard vacuum) vs. Mars ($\approx 6\,\text{hPa}$, $95\%\,\text{CO}_2$).
+- **Radiation Environment**: Earth is shielded by a thick atmosphere and intrinsic magnetosphere; the Moon and Mars receive lethal unattenuated galactic cosmic rays (GCR) and solar particle events (SPE).
+- **Regolith Physical Properties**: Terrestrial sands and rocks are weathered by wind and water; lunar regolith particles are pristine, highly abrasive, jagged glass-rich shards with electrostatic surface charges.
+
+### Relative Scoring Caveat
+Scores are normalized by $W_{k,\text{max}}$, meaning they reflect **relative ranking within the candidate panel**, not an absolute fidelity metric. Expanding the panel to include additional extreme sites will rescale intermediate numerical scores.
+
+---
+
+## 10. Development Lifecycle & Commit History
+
+This project was built following software engineering best practices with an incremental, progressive release schedule:
+
+1. **Commit 1 (`feat(core)`)**: Project architecture, `.gitignore`, dependency specifications, metadata schemas (`sites.yaml`, `targets.yaml`), and data protocol.
+2. **Commit 2 (`feat(scoring)`)**: Wasserstein similarity distance engine, criterion aggregation, confidence metrics, and scientific validation suite (`spearmanr`, ranking tests).
+3. **Commit 3 (`feat(indicators)`)**: Geospatial indicators (gradient slope, local standard deviation roughness, morphological cavity detection, multi-spectral mineral indices) and Planetary Computer STAC ingestion.
+4. **Commit 4 (`feat(dashboard)`)**: End-to-end execution pipeline and interactive Streamlit decision-support dashboard with Folium georeferencing and Plotly radar profiles.
+5. **Commit 5 (`chore(release)`)**: Expert data deposit directory scaffolding, sourced target baselines, and complete scientific documentation.
+
+---
+
+## 11. Expert Data Deposit Protocol
+
+Team members depositing newly georeferenced rasters should follow this protocol:
+
+### Raster Requirements
+- **Projection**: `EPSG:4326` (WGS 84 geographic coordinates)
+- **Target Resolution**: 100 m / pixel ($\approx 0.000898^\circ$ at equator)
+- **Format**: Cloud-Optimized GeoTIFF (`.tif`)
+- **NoData Value**: Set explicitly in GeoTIFF metadata
+
+### Deposit Locations
+```
+data/raw/
+├── targets/
+│   └── marius_hills_dem.tif        # (Gérard: Moon target DEM)
+├── virunga/
+│   └── basalt_mask.tif             # (Nicolas: Binary mask 1=basalt, 0=other)
+├── atacama/
+│   └── basalt_mask.tif             # (Nicolas: Geological mask)
+├── harrat_khaybar/
+│   └── basalt_mask.tif             # (Nicolas: Volcanic field mask)
+├── suswa/
+│   └── basalt_mask.tif             # (Diego: Caldera & lava field mask)
+├── vallee_mort/
+│   └── basalt_mask.tif             # (Diego: Arid terrain mask)
+├── hawaii/
+│   └── basalt_mask.tif             # (Diego: Mauna Loa basalt mask)
+├── lava_beds/
+│   └── basalt_mask.tif             # (Bosworth: Lava tube national monument mask)
+├── lanzarote/
+│   └── basalt_mask.tif             # (Bosworth: Volcanic island basalt mask)
+├── foret_congo/
+│   └── basalt_mask.tif             # (Bosworth: Negative control zero-mask)
+└── climate/
+    └── annual_precip.tif           # (Global or multi-region CHELSA/WorldClim raster)
+```
+
+### Re-running the Full Scientific Pipeline
+Once rasters are deposited:
+```bash
+# Execute real satellite ingestion and local raster fusion
+python -m analog_finder.pipeline
+
+# Restart the Streamlit dashboard
+streamlit run app/streamlit_app.py
+```
+
+---
+
+## 12. Team & Acknowledgments
+
+**Team GeoCongo AI** — NASA Space Apps Challenge 2026:
+- **Gérard Cubaka Bisimwa** — Lead Software & Geospatial Engineer, Lunar Target (Marius Hills)
+- **Nicolas** — Geological Cartography & Planetary Analog Specialist (Virunga, Atacama, Harrat Khaybar)
+- **Diego** — Remote Sensing & Volcanology Specialist (Mount Suswa, Death Valley, Hawaii)
+- **Bosworth** — Data Integration & Validation Analyst (Lava Beds, Lanzarote, Congo Rainforest)
+
+### References & Portals
+- NASA Planetary Geosciences Data Access: [pgda.gsfc.nasa.gov](https://pgda.gsfc.nasa.gov/search?quicksearchcat=89)
+- Copernicus Open Access & Microsoft Planetary Computer: [planetarycomputer.microsoft.com](https://planetarycomputer.microsoft.com)
+- National Park Service Geodiversity Atlas: [nps.gov](https://www.nps.gov/articles/nps-geodiversity-atlas-lava-beds-national-monument-california.htm)
+- CHELSA High-Resolution Climate Data: [envicloud.wsl.ch](https://envicloud.wsl.ch)

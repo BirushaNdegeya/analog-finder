@@ -39,12 +39,13 @@ htmlcov/
 .DS_Store
 
 # Large Geospatial Datasets (keep raw raster files out of git)
-data/raw/*
-!data/raw/.gitkeep
-data/raw/targets/*
-!data/raw/targets/.gitkeep
-data/raw/climate/*
-!data/raw/climate/.gitkeep
+data/raw/**/*
+!data/raw/**/
+!data/raw/**/.gitkeep
+*.tif
+*.tiff
+*.nc
+*.jp2
 
 # Streamlit
 .streamlit/

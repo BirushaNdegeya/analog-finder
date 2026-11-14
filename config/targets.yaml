@@ -17,8 +17,8 @@ marius_hills:
   indicators:
     basalte:            {mean: null, std: null, source: "Clementine / LRO spectral data (Oceanus Procellarum mare basalt composition)"}
     oxydes_fer:         {mean: null, std: null, source: "Lunar Prospector FeO wt% baseline maps"}
-    argiles:            {mean: null, std: null, source: "Expected ~0 (negligible aqueous alteration on lunar surface)"}
-    sol_nu:             {mean: null, std: null, source: "Expected 1.0 (zero vegetative cover)"}
-    aridite:            {mean: null, std: null, source: "Expected 0.0 mm/yr (total absence of precipitation)"}
+    argiles:            {mean: null, std: null, source: "Expected ~0 (negligible aqueous phyllosilicate alteration on lunar surface; Apollo sample baseline)"}
+    sol_nu:             {mean: 1.0,  std: 0.0,  source: "Expected 1.0 (zero vegetative cover on lunar regolith; Apollo/LROC observations)"}
+    aridite:            {mean: 0.0,  std: 0.0,  source: "Expected 0.0 mm/yr (hard vacuum, zero atmospheric precipitation; lunar surface)"}
     cavites:            {mean: null, std: null, source: "Marius Hills Pit Crater skylight (JAXA SELENE / NASA LROC inventory)"}
     basalte_accessible: {mean: null, std: null, source: "Mare basalt regolith interface"}
