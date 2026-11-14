@@ -1,0 +1,55 @@
+# Multi-temporal geohazard and environmental monitoring pairs
+# GeoCongo AI - Dual-Mode Analog & Risk Engine
+#
+# References define temporal observation windows:
+#   baseline_t0: pre-event or historical reference period (ISO 8601 date range)
+#   observation_t1: post-event or current surveillance period (ISO 8601 date range)
+
+temporal_pairs:
+  nyiragongo_2021:
+    name: "Nyiragongo Volcano (Virunga Rift)"
+    hazard_type: "volcanic"
+    description: "Topographic deformation, fracture propagation, and basaltic lava field expansion from the May 22, 2021 eruption towards Goma."
+    bbox: [29.15, -1.60, 29.35, -1.45]
+    baseline_t0: "2021-01-01/2021-05-15"
+    observation_t1: "2021-06-01/2021-09-30"
+    focal_indicators:
+      - "pente"
+      - "rugosite"
+      - "sol_nu"
+      - "basalte_accessible"
+    local_dem_t0: "data/raw/nyiragongo/dem_pre_2021.tif"
+    local_dem_t1: "data/raw/nyiragongo/dem_post_2021.tif"
+    reference_authority: "Observatoire Volcanologique de Goma (OVG)"
+
+  bukavu_kadutu:
+    name: "Bukavu - Kadutu & Funu Valley"
+    hazard_type: "landslide"
+    description: "Catastrophic gully erosion, chronic rotational landslides, and slope destabilization in high-density informal urban settlements."
+    bbox: [28.82, -2.52, 28.87, -2.48]
+    baseline_t0: "2018-06-01/2018-09-01"
+    observation_t1: "2024-06-01/2024-09-01"
+    focal_indicators:
+      - "pente"
+      - "rugosite"
+      - "sol_nu"
+      - "argiles"
+      - "aridite"
+    local_dem_t0: null
+    local_dem_t1: null
+    reference_authority: "Protection Civile Sud-Kivu / Université Officielle de Bukavu (UOB)"
+
+  bukavu_ibanda:
+    name: "Bukavu - Ibanda Escarpment"
+    hazard_type: "landslide"
+    description: "Creeping translational landslides along active Lake Kivu tectonic fault scarps threatening critical urban infrastructure."
+    bbox: [28.84, -2.55, 28.89, -2.50]
+    baseline_t0: "2019-01-01/2019-12-31"
+    observation_t1: "2024-01-01/2024-12-31"
+    focal_indicators:
+      - "pente"
+      - "rugosite"
+      - "sol_nu"
+    local_dem_t0: null
+    local_dem_t1: null
+    reference_authority: "Centre de Recherche en Sciences Naturelles de Lwiro (CRSN)"
