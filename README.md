@@ -31,6 +31,8 @@ Mode A: Planetary Analog                      Mode B: Temporal Geohazard
 - Planetary geological training               - Nyiragongo & Virunga volcanic deformation
 ```
 
+For the comprehensive technical and socio-economic whitepaper, see [docs/DUAL_USE_ARCHITECTURE.md](docs/DUAL_USE_ARCHITECTURE.md).
+
 ### Multi-Criteria Framework
 The assessment evaluates **4 core criteria** across **8 quantitative indicators**:
 1. **Topography**: Terrain slope and surface roughness (100 m baseline grid).
@@ -254,6 +256,18 @@ Output artifacts:
 streamlit run app/streamlit_app.py
 ```
 
+The interface features an **Operational Focus** selector in the sidebar:
+
+#### 🚀 Persona 1: Mode A — Planetary Mission Analogs
+1. **Interactive Global Map & Ranking**: Georeferenced candidate sites color-coded by similarity tier (Green: $\ge 0.70$, Yellow: $0.40 - 0.70$, Red: $< 0.40$) relative to the Moon target.
+2. **Site Detail & Scientific Validity Card**: Multi-criteria radar chart, physical indicator medians vs target, and actionable mission testing domains (rover mobility, EVA ergonomics, ISRU regolith).
+3. **Scientific Validation Tab**: Benchmark verification of known lunar analogs, negative control exclusion, and Monte Carlo Dirichlet sensitivity ($\rho$).
+
+#### 🌋 Persona 2: Mode B — Geohazard & Volcanic Risk Monitor
+1. **Surveillance Map & Alert Tiers**: Active monitoring map centered on the East African Rift (Bukavu & Virunga) with color-coded 4-tier alert badges (🔴 Critical, 🟠 Warning, 🟡 Watch, 🟢 Stable).
+2. **Zone Criticality & Decision Card**: Detailed deformation radar, two-sample Kolmogorov-Smirnov significance testing table ($p$-values), and actionable civil protection mandates (drainage reinforcement, building moratoria, sensor deployment).
+3. **2D Spatial Patch Differencing Simulation**: Localized sliding-window patch heatmap resolving the spatial blind spot and mapping exact deformation peaks ($W_1$).
+
 ### 7.3 Launch the FastAPI REST Backend
 
 Analog Finder exposes an enterprise-grade REST API powering external GIS clients, municipal early-warning dashboards, and mission planning systems:
@@ -273,21 +287,6 @@ Interactive documentation and OpenAPI Swagger UI:
 - `GET /v1/temporal-pairs` : Catalog of monitored geohazard zones (`temporal_pairs.yaml`).
 - `GET /v1/indicators` : Complete definitions, physical units, and criteria mappings.
 - `POST /v1/analyze` : Unified analysis engine accepting either `mode="analog"` or `mode="temporal"`.
-
-#### Dashboard Features:
-1. **Interactive Global Map & Ranking**:
-   - Georeferenced view of candidate sites color-coded by similarity tier (Green: $\ge 0.70$, Yellow: $0.40 - 0.70$, Red: $< 0.40$).
-   - Symbolic lunar/Martian target reference coordinates.
-   - Dynamic weight sliders in the sidebar enabling custom mission scenario tuning.
-2. **Site Detail & Scientific Validity Card**:
-   - Radar chart profile comparing multi-criteria performance.
-   - Qualitative analog validity card categorizing reproduced vs. non-reproduced parameters.
-   - Recommended testable use cases (e.g. mobility, drill testing, EVA logistics).
-   - Median measured indicator values vs. target values.
-3. **Validation Tab**:
-   - Automated rank verification for known lunar analogs.
-   - Negative control verification (confirming non-analogs like rainforest rank last).
-   - Dirichlet Monte Carlo sensitivity analysis ($\rho$ stability score).
 
 ---
 
@@ -336,11 +335,19 @@ Scores are normalized by $W_{k,\text{max}}$, meaning they reflect **relative ran
 
 This project was built following software engineering best practices with an incremental, progressive release schedule:
 
+### Phase 1 — Core Planetary Analogy Foundations (`main`)
 1. **Commit 1 (`feat(core)`)**: Project architecture, `.gitignore`, dependency specifications, metadata schemas (`sites.yaml`, `targets.yaml`), and data protocol.
 2. **Commit 2 (`feat(scoring)`)**: Wasserstein similarity distance engine, criterion aggregation, confidence metrics, and scientific validation suite (`spearmanr`, ranking tests).
 3. **Commit 3 (`feat(indicators)`)**: Geospatial indicators (gradient slope, local standard deviation roughness, morphological cavity detection, multi-spectral mineral indices) and Planetary Computer STAC ingestion.
 4. **Commit 4 (`feat(dashboard)`)**: End-to-end execution pipeline and interactive Streamlit decision-support dashboard with Folium georeferencing and Plotly radar profiles.
 5. **Commit 5 (`chore(release)`)**: Expert data deposit directory scaffolding, sourced target baselines, and complete scientific documentation.
+
+### Phase 2 — Dual-Mode Engine & Geohazard Surveillance (`feature/dual-mode-api`)
+1. **Commit 1 (`feat(api-core)`)**: Pydantic schemas (`schemas.py`), temporal pairs configuration (`temporal_pairs.yaml`), and 4-tier alert scale (`config.py`).
+2. **Commit 2 (`feat(temporal-engine)`)**: Temporal Wasserstein deformation energy, Kolmogorov-Smirnov significance testing, and 2D patch-wise localized heatmaps (`temporal.py`).
+3. **Commit 3 (`feat(ingest-temporal)`)**: Paired multi-temporal Sentinel-2 composite loader and multi-epoch DEM differential engine (`ingest.py`, `indicators.py`).
+4. **Commit 4 (`feat(fastapi-backend)`)**: Unified REST API (`app.py`), multi-mode pipeline execution, and pre-computed geohazard surveillance results (`changes.json`).
+5. **Commit 5 (`feat(dual-ui)`)**: Dual-persona Streamlit interface (Planetary Mission vs Geohazard Monitor) and comprehensive socio-economic whitepaper (`docs/DUAL_USE_ARCHITECTURE.md`).
 
 ---
 
