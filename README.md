@@ -81,3 +81,42 @@ source .venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 ```
+
+> [!NOTE]
+> On some Ubuntu systems `ensurepip` is not available. In that case install `virtualenv` first:
+> `pip install --user virtualenv && ~/.local/bin/virtualenv -p /usr/bin/python3 .venv`
+
+---
+
+## 5. Scoring Methodology
+
+### Wasserstein Similarity Score
+
+For each indicator $k$ and candidate site $s$, the similarity score is computed as:
+
+$$S_k(s) = 1 - \frac{W_1\bigl(\hat{P}_{k,\text{target}},\; \hat{P}_{k,s}\bigr)}{W_{k,\text{max}}}$$
+
+Where:
+- $W_1(P, Q)$ is the **first Wasserstein distance** (Earth Mover's Distance) between the target empirical distribution and the site distribution.
+- $W_{k,\text{max}} = \max_{s'} W_1(\hat{P}_{k,\text{target}}, \hat{P}_{k,s'})$ normalises the score **relative to the candidate panel**.
+- $S = 1$ means the site's distribution is identical to the target. $S = 0$ means it is the most dissimilar site in the panel.
+
+### Criterion Aggregation
+
+Indicator scores within each criterion are averaged (missing indicators are ignored, not set to zero). A criterion with **no data** is set to `null` and **excluded** from the global score aggregation.
+
+The global similarity score is a **weighted average** of the four criterion scores, with user-adjustable weights via the dashboard sidebar.
+
+### Confidence & Thresholds
+
+| Score threshold | Interpretation |
+|:---|:---|
+| ≥ 0.70 | **Strong analog** — distribution closely matches the target |
+| 0.40–0.70 | **Partial analog** — overlap with significant differences |
+| < 0.40 | **Weak / non-analog** — distribution is incompatible |
+
+> [!IMPORTANT]
+> **Scores are relative to the panel.** Adding or removing candidate sites changes all scores simultaneously. A score of 0.80 does not mean "80% Mars-compatible" — it means this site is **closer to the target than 80% of the current panel**.
+
+> [!WARNING]
+> **Scientific limitations:** Temperature extremes, liquid water / ice, electrostatic lunar dust, 1/6 g gravity, and hard-vacuum conditions are **not evaluated** by this tool. These are listed in each site's validity card as "Never reproducible on Earth".
