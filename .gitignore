@@ -49,3 +49,6 @@ data/raw/**/*
 
 # Streamlit
 .streamlit/
+.agents
+.claude
+

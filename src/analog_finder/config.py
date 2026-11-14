@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parents[2]
 CONFIG_DIR = ROOT / "config"
 RAW_DIR = ROOT / "data" / "raw"
 PROCESSED_DIR = ROOT / "data" / "processed"
+TEMPORAL_PAIRS_FILE = CONFIG_DIR / "temporal_pairs.yaml"
+CHANGES_FILE = PROCESSED_DIR / "changes.json"
 
 # --- Geospatial Data Ingestion Endpoints & Defaults --------------------------
 STAC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
@@ -93,3 +95,16 @@ NOT_EVALUATED = [
     "Electrostatic regolith dust behavior",
     "Astrobiology and strict planetary protection constraints",
 ]
+
+# --- Temporal Criticality Thresholds & Alerts (Mode B) -----------------------
+CRITICALITY_CRITICAL = 0.65   # Severe structural rupture / rapid ground displacement
+CRITICALITY_WARNING = 0.40    # Significant anomalous geomorphic deformation
+CRITICALITY_WATCH = 0.20      # Mild seasonal or creeping surface drift
+SIGNIFICANCE_ALPHA = 0.05     # Statistical p-value rejection threshold
+
+TEMPORAL_ACTIONS = {
+    "critical": "Immediate field inspection, sensor deployment, and evacuation preparedness in high-slope zones",
+    "warning": "Restricted construction zoning, high-frequency InSAR monitoring, and drainage stabilization",
+    "watch": "Routine geotechnical surveillance and quarterly multi-spectral satellite updates",
+    "stable": "Normal territorial maintenance and ongoing baseline environmental observation",
+}

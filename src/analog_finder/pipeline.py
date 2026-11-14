@@ -30,6 +30,7 @@ import yaml
 
 from . import config as C
 from . import scoring as S
+from . import temporal as T
 from . import validation as V
 
 
@@ -277,12 +278,102 @@ def run(synthetic: bool) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Mode B: Temporal Geohazard Pipeline
+# ---------------------------------------------------------------------------
+
+def run_temporal(synthetic: bool = False) -> dict:
+    """Execute Mode B temporal deformation pipeline and write data/processed/changes.json."""
+    temporal_cfg = _load_yaml("temporal_pairs.yaml")
+    pairs = temporal_cfg.get("temporal_pairs", {})
+
+    output_zones = []
+
+    for pair_id, pdata in pairs.items():
+        bbox = pdata["bbox"]
+        lat = (bbox[1] + bbox[3]) / 2
+        lon = (bbox[0] + bbox[2]) / 2
+
+        if synthetic:
+            rng = np.random.default_rng(hash(pair_id) % 10000)
+            # Create baseline T0 and perturbed T1
+            dist_t0 = {k: rng.normal(v, abs(v) * 0.1, 500) for k, v in _SYNTHETIC_BASELINE.items()}
+            # Higher shift on volcanic and landslide zones
+            mult = 1.45 if pdata.get("hazard_type") in ["volcanic", "landslide"] else 1.05
+            dist_t1 = {
+                k: rng.normal(v * (mult if k in pdata.get("focal_indicators", []) else 1.02), abs(v) * 0.12, 500)
+                for k, v in _SYNTHETIC_BASELINE.items()
+            }
+        else:
+            # Real STAC multi-temporal loading
+            from . import ingest, indicators as I
+            try:
+                s2_t0, s2_t1 = ingest.load_s2_time_pair(bbox, pdata["baseline_t0"], pdata["observation_t1"])
+                dem = ingest.load_dem(bbox, C.COMMON_RES_M)
+                diff = I.compute_differential_indicators(dem_t0=dem, dem_t1=dem, s2_t0=s2_t0, s2_t1=s2_t1)
+                dist_t0, dist_t1 = diff["t0"], diff["t1"]
+            except Exception as exc:
+                print(f"[FAILED TEMPORAL] {pair_id}: {exc} — fallback to baseline.")
+                dist_t0, dist_t1 = {}, {}
+
+        # Indicators & Criteria analysis
+        ind_metrics = {}
+        for ind in C.INDICATORS:
+            d0 = dist_t0.get(ind, np.array([]))
+            d1 = dist_t1.get(ind, np.array([]))
+            ind_metrics[ind] = T.analyze_indicator_change(ind, d0, d1)
+
+        crit_scores = T.temporal_criteria_scores(ind_metrics)
+        g_crit = round(T.temporal_global_criticality(crit_scores), 4)
+        alert = T.classify_alert_level(g_crit)
+        v_card = T.temporal_validity_card(crit_scores, alert)
+
+        output_zones.append({
+            "id": pair_id,
+            "name": pdata["name"],
+            "hazard_type": pdata.get("hazard_type", "general"),
+            "description": pdata.get("description", ""),
+            "lat": lat,
+            "lon": lon,
+            "bbox": bbox,
+            "baseline_t0": pdata["baseline_t0"],
+            "observation_t1": pdata["observation_t1"],
+            "criticality_index": g_crit,
+            "alert_level": alert.value,
+            "criteria": {k: (round(v, 4) if v is not None else None) for k, v in crit_scores.items()},
+            "indicators": ind_metrics,
+            "validity_card": v_card,
+            "authority": pdata.get("reference_authority", ""),
+        })
+
+    result = {
+        "mode": "temporal",
+        "synthetic": synthetic,
+        "zones": output_zones,
+    }
+
+    C.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = C.PROCESSED_DIR / "changes.json"
+    output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(
+        f"changes.json written ({len(output_zones)} geohazard zones, synthetic={synthetic}).\n"
+        f"Path: {output_path}"
+    )
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Analog Finder pipeline — compute similarity scores for all candidate sites."
+        description="Analog Finder dual-mode pipeline — planetary analogs & geohazard risk monitoring."
+    )
+    parser.add_argument(
+        "--mode",
+        choices=["analog", "temporal", "all"],
+        default="analog",
+        help="Operational mode: 'analog' (planetary target), 'temporal' (deformation), or 'all'.",
     )
     parser.add_argument(
         "--synthetic",
@@ -290,4 +381,8 @@ if __name__ == "__main__":
         help="Use INVENTED synthetic data (for UI testing only — not scientific results).",
     )
     args = parser.parse_args()
-    run(args.synthetic)
+
+    if args.mode in ["analog", "all"]:
+        run(args.synthetic)
+    if args.mode in ["temporal", "all"]:
+        run_temporal(args.synthetic)
