@@ -43,8 +43,9 @@ def sensitivity(criteria_by_site: Dict[str, Dict[str, Optional[float]]], n_draws
         w = dict(zip(C.CRITERIA, rng.dirichlet(np.ones(len(C.CRITERIA)))))
         sc = {s: global_score(criteria_by_site[s], w) for s in sites}
         all_ranks.append([ranks(sc)[s] for s in sites])
-        rho = spearmanr(base_vec, [sc[s] for s in sites]).statistic
-        rhos.append(rho)
+        res = spearmanr(base_vec, [sc[s] for s in sites])
+        rho = getattr(res, "correlation", res[0])
+        rhos.append(float(rho))
 
     arr = np.array(all_ranks)
     base_ranks = ranks(base)
