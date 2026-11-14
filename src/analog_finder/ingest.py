@@ -217,3 +217,63 @@ def load_local_raster(
     except (rasterio.errors.RasterioIOError, FileNotFoundError):
         print(f"[WARNING] Local raster not found: {path}")
         return None
+
+
+# ---------------------------------------------------------------------------
+# Multi-temporal ingestion (Mode B)
+# ---------------------------------------------------------------------------
+
+def load_s2_time_pair(
+    bbox: tuple[float, float, float, float],
+    date_t0: str,
+    date_t1: str,
+    res_m: float = C.COMMON_RES_M,
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray]]:
+    """Fetch paired Sentinel-2 composites for baseline T0 and surveillance T1.
+
+    Guarantees spatial alignment and common pixel resolution across time slices.
+
+    Parameters
+    ----------
+    bbox : (west, south, east, north) in EPSG:4326.
+    date_t0 : ISO date range string for baseline, e.g. '2021-01-01/2021-05-15'.
+    date_t1 : ISO date range string for observation, e.g. '2021-06-01/2021-09-30'.
+    res_m : spatial grid resolution in metres.
+
+    Returns
+    -------
+    (composite_t0, composite_t1) : tuple of band dictionaries.
+    """
+    s2_t0 = load_s2_composite(bbox, date_range=date_t0, res_m=res_m)
+    s2_t1 = load_s2_composite(bbox, date_range=date_t1, res_m=res_m)
+    return s2_t0, s2_t1
+
+
+def load_dem_differential(
+    dem_t0_path: str,
+    dem_t1_path: str,
+    bbox: tuple[float, float, float, float],
+    shape: tuple[int, int],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray] | None:
+    """Load two multi-epoch DEMs and compute the elevation change raster (ΔDEM = T1 - T0).
+
+    Used for volcanic edifice collapse, caldera volume change, or major landslide scarps.
+
+    Parameters
+    ----------
+    dem_t0_path : path to baseline pre-event GeoTIFF.
+    dem_t1_path : path to surveillance post-event GeoTIFF.
+    bbox : bounding box in EPSG:4326.
+    shape : (rows, cols) target raster shape.
+
+    Returns
+    -------
+    (dem_t0, dem_t1, delta_dem) as float32 arrays, or None if either raster is missing.
+    """
+    dem_t0 = load_local_raster(dem_t0_path, bbox, shape)
+    dem_t1 = load_local_raster(dem_t1_path, bbox, shape)
+    if dem_t0 is None or dem_t1 is None:
+        return None
+
+    delta_dem = dem_t1 - dem_t0
+    return dem_t0, dem_t1, delta_dem

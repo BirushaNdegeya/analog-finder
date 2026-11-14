@@ -240,3 +240,59 @@ def compute_site_indicators(
             out["basalte_accessible"] = sample(bas * sol_nu)
 
     return out
+
+
+# ---------------------------------------------------------------------------
+# Multi-temporal differential indicator computation (Mode B)
+# ---------------------------------------------------------------------------
+
+def compute_differential_indicators(
+    dem_t0: np.ndarray | None = None,
+    dem_t1: np.ndarray | None = None,
+    s2_t0: dict | None = None,
+    s2_t1: dict | None = None,
+    basalt_t0: np.ndarray | None = None,
+    basalt_t1: np.ndarray | None = None,
+    precip_t0: np.ndarray | None = None,
+    precip_t1: np.ndarray | None = None,
+) -> dict:
+    """Compute indicator distributions at T0 and T1, plus pixel-level differencing.
+
+    Returns
+    -------
+    {
+        "t0": dict of 1-D indicator sample distributions at baseline,
+        "t1": dict of 1-D indicator sample distributions at surveillance,
+        "pixel_diffs": dict of 1-D pixel-level signed differentials (T1 - T0),
+    }
+    """
+    inds_t0 = compute_site_indicators(dem100=dem_t0, s2=s2_t0, basalt_mask=basalt_t0, precip=precip_t0)
+    inds_t1 = compute_site_indicators(dem100=dem_t1, s2=s2_t1, basalt_mask=basalt_t1, precip=precip_t1)
+
+    pixel_diffs: dict[str, np.ndarray] = {}
+
+    # Pixel-level topographic slope shift
+    if dem_t0 is not None and dem_t1 is not None and dem_t0.shape == dem_t1.shape:
+        slope0 = slope_deg(_fill_nan(dem_t0), C.COMMON_RES_M)
+        slope1 = slope_deg(_fill_nan(dem_t1), C.COMMON_RES_M)
+        pixel_diffs["delta_pente"] = sample(slope1 - slope0)
+        pixel_diffs["delta_dem"] = sample(dem_t1 - dem_t0)
+
+    # Pixel-level vegetation change (Delta NDVI)
+    if s2_t0 is not None and s2_t1 is not None:
+        valid0 = np.isfinite(s2_t0["B04"]) & np.isfinite(s2_t0["B08"])
+        valid1 = np.isfinite(s2_t1["B04"]) & np.isfinite(s2_t1["B08"])
+        common_valid = valid0 & valid1
+
+        ndvi0 = (s2_t0["B08"] - s2_t0["B04"]) / (s2_t0["B08"] + s2_t0["B04"] + 1e-6)
+        ndvi1 = (s2_t1["B08"] - s2_t1["B04"]) / (s2_t1["B08"] + s2_t1["B04"] + 1e-6)
+
+        delta_ndvi = ndvi1 - ndvi0
+        delta_ndvi[~common_valid] = np.nan
+        pixel_diffs["delta_ndvi"] = sample(delta_ndvi)
+
+    return {
+        "t0": inds_t0,
+        "t1": inds_t1,
+        "pixel_diffs": pixel_diffs,
+    }

@@ -210,6 +210,18 @@ Precipitation  ──→  "aridite"
 > [!TIP]
 > The Sentinel-2 reflectance formula `(DN − 1000) / 10 000` applies to **ESA Baseline ≥ 04.00** (January 2022 onward). Values are clipped to `[0.0, 1.0]` to suppress physically meaningless negative reflectances on dark basalt in shadow.
 
+### 6.2 Multi-Temporal Differencing (Mode B)
+
+For geohazard monitoring, the ingestion pipeline loads paired multi-temporal scenes across identical bounding boxes and resolutions:
+
+1. **Paired Sentinel-2 L2A Composites (`load_s2_time_pair`)**:
+   - Generates median cloud-free composites for baseline $T_0$ and surveillance $T_1$.
+   - Computes pixel-aligned differential rasters: $\Delta\text{NDVI} = \text{NDVI}_{T_1} - \text{NDVI}_{T_0}$ (vegetation stripping and gully expansion).
+2. **Multi-Epoch DEM Differencing (`load_dem_differential`)**:
+   - Compares multi-temporal elevation models (e.g. drone photogrammetry or post-event LiDAR):
+     $$\Delta\text{DEM} = \text{DEM}_{T_1} - \text{DEM}_{T_0} \quad\text{and}\quad \Delta\text{Slope} = \text{Slope}_{T_1} - \text{Slope}_{T_0}$$
+   - Accurately tracks scarp steepening, landslide volume displacements, and volcanic lava flow thickening.
+
 ---
 
 ## 7. Execution & Decision-Support Dashboard
