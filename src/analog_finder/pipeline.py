@@ -121,15 +121,14 @@ def _target_profile(tcfg: dict) -> dict:
     {indicator_id: 1-D float32 array}
     """
     from . import indicators as I
-    import rasterio
+    from . import planetary_ingest as PI
 
     profile: dict = {}
-    dem_path = C.ROOT / tcfg["dem_raster"]
-    if dem_path.exists():
-        with rasterio.open(dem_path) as src:
-            profile.update(I.dem_indicators(src.read(1).astype("float32"), abs(src.transform.a)))
+    target_dem = PI.load_planetary_target_dem(tcfg)
+    if target_dem is not None:
+        profile.update(I.dem_indicators(target_dem, res_m=C.COMMON_RES_M))
     else:
-        print(f"[WARNING] Target DEM not found: {dem_path} — slope/roughness skipped.")
+        print(f"[WARNING] Target DEM unavailable for {tcfg.get('name')} — topographic indicators skipped.")
 
     for ind, spec in tcfg["indicators"].items():
         if spec.get("mean") is not None and spec.get("std") is not None:

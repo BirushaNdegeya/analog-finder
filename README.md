@@ -178,15 +178,21 @@ A global 1D distribution can conceal localized mass movements (e.g., an active l
 
 ## 6. Geospatial Data Sources & Indicator Computation
 
-### Satellite & Planetary Data Sources
+### Satellite & Planetary Data Sources (Universal STAC Integration)
 
-| Data Product | Collection / Dataset | Access | Used For |
-|:---|:---|:---|:---|
-| **Copernicus DEM GLO-30** | `cop-dem-glo-30` | [Microsoft Planetary Computer](https://planetarycomputer.microsoft.com/dataset/cop-dem-glo-30) | Slope, Roughness, Pit detection |
-| **Sentinel-2 L2A** | `sentinel-2-l2a` | Microsoft Planetary Computer | Bare soil, Iron oxides, Clay minerals, Accessible basalt |
-| **LOLA / LROC DEM** (Moon) | NASA PGDA | [pgda.gsfc.nasa.gov](https://pgda.gsfc.nasa.gov/search?quicksearchcat=89) | Marius Hills target slope & roughness |
-| **CHELSA / WorldClim** | Annual precipitation | [envicloud.wsl.ch](https://envicloud.wsl.ch) | Aridity indicator |
-| **Local basalt masks** | Georeferenced geological maps | NPS, ResearchGate, national surveys | Basalt fraction, Accessible basalt |
+Analog Finder provides a unified programmatic gateway across Earth, Moon, and Mars using open STAC (SpatioTemporal Asset Catalog) APIs and Cloud-Optimized GeoTIFFs (COGs):
+
+| Astre | Type de donnée | Collection STAC | Résolution | Format & Accès |
+| :--- | :--- | :--- | :--- | :--- |
+| 🌍 **Terre** | **MNT (DEM)** | `cop-dem-glo-30` (Copernicus) | 30 m | COG via Planetary Computer STAC |
+| 🌍 **Terre** | **Optique** | `sentinel-2-l2a` (12 bandes) | 10 m – 20 m | COG via Planetary Computer STAC |
+| 🌕 **Lune** | **MNT (DEM)** | `kaguya_terrain_camera_usgs_dtms_v2_equi` | **26.2 m** | COG via USGS Astrogeology STAC (AWS S3 public) |
+| 🌕 **Lune** | **Optique** | `kaguya_terrain_camera` (Orthos) & LROC WAC | 10 m – 100 m | COG via USGS Astrogeology STAC |
+| 🔴 **Mars** | **MNT (DEM)** | `mro_ctx_controlled_usgs_dtms` & HiRISE | **20 m** / **1 m** | COG via USGS Astrogeology STAC (AWS S3 public) |
+| 🔴 **Mars** | **Optique** | `mo_themis_controlled_mosaics` & CTX Ortho | 6 m – 100 m | COG via USGS Astrogeology STAC |
+
+> [!NOTE]
+> **Automated Planetary Fallback**: If local target DEMs (e.g. `data/raw/targets/marius_hills_dem.tif`) are not present on disk, the pipeline automatically queries the USGS Astrogeology STAC API and streams the required window over HTTP via rasterio. Pipeline execution is **never blocked**.
 
 ### Indicator Computation Pipeline
 
@@ -287,6 +293,11 @@ Interactive documentation and OpenAPI Swagger UI:
 - `GET /v1/temporal-pairs` : Catalog of monitored geohazard zones (`temporal_pairs.yaml`).
 - `GET /v1/indicators` : Complete definitions, physical units, and criteria mappings.
 - `POST /v1/analyze` : Unified analysis engine accepting either `mode="analog"` or `mode="temporal"`.
+
+#### Cross-Body Planetary Data Bridge Endpoints:
+- `GET /v1/planetary/bodies` : List supported bodies (Earth, Moon, Mars) and open STAC endpoints.
+- `GET /v1/planetary/search` : Programmatic search across Earth, Lunar (Kaguya/LOLA), and Martian (CTX/HiRISE) STAC catalogs.
+- `GET /v1/planetary/sample` : Streams remote COG windows via HTTP Range requests and returns real-time topographic metrics (elevation range, mean slope, roughness).
 
 ---
 

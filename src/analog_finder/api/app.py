@@ -124,6 +124,119 @@ def list_indicators() -> List[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Cross-Body Planetary Data Bridge Endpoints (Earth, Moon, Mars)
+# ---------------------------------------------------------------------------
+@app.get("/v1/planetary/bodies", tags=["Planetary Bridge"])
+def list_planetary_bodies() -> dict:
+    """List supported planetary bodies and their respective open STAC catalog endpoints."""
+    return {
+        "supported_bodies": {
+            "earth": {
+                "name": "Earth",
+                "stac_endpoint": C.STAC_URL,
+                "primary_dem": C.DEM_COLLECTION,
+                "primary_optical": C.S2_COLLECTION,
+                "format": "Cloud-Optimized GeoTIFF (COG)",
+                "access": "Public, no authentication required",
+            },
+            "moon": {
+                "name": "Moon",
+                "stac_endpoint": C.PLANETARY_STAC_URL,
+                "primary_dem": C.LUNAR_DEM_COLLECTION,
+                "resolution": "26.2 m/pixel (Kaguya TC DTM v2)",
+                "primary_optical": "kaguya_terrain_camera_monoscopic",
+                "format": "Cloud-Optimized GeoTIFF (COG) on AWS S3",
+                "access": "Public, no authentication required",
+            },
+            "mars": {
+                "name": "Mars",
+                "stac_endpoint": C.PLANETARY_STAC_URL,
+                "primary_dem": C.MARS_DEM_COLLECTION,
+                "resolution": "20.0 m/pixel (MRO CTX Controlled DTMs)",
+                "primary_optical": "mo_themis_controlled_mosaics",
+                "format": "Cloud-Optimized GeoTIFF (COG) on AWS S3",
+                "access": "Public, no authentication required",
+            },
+        }
+    }
+
+
+@app.get("/v1/planetary/search", tags=["Planetary Bridge"])
+def search_planetary_data(
+    body: str = Query("moon", description="Planetary body: 'earth', 'moon', or 'mars'"),
+    min_lon: float = Query(-57.0, description="Minimum longitude in decimal degrees"),
+    min_lat: float = Query(13.0, description="Minimum latitude in decimal degrees"),
+    max_lon: float = Query(-55.0, description="Maximum longitude in decimal degrees"),
+    max_lat: float = Query(15.0, description="Maximum latitude in decimal degrees"),
+    data_type: str = Query("dem", description="Type of data: 'dem' or 'optical'"),
+    limit: int = Query(5, ge=1, le=20, description="Maximum number of items to return"),
+) -> dict:
+    """Search for altimetry (DEM) and optical assets across Earth, Moon, or Mars."""
+    from ..planetary_ingest import search_unified_stac
+
+    bbox = [min_lon, min_lat, max_lon, max_lat]
+    items = search_unified_stac(body=body, bbox=bbox, data_type=data_type, limit=limit)
+    return {
+        "body": body.lower(),
+        "bbox": bbox,
+        "data_type": data_type,
+        "count": len(items),
+        "items": items,
+    }
+
+
+@app.get("/v1/planetary/sample", tags=["Planetary Bridge"])
+def sample_planetary_terrain(
+    body: str = Query("moon", description="Planetary body: 'earth', 'moon', or 'mars'"),
+    min_lon: float = Query(-57.0),
+    min_lat: float = Query(13.0),
+    max_lon: float = Query(-55.0),
+    max_lat: float = Query(15.0),
+) -> dict:
+    """Stream a terrain sample window and compute topographic distribution metrics."""
+    from ..planetary_ingest import search_planetary_stac, stream_cog_window
+    from ..indicators import dem_indicators
+
+    bbox = [min_lon, min_lat, max_lon, max_lat]
+    items = search_planetary_stac(body=body, bbox=bbox, limit=1)
+    if not items or not items[0].get("dem_href"):
+        raise HTTPException(
+            status_code=404,
+            detail=f"No streamable DEM found for body '{body}' at bounding box {bbox}."
+        )
+
+    dem_href = items[0]["dem_href"]
+    data = stream_cog_window(dem_href, window_dim=200)
+    if data is None or not np.isfinite(data).any():
+        raise HTTPException(
+            status_code=502,
+            detail="Failed to stream remote Cloud-Optimized GeoTIFF window."
+        )
+
+    finite_data = data[np.isfinite(data)]
+    topo = dem_indicators(data, res_m=C.COMMON_RES_M)
+
+    return {
+        "body": body.lower(),
+        "item_id": items[0]["id"],
+        "asset_href": dem_href,
+        "window_shape": list(data.shape),
+        "elevation_metrics": {
+            "min_m": round(float(np.nanmin(finite_data)), 2),
+            "max_m": round(float(np.nanmax(finite_data)), 2),
+            "median_m": round(float(np.median(finite_data)), 2),
+            "mean_m": round(float(np.nanmean(finite_data)), 2),
+            "std_m": round(float(np.nanstd(finite_data)), 2),
+        },
+        "computed_topography": {
+            "mean_slope_deg": round(float(np.mean(topo["pente"])), 2),
+            "mean_roughness_deg": round(float(np.mean(topo["rugosite"])), 2),
+            "sample_count": len(topo["pente"]),
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
 # Core Unified Analysis Endpoint
 # ---------------------------------------------------------------------------
 @app.post("/v1/analyze", response_model=AnalysisResponse, tags=["Analysis"])
