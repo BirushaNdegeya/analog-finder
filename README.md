@@ -15,6 +15,22 @@ Future permanent lunar bases and Martian exploration outposts require rigorous m
 - **Where it falls short**: non-reproduced or partially reproduced parameters.
 - **What can be validated on site**: targeted testing domains (rover mobility, lava tube exploration, EVA operational logistics, ISRU regolith testing).
 
+### Core Principle: One Algorithmic Engine, Dual Societal Reading
+
+> **Analog Finder is neither strictly a space tool nor strictly a humanitarian hazard platform. It is a unified geospatial optimal transport engine.**  
+> What is compared (a terrestrial site vs a lunar target, or a terrestrial site against itself across time) is merely a configuration parameter. The mathematical core remains identical.
+
+```
+Geospatial Rasters ──→ Indicator Distributions ──→ Optimal Transport (Wasserstein W₁)
+                              │
+       ┌──────────────────────┴──────────────────────┐
+       ▼                                             ▼
+Mode A: Planetary Analog                      Mode B: Temporal Geohazard
+"Does this Earth site resemble the Moon?"    "Has this slope moved dangerously between T₀ & T₁?"
+- Space mission design & rover testing        - Bukavu urban landslides & gully erosion
+- Planetary geological training               - Nyiragongo & Virunga volcanic deformation
+```
+
 ### Multi-Criteria Framework
 The assessment evaluates **4 core criteria** across **8 quantitative indicators**:
 1. **Topography**: Terrain slope and surface roughness (100 m baseline grid).
@@ -30,15 +46,25 @@ The assessment evaluates **4 core criteria** across **8 quantitative indicators*
 Analog-Finder/
 ├── config/                  # Configuration files
 │   ├── sites.yaml           # Terrestrial candidate sites metadata & bounding boxes
-│   └── targets.yaml         # Planetary target specifications (Marius Hills)
+│   ├── targets.yaml         # Planetary target specifications (Marius Hills)
+│   └── temporal_pairs.yaml  # Geohazard multi-temporal monitoring pairs (Virunga, Bukavu)
 ├── src/
 │   └── analog_finder/       # Core Python package
 │       ├── __init__.py
-│       └── config.py        # System paths, indicator definitions & thresholds
+│       ├── config.py        # System paths, indicator definitions & criticality thresholds
+│       ├── indicators.py    # Geospatial indicator extraction algorithms
+│       ├── ingest.py        # STAC satellite data ingestion & raster loaders
+│       ├── schemas.py       # Pydantic contracts for Mode A (analog) & Mode B (temporal)
+│       ├── scoring.py       # Mode A Wasserstein similarity engine
+│       ├── temporal.py      # Mode B deformation energy, patch heatmaps & significance
+│       ├── validation.py    # Ranking validation & sensitivity analysis
+│       └── pipeline.py      # Execution pipeline
 ├── data/
 │   ├── raw/                 # Raw satellite rasters, DEMs & geological masks (git ignored)
-│   └── processed/           # Processed similarity rankings and validation results
+│   └── processed/           # Processed rankings (scores.json) and changes (changes.json)
+├── tests/                   # Complete automated test suite (30 unit tests)
 ├── requirements.txt         # Pinned software dependencies
+├── pyproject.toml           # Standard build & editable installation configuration
 ├── .gitignore               # Clean repository exclusion rules
 └── README.md                # Project documentation
 ```
@@ -120,6 +146,31 @@ The global similarity score is a **weighted average** of the four criterion scor
 
 > [!WARNING]
 > **Scientific limitations:** Temperature extremes, liquid water / ice, electrostatic lunar dust, 1/6 g gravity, and hard-vacuum conditions are **not evaluated** by this tool. These are listed in each site's validity card as "Never reproducible on Earth".
+
+### 5.2 Mode B — Temporal Deformation Energy & Geohazard Criticality
+
+In temporal surveillance mode, the system assesses whether a specific territory has undergone anomalous physical alteration between baseline period $T_0$ and surveillance period $T_1$:
+
+$$\Delta_{\text{crit}}(k) = \frac{W_1\bigl(\hat{P}_{k,T_0},\; \hat{P}_{k,T_1}\bigr)}{W_{k,\text{scale}}}$$
+
+Where $W_{k,\text{scale}}$ represents the expected physical threshold indicating hazardous geomorphic displacement (e.g. $15^\circ$ slope shift, $60\%$ vegetation loss).
+
+#### 1. Hypothesis Testing (Filtering Sensor Noise)
+To prevent false alarms caused by sensor noise or atmospheric fluctuations, every temporal indicator undergoes a two-sample **Kolmogorov-Smirnov test**:
+- $H_0$: $\hat{P}_{k,T_0} = \hat{P}_{k,T_1}$ (no true ground deformation)
+- Reject $H_0$ if $p\text{-value} < \alpha$ ($\alpha = 0.05$). Indicators failing this significance test are labeled stable.
+
+#### 2. Resolving the Spatial Blind Spot: 2D Patch-Wise Wasserstein Heatmaps
+A global 1D distribution can conceal localized mass movements (e.g., an active landslide toe or volcanic fracture). To maintain spatial localization, the engine splits multi-temporal rasters into sliding metric tiles ($500\,\text{m} \times 500\,\text{m}$) and computes the Earth Mover's Distance patch-by-patch, generating a **georeferenced 2D critical deformation heatmap**.
+
+#### 3. Standardized 4-Tier Early Warning Alert Scale
+
+| Criticality Score | Alert Level | Geomorphic Interpretation | Recommended Municipal / Field Action |
+|:---|:---|:---|:---|
+| **< 0.20** | 🟢 **STABLE** | Normal seasonal variation | Routine baseline observation |
+| **0.20 – 0.40** | 🟡 **WATCH** | Minor creeping surface drift | Bi-annual InSAR / drone surveillance |
+| **0.40 – 0.65** | 🟠 **WARNING** | Substantial slope or land degradation | Restrict construction permits; drainage stabilization |
+| **≥ 0.65** | 🔴 **CRITICAL** | Severe structural collapse risk / active fissure | Immediate ground inspection & evacuation readiness |
 
 ---
 
