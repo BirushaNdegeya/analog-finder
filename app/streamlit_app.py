@@ -1,13 +1,13 @@
 """Analog Finder — Dual-Mode Interactive Decision-Support Dashboard.
 
 Provides two operational personas driven by a single Optimal Transport core:
-  - Mode A: 🚀 Planetary Mission Analogs (Earth vs Moon/Mars)
-  - Mode B: 🌋 Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
+  - Mode A:  Planetary Mission Analogs (Earth vs Moon/Mars)
+  - Mode B:  Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
 
 Features a streamlined 3-tab layout per mode:
-  1. 🗺️ Benchmark Analogs / Crisis Surveillance
-  2. 🎯 Custom Live Study (Draw & Analyze) / On-Demand Hazard Surveillance
-  3. 📚 Documentation & Scientific References
+  1.  Benchmark Analogs / Crisis Surveillance
+  2.  Custom Live Study (Draw & Analyze) / On-Demand Hazard Surveillance
+  3.  Documentation & Scientific References
 
 NASA Space Apps Challenge 2026 - GeoCongo AI
 """
@@ -45,7 +45,7 @@ if not ICON_PATH.exists():
     if fallback_icon.exists():
         ICON_PATH = fallback_icon
 
-favicon = Image.open(ICON_PATH) if ICON_PATH.exists() else "🌍"
+favicon = Image.open(ICON_PATH) if ICON_PATH.exists() else ""
 
 st.set_page_config(
     page_title="Analog Finder — GeoCongo AI",
@@ -60,15 +60,15 @@ st.set_page_config(
 # ---------------------------------------------------------------------------
 def render_documentation_tab() -> None:
     """Render comprehensive peer-reviewed documentation and scientific bibliography."""
-    st.header("📚 Scientific Documentation, Methodology & References")
+    st.header("Scientific Documentation, Methodology & References")
     st.caption("Theoretical framework, multi-sensor satellite ingestion, literature confrontation, and open data sources.")
 
     doc_tab1, doc_tab2, doc_tab3, doc_tab4, doc_tab5 = st.tabs([
-        "📐 Mathematical Methodology & Scoring",
-        "🛰️ Satellite Data Acquisition Pipeline",
-        "🔬 Confrontation with Scientific Literature",
-        "🔗 References & Data Catalogs",
-        "📖 Glossary & Abbreviations",
+        "Mathematical Methodology & Scoring",
+        "Satellite Data Acquisition Pipeline",
+        "Confrontation with Scientific Literature",
+        "References & Data Catalogs",
+        "Glossary & Abbreviations",
     ])
 
     with doc_tab1:
@@ -159,7 +159,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 
 #### B. Concrete Mission Scenarios: What Happens When Weights Are Changed?
 
-##### 🚀 In Mode A: Planetary Mission Analogs
+#####  In Mode A: Planetary Mission Analogs
 
 | Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
 |:---|:---|:---|
@@ -168,7 +168,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 | **Extreme Vacuum & Hyper-Arid Preservation** | Topography: 0.10<br>Geology: 0.10<br>**Environment: 0.70 – 1.00**<br>Resources: 0.10 | • Heavily penalizes any vegetation presence and rainfall; prioritizes zero bare-soil moisture.<br>• **Atacama Desert (Chile) and Death Valley (USA) take #1 and #2** due to extreme aridity ($< 20\\,\\text{mm/yr}$ precipitation) and near-zero NDVI. |
 | **Subsurface Habitat & In-Situ Caves (ISRU)** | Topography: 0.10<br>Geology: 0.20<br>Environment: 0.10<br>**In-Situ Resources / Cavities: 0.80** | • Filters strictly for confirmed lava tubes, volcanic skylights, and basaltic regolith thickness.<br>• **Harrat Khaybar (Umm Jirsan cave) and Lanzarote rise decisively**, while volcanic sites lacking caves are penalized. |
 
-##### 🌋 In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
+#####  In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
 
 In Geohazard mode, the space ISRU resource criterion is completely excluded, leaving the 3 core geophysical drivers:
 
@@ -293,7 +293,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
         )
 
         # ---- Glossary ----
-        st.markdown("### 📖 Glossary of Core Terminology")
+        st.markdown("###  Glossary of Core Terminology")
         st.markdown("""
 | Term | Plain-Language Definition |
 |:---|:---|
@@ -317,7 +317,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 """)
 
         # ---- Abbreviations ----
-        st.markdown("### 🔤 Technical Abbreviations Reference")
+        st.markdown("###  Technical Abbreviations Reference")
         st.markdown("""
 | Abbreviation | Expanded Name | Organization / Context |
 |:---|:---|:---|
@@ -346,7 +346,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 """)
 
         # ---- Operational Decision Reference ----
-        st.markdown("### 🚨 Operational Decision & Alert Thresholds Guide")
+        st.markdown("###  Operational Decision & Alert Thresholds Guide")
         st.markdown("""
 Summary of decision thresholds applied across both operational personas:
 
@@ -372,34 +372,34 @@ Summary of decision thresholds applied across both operational personas:
 # ---------------------------------------------------------------------------
 ANALOG_TOOLTIPS = {
     "topographie": (
-        "📐 Slope, elevation & rugosity: increases focus on terrain roughness and slope distribution. "
+        "Slope, elevation & rugosity: increases focus on terrain roughness and slope distribution. "
         "Crucial for testing rover mobility, traction, wheel wear, and obstacle traversal over lunar/martian terrains."
     ),
     "geologie": (
-        "🪨 Basaltic iron oxide & clay minerals: increases focus on spectral mineral signatures. "
+        "Basaltic iron oxide & clay minerals: increases focus on spectral mineral signatures. "
         "Crucial for drilling tests, sampling mechanisms, and in-situ geochemical spectrometer calibration."
     ),
     "environnement": (
-        "☀️ Aridity & barren regolith: heavily penalizes moisture and vegetation canopy, rewarding barren ground. "
+        "Aridity & barren regolith: heavily penalizes moisture and vegetation canopy, rewarding barren ground. "
         "Crucial for simulating extreme planetary thermal vacuum and hyper-arid climates."
     ),
     "ressources": (
-        "🕳️ Lava tubes & sub-surface cavities: increases focus on volcanic caves and basalt thickness. "
+        "Lava tubes & sub-surface cavities: increases focus on volcanic caves and basalt thickness. "
         "Crucial for testing astronaut habitats, radiation shielding, and subsurface robotic exploration."
     ),
 }
 
 TEMPORAL_TOOLTIPS = {
     "topographie": (
-        "📉 Slope steepening & scarp failure: detects rapid vertical ground displacement and structural collapse "
+        "Slope steepening & scarp failure: detects rapid vertical ground displacement and structural collapse "
         "along active fault scarps and landslide heads."
     ),
     "geologie": (
-        "🌋 Basaltic lava effusion & mineral alteration: detects active volcanic flows, fresh basaltic cooling crust, "
+        "Basaltic lava effusion & mineral alteration: detects active volcanic flows, fresh basaltic cooling crust, "
         "and hydrothermal mineral deposition."
     ),
     "environnement": (
-        "🌱 Bare soil stripping & vegetation loss: detects mass movement scouring, mudflow erosion, and catastrophic "
+        "Bare soil stripping & vegetation loss: detects mass movement scouring, mudflow erosion, and catastrophic "
         "canopy removal during acute geohazard events."
     ),
 }
@@ -410,7 +410,7 @@ TEMPORAL_TOOLTIPS = {
 # ---------------------------------------------------------------------------
 def render_api_docs_page() -> None:
     """Render comprehensive Open Science REST API & Developer SDK documentation."""
-    st.title("🔌 Analog Finder Open Science REST API & Developer SDK")
+    st.title("Analog Finder Open Science REST API & Developer SDK")
     st.caption(
         "Free, public, programmatic access to Earth, Moon, and Mars satellite data, "
         "Wasserstein-1 Optimal Transport models, and real-time geohazard early warning diagnostics."
@@ -424,19 +424,19 @@ def render_api_docs_page() -> None:
     col_b4.metric("Supported Bodies", "Earth · Moon · Mars")
 
     st.info(
-        "💡 **Public Good Mission**: Analog Finder exposes its complete algorithmic engine as a free, open REST API "
+        "**Public Good Mission**: Analog Finder exposes its complete algorithmic engine as a free, open REST API "
         "to empower university researchers, space exploration scientists (NASA, ESA, JAXA), humanitarian NGOs "
         "(Red Cross, UN-OCHA), and African geological observatories (OVG, CRSN, UOB). "
         "No API keys, payment, or proprietary lock-in required."
     )
 
     api_tab1, api_tab2, api_tab3, api_tab4, api_tab5, api_tab6 = st.tabs([
-        "🚀 Quickstart & Health",
-        "🪐 Planetary STAC Bridge (Earth, Moon, Mars)",
-        "🧪 Similarity & Hazard Engine (Mode A & B)",
-        "📦 Catalogs & Precomputed Datasets",
-        "💻 Code Recipes (Python, cURL, JS)",
-        "🤝 Academic & NGO Partnerships",
+        "Quickstart & Health",
+        "Planetary STAC Bridge (Earth, Moon, Mars)",
+        "Similarity & Hazard Engine (Mode A & B)",
+        "Catalogs & Precomputed Datasets",
+        "Code Recipes (Python, cURL, JS)",
+        "Academic & NGO Partnerships",
     ])
 
     # -----------------------------------------------------------------------
@@ -503,7 +503,7 @@ Query and stream satellite altimetry and multispectral imagery across **Earth**,
 without downloading gigabyte-sized files. The bridge uses HTTP range requests on Cloud-Optimized GeoTIFFs (COGs).
 """)
 
-        with st.expander("📡 GET /v1/planetary/bodies — Supported Bodies & Catalogs", expanded=True):
+        with st.expander("GET /v1/planetary/bodies — Supported Bodies & Catalogs", expanded=True):
             st.markdown("Returns supported celestial targets, their resolution, and primary STAC catalog endpoints.")
             col_pb1, col_pb2 = st.columns(2)
             with col_pb1:
@@ -534,7 +534,7 @@ without downloading gigabyte-sized files. The bridge uses HTTP range requests on
 }
 """, language="json")
 
-        with st.expander("🔍 GET /v1/planetary/search — Discover COG Assets by Bounding Box", expanded=False):
+        with st.expander("GET /v1/planetary/search — Discover COG Assets by Bounding Box", expanded=False):
             st.markdown("""
 Search for Cloud-Optimized GeoTIFFs over any planetary bounding box.
 
@@ -549,7 +549,7 @@ curl -X GET "http://localhost:8000/v1/planetary/search?body=moon&min_lon=-57.0&m
      -H "Accept: application/json"
 """, language="bash")
 
-        with st.expander("📐 GET /v1/planetary/sample — Stream Elevation & Compute Topography", expanded=False):
+        with st.expander("GET /v1/planetary/sample — Stream Elevation & Compute Topography", expanded=False):
             st.markdown("""
 Streams a 200×200 pixel sub-window from a remote planetary COG and calculates slope and roughness metrics in memory.
 """)
@@ -695,10 +695,10 @@ curl -X GET "http://localhost:8000/v1/sites" -H "Accept: application/json"
         recipe_choice = st.selectbox(
             "Select Code Recipe:",
             [
-                "🐍 Python: Batch Evaluate & Rank Candidate Sites (Requests + Pandas)",
-                "🚨 Python: Automated Geohazard Monitor & Slack/Webhook Dispatcher (NGOs)",
-                "🌐 JavaScript / TypeScript: Web App Integration (Fetch API)",
-                "💻 Bash / cURL: Pipeline Automation Script",
+                "Python: Batch Evaluate & Rank Candidate Sites (Requests + Pandas)",
+                "Python: Automated Geohazard Monitor & Slack/Webhook Dispatcher (NGOs)",
+                "JavaScript / TypeScript: Web App Integration (Fetch API)",
+                "Bash / cURL: Pipeline Automation Script",
             ]
         )
 
@@ -781,7 +781,7 @@ def monitor_geohazard_zone(pair_id="bukavu_ibanda"):
     if alert == "CRITICAL":
         alert_msg = {
             "text": (
-                f"🚨 *DISASTER ALERT: {data['site_name']}*\\n"
+                f"*DISASTER ALERT: {data['site_name']}*\\n"
                 f"Criticality Index: *{criticality:.3f}* (Threshold ≥ 0.65)\\n"
                 f"Status: *CRITICAL* — Immediate field reconnaissance recommended."
             )
@@ -855,13 +855,13 @@ curl -s -X POST "$API/analyze" \\
         st.subheader("6. Free Open Science & Institutional Partnerships")
         st.markdown(r"""
 #### Who Can Use This API for Free?
-1. 🎓 **Universities & Student Researchers**:
+1.  **Universities & Student Researchers**:
    * Master's and PhD candidates in planetary geomorphology, remote sensing, and geophysics may query our endpoints for thesis simulations and paper benchmarking.
    * Cite GeoCongo AI in your papers using the BibTeX citation below.
-2. 🏥 **Humanitarian NGOs & Civil Protection**:
+2.  **Humanitarian NGOs & Civil Protection**:
    * Disaster risk reduction organizations (*Red Cross, Protection Civile RDC, UN-OCHA*) can integrate our `/v1/analyze` endpoint into automated hazard dashboards for the Kivu rift.
    * Free high-frequency polling is permitted for crisis prevention.
-3. 🚀 **Space Agencies & Rover Robotics Labs**:
+3.  **Space Agencies & Rover Robotics Labs**:
    * NASA, ESA, JAXA, and NewSpace rover manufacturers can leverage our STAC cross-body bridge to locate suitable Earth test sites for landing gear, autonomous mobility, and drill mechanisms.
 
 ---
@@ -900,9 +900,9 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("Operational Focus")
 
 persona_options = [
-    "🚀 Planetary Mission Analogs (Mode A)",
-    "🌋 Geohazard & Risk Monitor (Mode B)",
-    "🔌 Open Science API & Developer Hub",
+    "Planetary Mission Analogs (Mode A)",
+    "Geohazard & Risk Monitor (Mode B)",
+    "Open Science API & Developer Hub",
 ]
 persona_captions = [
     "Benchmark Earth testbeds against Moon & Mars using continuous Wasserstein-1 Optimal Transport.",
@@ -941,7 +941,7 @@ if "Planetary" in app_mode:
 
     data = json.loads(scores_path.read_text(encoding="utf-8"))
 
-    st.title("🚀 Planetary Analog Finder")
+    st.title("Planetary Analog Finder")
     st.caption(
         f"Target: **{data['target']['name']}** — "
         "Candidate Earth sites ranked by geomorphological and geological similarity to the planetary target "
@@ -974,7 +974,7 @@ if "Planetary" in app_mode:
 
     # Sidebar: Open Science API Quick Access Section
     st.sidebar.markdown("---")
-    st.sidebar.subheader("🔌 Open Science API & SDK")
+    st.sidebar.subheader("Open Science API & SDK")
     st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
     st.sidebar.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
@@ -982,8 +982,8 @@ if "Planetary" in app_mode:
 * **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
-    if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_a"):
-        st.session_state["platform_persona_radio"] = "🔌 Open Science API & Developer Hub"
+    if st.sidebar.button("Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_a"):
+        st.session_state["platform_persona_radio"] = "Open Science API & Developer Hub"
         st.rerun()
 
     _label_to_key = {v: k for k, v in C.CRITERIA_LABELS.items()}
@@ -1015,9 +1015,9 @@ if "Planetary" in app_mode:
 
     # Exact 3 Tabs as requested
     tab_bench, tab_custom, tab_docs = st.tabs([
-        "🗺️ Benchmark Analogs & Validity",
-        "🎯 Custom Live Study (Draw & Analyze)",
-        "📚 Documentation & Scientific References",
+        "Benchmark Analogs & Validity",
+        "Custom Live Study (Draw & Analyze)",
+        "Documentation & Scientific References",
     ])
 
     # -----------------------------------------------------------------------
@@ -1061,7 +1061,7 @@ if "Planetary" in app_mode:
 
             folium_static(m, width=680, height=450)
             st.caption(
-                "🗺️ **Global Map Guide**: The blue star marks the planetary target (Marius Hills, Moon). "
+                "**Global Map Guide**: The blue star marks the planetary target (Marius Hills, Moon). "
                 "Each candidate Earth site is shown as a **colored bounding box** (geographic footprint) "
                 "plus a **center pin marker** — matching the Geohazard mode's visualization style. "
                 "🟢 Green = High planetary resemblance (≥ 0.70), 🟡 Yellow = Moderate/Partial analog (0.40–0.70), "
@@ -1071,7 +1071,7 @@ if "Planetary" in app_mode:
         with right:
             st.dataframe(df.drop(columns=["id"]), use_container_width=True)
             st.caption(
-                "📋 **Leaderboard Interpretation**: Sites are sorted by **Global Score** (0.0 to 1.0), "
+                "**Leaderboard Interpretation**: Sites are sorted by **Global Score** (0.0 to 1.0), "
                 "computed via Earth Mover's Distance. A higher score means closer terrain resemblance. "
                 "**Confidence** indicates the percentage of physical indicators successfully extracted from satellite data."
             )
@@ -1102,7 +1102,7 @@ if "Planetary" in app_mode:
         with c1:
             st.plotly_chart(fig, use_container_width=True)
             st.caption(
-                "🕸️ **Multi-Criteria Polar Profile**: Each axis corresponds to a core physical domain. "
+                "**Multi-Criteria Polar Profile**: Each axis corresponds to a core physical domain. "
                 "The further the colored shape reaches outward toward 1.0 (the outer perimeter), the more faithfully "
                 "this Earth site mimics the lunar target in that specific scientific domain."
             )
@@ -1122,7 +1122,7 @@ if "Planetary" in app_mode:
         st.markdown("#### Scientific Validity Card")
         k1, k2, k3 = st.columns(3)
         k1.success("✅ Reproduced: " + (", ".join(v.get("reproduit", [])) or "none"))
-        k2.warning("⚠️ Partial: " + (", ".join(v.get("partiel", [])) or "none"))
+        k2.warning("🟡 Partial: " + (", ".join(v.get("partiel", [])) or "none"))
         k3.error("❌ Not reproduced: " + (", ".join(v.get("non_reproduit", [])) or "none"))
 
         st.write(f"**Not evaluated:** {', '.join(v.get('non_evalue', [])) or 'none'}")
@@ -1144,13 +1144,13 @@ if "Planetary" in app_mode:
             ]
             st.dataframe(pd.DataFrame(rows_val), hide_index=True, use_container_width=True)
             st.caption(
-                "🔬 **Physical Distributions Guide**: Compares the median terrain parameter measured on Earth with "
+                "**Physical Distributions Guide**: Compares the median terrain parameter measured on Earth with "
                 "the planetary target baseline. A Score close to 1.0 denotes near-identical distributions; "
                 "divergent values (e.g. slope differences or moisture) account for criterion score reductions."
             )
 
         # Scientific Validation Expander
-        with st.expander("📈 Scientific Validation & Sensitivity Stability (Monte Carlo)", expanded=False):
+        with st.expander("Scientific Validation & Sensitivity Stability (Monte Carlo)", expanded=False):
             exp = data["validation"]["expectations"]
             st.markdown("##### Known Analogs & Negative Control Verification")
             status = "✅ Passed" if exp["passed"] else "❌ Failed"
@@ -1163,7 +1163,7 @@ if "Planetary" in app_mode:
             if known_rows:
                 st.dataframe(pd.DataFrame(known_rows), hide_index=True)
                 st.caption(
-                    "🧪 **Benchmark Check**: Confirms that peer-reviewed literature analogs (Hawaii, Lanzarote, Lava Beds) "
+                    "**Benchmark Check**: Confirms that peer-reviewed literature analogs (Hawaii, Lanzarote, Lava Beds) "
                     "are algorithmically placed in the top tier, matching decades of published NASA field exploration data."
                 )
 
@@ -1171,7 +1171,7 @@ if "Planetary" in app_mode:
             neg_last = exp["negative_control_last"]
             st.write(
                 f"**Negative Control Rank:** {neg_rank} "
-                f"({'last (rank 9) — ✅ expected' if neg_last else '⚠️ not last'})."
+                f"({'last (rank 9) — ✅ expected' if neg_last else 'not last'})."
             )
 
             sens = data["validation"]["sensitivity"]
@@ -1183,7 +1183,7 @@ if "Planetary" in app_mode:
             if "per_site" in sens:
                 st.dataframe(pd.DataFrame(sens["per_site"]).T, use_container_width=True)
                 st.caption(
-                    "📊 **Monte Carlo Stability Guide**: Verifies how the ranking responds to random variations in user weights. "
+                    "**Monte Carlo Stability Guide**: Verifies how the ranking responds to random variations in user weights. "
                     "A mean correlation ρ = 0.95 proves the ranking is scientifically stable, resilient to subjective bias, and governed by terrain physics."
                 )
 
@@ -1191,7 +1191,7 @@ if "Planetary" in app_mode:
     # TAB 2: Custom Live Study (Draw & Analyze)
     # -----------------------------------------------------------------------
     with tab_custom:
-        st.subheader("🎯 Custom Planetary Analog Studio — Test Any Area on Earth")
+        st.subheader("Custom Planetary Analog Studio — Test Any Area on Earth")
         st.write(
             "Evaluate any custom Area of Interest (AOI) on Earth against the selected Moon or Mars target. "
             "Select an iconic volcanic field, enter custom coordinates, and run live optimal transport scoring."
@@ -1202,8 +1202,8 @@ if "Planetary" in app_mode:
             target_opt = st.selectbox(
                 "1. Choose Planetary Target:",
                 [
-                    "🌕 Marius Hills (Moon - Oceanus Procellarum)",
-                    "🔴 Jezero Crater (Mars - Ancient paleolake delta)",
+                    "Marius Hills (Moon - Oceanus Procellarum)",
+                    "Jezero Crater (Mars - Ancient paleolake delta)",
                 ],
             )
             target_key = "marius_hills" if "Marius" in target_opt else "jezero_crater"
@@ -1213,22 +1213,22 @@ if "Planetary" in app_mode:
                 "2. Choose Terrestrial Candidate Preset or Custom:",
                 [
                     "Custom Coordinates (Enter Bounding Box below)",
-                    "🌋 Mount Etna, Italy (Active basaltic stratovolcano)",
-                    "🌋 Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)",
-                    "🌋 Piton de la Fournaise, Reunion (Basaltic shield caldera)",
-                    "🌋 Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)",
-                    "🏜️ Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)",
-                    "🌋 Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)",
+                    "Mount Etna, Italy (Active basaltic stratovolcano)",
+                    "Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)",
+                    "Piton de la Fournaise, Reunion (Basaltic shield caldera)",
+                    "Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)",
+                    "Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)",
+                    "Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)",
                 ],
             )
 
         PRESETS = {
-            "🌋 Mount Etna, Italy (Active basaltic stratovolcano)": ("Mount Etna (Italy)", (14.95, 37.70, 15.05, 37.80)),
-            "🌋 Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)": ("Ol Doinyo Lengai (Tanzania)", (35.88, -2.78, 35.95, -2.72)),
-            "🌋 Piton de la Fournaise, Reunion (Basaltic shield caldera)": ("Piton de la Fournaise", (55.67, -21.28, 55.75, -21.20)),
-            "🌋 Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)": ("Kilauea Caldera (Hawaii)", (-155.32, 19.38, -155.24, 19.45)),
-            "🏜️ Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)": ("Erg Chebbi (Morocco)", (-4.05, 31.10, -3.95, 31.25)),
-            "🌋 Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)": ("Nyamuragira (DR Congo)", (29.15, -1.45, 29.25, -1.35)),
+            "Mount Etna, Italy (Active basaltic stratovolcano)": ("Mount Etna (Italy)", (14.95, 37.70, 15.05, 37.80)),
+            "Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)": ("Ol Doinyo Lengai (Tanzania)", (35.88, -2.78, 35.95, -2.72)),
+            "Piton de la Fournaise, Reunion (Basaltic shield caldera)": ("Piton de la Fournaise", (55.67, -21.28, 55.75, -21.20)),
+            "Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)": ("Kilauea Caldera (Hawaii)", (-155.32, 19.38, -155.24, 19.45)),
+            "Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)": ("Erg Chebbi (Morocco)", (-4.05, 31.10, -3.95, 31.25)),
+            "Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)": ("Nyamuragira (DR Congo)", (29.15, -1.45, 29.25, -1.35)),
         }
 
         default_name = "Custom Terrestrial AOI"
@@ -1268,19 +1268,19 @@ if "Planetary" in app_mode:
         ).add_to(m_draw)
         folium_static(m_draw, width=680, height=320)
         st.caption(
-            "🗺️ **Bounding Box Preview**: The blue outline indicates the geographic footprint where Copernicus DEM elevation, "
+            "**Bounding Box Preview**: The blue outline indicates the geographic footprint where Copernicus DEM elevation, "
             "Sentinel-2 multispectral bands, and TerraClimate aridity data are extracted via open STAC protocols."
         )
 
         col_exec, col_mode = st.columns([2, 1])
         with col_mode:
             exec_real = st.toggle(
-                "🛰️ Live STAC Cloud Streaming",
+                "Live STAC Cloud Streaming",
                 value=not data.get("synthetic", True),
                 help="Stream live Copernicus DEM, Sentinel-2, and TerraClimate rasters from Microsoft Planetary Computer.",
             )
         with col_exec:
-            launch_analog = st.button("🚀 Run Live Analog Evaluation", type="primary", use_container_width=True)
+            launch_analog = st.button("Run Live Analog Evaluation", type="primary", use_container_width=True)
 
         if launch_analog or st.session_state.get(f"res_analog_{c_name}"):
             with st.spinner("Analyzing planetary target profile and extracting satellite data..."):
@@ -1300,15 +1300,15 @@ if "Planetary" in app_mode:
             st.success(f"✅ Evaluation completed successfully for **{cs['name']}** against **{res_a['target']['name']}**!")
 
             m_col1, m_col2, m_col3, m_col4 = st.columns(4)
-            m_col1.metric("🏆 Global Rank", f"#{res_a['rank']} / {res_a['total_sites']} sites")
-            m_col2.metric("🎯 Wasserstein Fidelity Score", f"{cs['global']:.4f}")
-            m_col3.metric("📡 Data Confidence", f"{cs['confidence'] * 100:.1f} %")
-            m_col4.metric("🪐 Target Body", res_a["target"]["name"])
+            m_col1.metric("Global Rank", f"#{res_a['rank']} / {res_a['total_sites']} sites")
+            m_col2.metric("Wasserstein Fidelity Score", f"{cs['global']:.4f}")
+            m_col3.metric("Data Confidence", f"{cs['confidence'] * 100:.1f} %")
+            m_col4.metric("Target Body", res_a["target"]["name"])
 
             # Spider / Radar Chart
             c_left, c_right = st.columns([1, 1])
             with c_left:
-                st.markdown("#### 🕸️ Multi-Criteria Comparative Profile")
+                st.markdown("####  Multi-Criteria Comparative Profile")
                 crit_cats = [C.CRITERIA_LABELS.get(k, k) for k in C.CRITERIA.keys()]
                 crit_vals = [cs["criteria"].get(k) or 0.0 for k in C.CRITERIA.keys()]
                 fig_radar = go.Figure()
@@ -1317,13 +1317,13 @@ if "Planetary" in app_mode:
                 fig_radar.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), height=360, margin=dict(l=40, r=40, t=30, b=30))
                 st.plotly_chart(fig_radar, use_container_width=True)
                 st.caption(
-                    "ℹ️ **Comparative Radar Guide**: The blue filled area represents your custom site's performance across the 4 criteria. "
+                    "**Comparative Radar Guide**: The blue filled area represents your custom site's performance across the 4 criteria. "
                     "The green dashed outer ring (1.0) marks an ideal planetary match. The closer the blue envelope approaches the green dashed ring, "
                     "the higher the physical resemblance to the Moon or Mars target."
                 )
 
             with c_right:
-                st.markdown("#### 📋 Scientific Validity Card")
+                st.markdown("####  Scientific Validity Card")
                 st.caption(cs["explanation"])
                 v = cs["validity"]
                 if v["reproduit"]:
@@ -1337,7 +1337,7 @@ if "Planetary" in app_mode:
                     st.write("**Never Reproducible (Earth Physics):**", v["jamais_reproductible"])
 
             # Indicators breakdown table
-            st.markdown("#### 🔬 Physical Indicator Breakdown")
+            st.markdown("####  Physical Indicator Breakdown")
             ind_rows = []
             for ind, vinfo in cs.get("values", {}).items():
                 ind_rows.append({
@@ -1350,19 +1350,19 @@ if "Planetary" in app_mode:
             if ind_rows:
                 st.dataframe(pd.DataFrame(ind_rows), hide_index=True, use_container_width=True)
                 st.caption(
-                    "ℹ️ **Indicator Interpretation**: Compares the physical parameters. "
+                    "**Indicator Interpretation**: Compares the physical parameters. "
                     "• **Wasserstein Distance W₁**: Quantifies the transport distance between terrestrial and planetary distributions (lower = closer match). "
                     "• **Similarity Score**: Normalized score where 1.0 is an exact distribution match and 0.0 is complete divergence."
                 )
 
             # Integrated Leaderboard
-            st.markdown("#### 🏅 Integrated Global Ranking (Custom Site Included)")
+            st.markdown("####  Integrated Global Ranking (Custom Site Included)")
             lb_df = pd.DataFrame(res_a["leaderboard"])
             lb_df = lb_df[["name", "role", "global", "confidence"]].rename(columns={"name": "Site", "role": "Role", "global": "Global Score", "confidence": "Data Confidence"})
             lb_df.index = range(1, len(lb_df) + 1)
             st.dataframe(lb_df, use_container_width=True)
             st.caption(
-                "ℹ️ **Integrated Benchmark Ranking**: Seamlessly positions your custom area of interest alongside world-famous "
+                "**Integrated Benchmark Ranking**: Seamlessly positions your custom area of interest alongside world-famous "
                 "scientific reference analogs (e.g. Death Valley, Lanzarote, Atacama Desert) to assess competitive mission viability."
             )
 
@@ -1388,7 +1388,7 @@ elif "Geohazard" in app_mode:
 
     tdata = json.loads(changes_path.read_text(encoding="utf-8"))
 
-    st.title("🌋 Geohazard & Volcanic Risk Monitor")
+    st.title("Geohazard & Volcanic Risk Monitor")
     st.caption(
         "Kivu Rift & Virunga Province (DR Congo) — "
         "Multi-temporal satellite surveillance quantifying ground deformation, volcanic eruption signatures, "
@@ -1431,7 +1431,7 @@ elif "Geohazard" in app_mode:
 
     # Sidebar: Open Science API Quick Access Section
     st.sidebar.markdown("---")
-    st.sidebar.subheader("🔌 Open Science API & SDK")
+    st.sidebar.subheader("Open Science API & SDK")
     st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
     st.sidebar.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
@@ -1439,15 +1439,15 @@ elif "Geohazard" in app_mode:
 * **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
-    if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_b"):
-        st.session_state["platform_persona_radio"] = "🔌 Open Science API & Developer Hub"
+    if st.sidebar.button("Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_b"):
+        st.session_state["platform_persona_radio"] = "Open Science API & Developer Hub"
         st.rerun()
 
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
-        "🗺️ Crisis Surveillance & Risk Validation",
-        "⚡ On-Demand Hazard Surveillance",
-        "📚 Documentation & Scientific References",
+        "Crisis Surveillance & Risk Validation",
+        "On-Demand Hazard Surveillance",
+        "Documentation & Scientific References",
     ])
 
     # -----------------------------------------------------------------------
@@ -1487,7 +1487,7 @@ elif "Geohazard" in app_mode:
 
             folium_static(m_rift, width=680, height=450)
             st.caption(
-                "🗺️ **Kivu Rift Surveillance Map Guide**: Bounding boxes outline priority disaster monitoring zones. "
+                "**Kivu Rift Surveillance Map Guide**: Bounding boxes outline priority disaster monitoring zones. "
                 "Colors reflect civil protection alert levels: 🔴 Red = Critical rapid rupture, 🟠 Orange = Warning / high hazard shift, "
                 "🟡 Yellow = Watch / creeping deformation, 🟢 Green = Stable baseline terrain. Click markers for zone details."
             )
@@ -1504,7 +1504,7 @@ elif "Geohazard" in app_mode:
                 })
             st.dataframe(pd.DataFrame(z_rows), use_container_width=True)
             st.caption(
-                "📋 **Territorial Criticality Table**: 'Criticality Index' ranges from 0.0 (total stability) to 1.0 (catastrophic mass movement). "
+                "**Territorial Criticality Table**: 'Criticality Index' ranges from 0.0 (total stability) to 1.0 (catastrophic mass movement). "
                 "Alert thresholds: 🔴 CRITICAL (≥ 0.65) · 🟠 WARNING (0.40–0.65) · 🟡 WATCH (0.20–0.40) · 🟢 STABLE (< 0.20). "
                 "Index ≥ 0.65 triggers immediate civil protection field deployment and building moratoria."
             )
@@ -1534,7 +1534,7 @@ elif "Geohazard" in app_mode:
             )
             st.plotly_chart(fig_t, use_container_width=True)
             st.caption(
-                "⚠️ **Triangle of Risk Guide**: Evaluates the 3 fundamental disaster drivers: "
+                "**Triangle of Risk Guide**: Evaluates the 3 fundamental disaster drivers: "
                 "• **Topography** (slope collapse, scarp steepening) · "
                 "• **Geology** (lava field expansion, hydrothermal mineral alteration) · "
                 "• **Environment** (bare soil exposure, vegetation stripping). "
@@ -1553,10 +1553,10 @@ elif "Geohazard" in app_mode:
         st.markdown("#### Geohazard Decision Card")
         if v_card["divergent_or_critical"]:
             for crit_item in v_card["divergent_or_critical"]:
-                st.error(f"🚨 {crit_item}")
+                st.error(f"{crit_item}")
         if v_card["partial_drift"]:
             for drift_item in v_card["partial_drift"]:
-                st.warning(f"⚠️ {drift_item}")
+                st.warning(f"🟠 {drift_item}")
         if v_card["reproduced_or_stable"]:
             for stable_item in v_card["reproduced_or_stable"]:
                 st.success(f"🟢 {stable_item}")
@@ -1579,14 +1579,14 @@ elif "Geohazard" in app_mode:
             })
         st.dataframe(pd.DataFrame(ind_table_rows), hide_index=True, use_container_width=True)
         st.caption(
-            "🔬 **Kolmogorov-Smirnov Significance Guide**: "
+            "**Kolmogorov-Smirnov Significance Guide**: "
             "• **Shift (Δ Median)**: Shows the physical magnitude and direction of displacement (e.g. +54% bare soil exposure, or slope change). "
             "• **p-value (KS-test)**: Mathematical proof of displacement. A p-value < 0.05 ('✅ YES') formally rejects the null hypothesis of seasonal noise, "
             "proving to emergency planners that real physical terrain movement occurred between the satellite overpasses."
         )
 
         st.markdown("---")
-        st.subheader("🔬 2D Spatial Patch Differencing Simulation")
+        st.subheader("2D Spatial Patch Differencing Simulation")
         st.write(
             "Resolving Spatial Blind Spots: While 1D empirical distributions quantify total deformation energy, "
             "localized mass movements (e.g. Kadutu scarp or volcanic fractures) are isolated using sliding 2D metric patches."
@@ -1609,7 +1609,7 @@ elif "Geohazard" in app_mode:
         fig_heat.update_layout(height=420)
         st.plotly_chart(fig_heat, use_container_width=True)
         st.caption(
-            "🔥 **Spatialized Ground Deformation Heatmap Guide (For Non-Specialists)**: "
+            "**Spatialized Ground Deformation Heatmap Guide (For Non-Specialists)**: "
             "Even when an entire valley or mountain appears stable on average, local landslides or volcanic faults rupture at precise focal points. "
             "This 2D map divides the terrain into 500-meter metric grid squares. "
             "• **Deep Red Peak (W₁ > 8.0 m)**: Pinpoints the active rupture epicenter (e.g. the active toe of the Kadutu landslide or active volcanic rift scarp). "
@@ -1621,7 +1621,7 @@ elif "Geohazard" in app_mode:
     # TAB 2: On-Demand Hazard Surveillance
     # -----------------------------------------------------------------------
     with tab_tondemand:
-        st.subheader("⚡ On-Demand Hazard Surveillance — Dynamic Multi-Temporal Testing")
+        st.subheader("On-Demand Hazard Surveillance — Dynamic Multi-Temporal Testing")
         st.write(
             "Monitor geomorphological and spectral deformation across any custom Area of Interest (AOI) on Earth between two satellite acquisition intervals. "
             "Computes Kolmogorov-Smirnov significance testing and Wasserstein divergence live."
@@ -1633,10 +1633,10 @@ elif "Geohazard" in app_mode:
                 "1. Choose Geohazard Study Area Preset or Custom:",
                 [
                     "Custom Coordinates (Enter Bounding Box below)",
-                    "🏚️ Bukavu - Ibanda Escarpment (Active fault creep & landslide)",
-                    "🏚️ Bukavu - Kadutu & Funu Valley (Severe gully erosion)",
-                    "🌋 Nyiragongo Volcano - South Flank (2021 eruption lava field)",
-                    "🌋 Nyamuragira Volcano - Caldera & Adventive Cones",
+                    "Bukavu - Ibanda Escarpment (Active fault creep & landslide)",
+                    "Bukavu - Kadutu & Funu Valley (Severe gully erosion)",
+                    "Nyiragongo Volcano - South Flank (2021 eruption lava field)",
+                    "Nyamuragira Volcano - Caldera & Adventive Cones",
                 ],
             )
             t_hazard = st.selectbox(
@@ -1651,10 +1651,10 @@ elif "Geohazard" in app_mode:
             )
 
         T_PRESETS = {
-            "🏚️ Bukavu - Ibanda Escarpment (Active fault creep & landslide)": ("Bukavu - Ibanda Escarpment", (28.8559, -2.5297, 28.8653, -2.5167), "2019-06-01/2019-09-01", "2024-06-01/2024-09-01"),
-            "🏚️ Bukavu - Kadutu & Funu Valley (Severe gully erosion)": ("Bukavu - Kadutu Funu", (28.8399, -2.5259, 28.8484, -2.5156), "2018-06-01/2018-09-01", "2024-06-01/2024-09-01"),
-            "🌋 Nyiragongo Volcano - South Flank (2021 eruption lava field)": ("Nyiragongo South Flank", (29.15, -1.60, 29.35, -1.45), "2021-01-01/2021-05-15", "2021-06-01/2021-09-30"),
-            "🌋 Nyamuragira Volcano - Caldera & Adventive Cones": ("Nyamuragira Caldera", (29.15, -1.45, 29.25, -1.35), "2020-01-01/2020-06-01", "2024-01-01/2024-06-01"),
+            "Bukavu - Ibanda Escarpment (Active fault creep & landslide)": ("Bukavu - Ibanda Escarpment", (28.8559, -2.5297, 28.8653, -2.5167), "2019-06-01/2019-09-01", "2024-06-01/2024-09-01"),
+            "Bukavu - Kadutu & Funu Valley (Severe gully erosion)": ("Bukavu - Kadutu Funu", (28.8399, -2.5259, 28.8484, -2.5156), "2018-06-01/2018-09-01", "2024-06-01/2024-09-01"),
+            "Nyiragongo Volcano - South Flank (2021 eruption lava field)": ("Nyiragongo South Flank", (29.15, -1.60, 29.35, -1.45), "2021-01-01/2021-05-15", "2021-06-01/2021-09-30"),
+            "Nyamuragira Volcano - Caldera & Adventive Cones": ("Nyamuragira Caldera", (29.15, -1.45, 29.25, -1.35), "2020-01-01/2020-06-01", "2024-01-01/2024-06-01"),
         }
 
         default_tname = "Custom Geohazard AOI"
@@ -1702,20 +1702,20 @@ elif "Geohazard" in app_mode:
         ).add_to(m_tdraw)
         folium_static(m_tdraw, width=680, height=320)
         st.caption(
-            "🗺️ **Monitored Bounding Box Preview**: The red outline shows the exact territorial footprint where bi-temporal Sentinel-2 optical "
+            "**Monitored Bounding Box Preview**: The red outline shows the exact territorial footprint where bi-temporal Sentinel-2 optical "
             "passes and Copernicus DEM elevation profiles are ingested and differenced."
         )
 
         texec_col, tmode_col = st.columns([2, 1])
         with tmode_col:
             texec_real = st.toggle(
-                "🛰️ Live STAC Sentinel-2 Loading",
+                "Live STAC Sentinel-2 Loading",
                 value=not tdata.get("synthetic", True),
                 key="toggle_real_temporal",
                 help="Download and process bi-temporal Sentinel-2 L2A scenes from Planetary Computer.",
             )
         with texec_col:
-            launch_temporal = st.button("🚨 Run Live Geohazard Surveillance", type="primary", use_container_width=True)
+            launch_temporal = st.button("Run Live Geohazard Surveillance", type="primary", use_container_width=True)
 
         if launch_temporal or st.session_state.get(f"res_temporal_{t_name}"):
             with st.spinner("Streaming bi-temporal Sentinel-2 scenes and computing Wasserstein divergence..."):
@@ -1735,7 +1735,7 @@ elif "Geohazard" in app_mode:
 
             st.success(f"✅ Surveillance diagnostics complete for **{res_t['name']}**!")
             alert_lvl = res_t["alert_level"]
-            alert_labels = {"critical": "🚨 CRITICAL", "warning": "⚠️ WARNING", "watch": "🟡 WATCH", "stable": "🟢 STABLE"}
+            alert_labels = {"critical": "🔴 CRITICAL", "warning": "🟠 WARNING", "watch": "🟡 WATCH", "stable": "🟢 STABLE"}
 
             tm1, tm2, tm3, tm4 = st.columns(4)
             tm1.metric("Alert Status", alert_labels.get(alert_lvl, alert_lvl))
@@ -1745,13 +1745,13 @@ elif "Geohazard" in app_mode:
 
             # Risk validity card
             tv = res_t["validity_card"]
-            st.markdown("#### 📋 Geohazard Decision Breakdown")
+            st.markdown("####  Geohazard Decision Breakdown")
             if tv["divergent_or_critical"]:
                 for item in tv["divergent_or_critical"]:
-                    st.error(f"🚨 {item}")
+                    st.error(f"{item}")
             if tv["partial_drift"]:
                 for item in tv["partial_drift"]:
-                    st.warning(f"⚠️ {item}")
+                    st.warning(f"🟠 {item}")
             if tv["reproduced_or_stable"]:
                 for item in tv["reproduced_or_stable"]:
                     st.success(f"🟢 {item}")
@@ -1760,7 +1760,7 @@ elif "Geohazard" in app_mode:
                 st.info("**Civil Protection Directives:**\n" + "\n".join(f"- {act}" for act in tv["recommended_actions"]))
 
             # Table KS
-            st.markdown("#### 🔬 Statistical Indicator Metrics (Two-Sample Kolmogorov-Smirnov Test)")
+            st.markdown("####  Statistical Indicator Metrics (Two-Sample Kolmogorov-Smirnov Test)")
             tind_rows = []
             for ind, m in res_t.get("indicators", {}).items():
                 tind_rows.append({
@@ -1773,7 +1773,7 @@ elif "Geohazard" in app_mode:
                 })
             st.dataframe(pd.DataFrame(tind_rows), hide_index=True, use_container_width=True)
             st.caption(
-                "ℹ️ **Emergency Decision Metrics Guide**: "
+                "**Emergency Decision Metrics Guide**: "
                 "Every indicator marked '✅ YES' experienced statistically verifiable deformation exceeding environmental noise thresholds. "
                 "Disaster response teams use these metrics to assess active landslide acceleration, soil erosion severity, or volcanic deposit expansion."
             )
