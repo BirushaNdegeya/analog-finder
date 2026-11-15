@@ -299,6 +299,21 @@ Interactive documentation and OpenAPI Swagger UI:
 - `GET /v1/planetary/search` : Programmatic search across Earth, Lunar (Kaguya/LOLA), and Martian (CTX/HiRISE) STAC catalogs.
 - `GET /v1/planetary/sample` : Streams remote COG windows via HTTP Range requests and returns real-time topographic metrics (elevation range, mean slope, roughness).
 
+#### Quick Start — cURL Examples (Planetary Bridge)
+
+```bash
+# 1. List supported planetary bodies and their open STAC endpoints
+curl -X GET "http://localhost:8000/v1/planetary/bodies"
+
+# 2. Search DEM and optical assets over Marius Hills (Moon)
+curl -X GET "http://localhost:8000/v1/planetary/search?body=moon&min_lon=-57.0&min_lat=13.0&max_lon=-55.0&max_lat=15.0"
+
+# 3. Stream real-time slope & roughness from Jezero Crater (Mars)
+curl -X GET "http://localhost:8000/v1/planetary/sample?body=mars&min_lon=77.0&min_lat=18.0&max_lon=78.0&max_lat=19.0"
+```
+
+> **Open Protocol**: These endpoints act as a public bridge to Earth, Moon, and Mars STAC data. Any external project can query them to access altimetric (DEM) and optical COG assets across all three bodies — no authentication required.
+
 ---
 
 ## 8. Scientific Analog Validity Framework
