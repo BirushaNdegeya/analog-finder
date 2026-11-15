@@ -26,7 +26,7 @@ temporal_pairs:
     name: "Bukavu - Kadutu & Funu Valley"
     hazard_type: "landslide"
     description: "Catastrophic gully erosion, chronic rotational landslides, and slope destabilization in high-density informal urban settlements."
-    bbox: [28.82, -2.52, 28.87, -2.48]
+    bbox: [28.8399, -2.5259, 28.8484, -2.5156]
     baseline_t0: "2018-06-01/2018-09-01"
     observation_t1: "2024-06-01/2024-09-01"
     focal_indicators:
@@ -43,9 +43,9 @@ temporal_pairs:
     name: "Bukavu - Ibanda Escarpment"
     hazard_type: "landslide"
     description: "Creeping translational landslides along active Lake Kivu tectonic fault scarps threatening critical urban infrastructure."
-    bbox: [28.84, -2.55, 28.89, -2.50]
-    baseline_t0: "2019-01-01/2019-12-31"
-    observation_t1: "2024-01-01/2024-12-31"
+    bbox: [28.8559, -2.5297, 28.8653, -2.5167]
+    baseline_t0: "2019-06-01/2019-09-01"
+    observation_t1: "2024-06-01/2024-09-01"
     focal_indicators:
       - "pente"
       - "rugosite"

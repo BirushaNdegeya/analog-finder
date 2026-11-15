@@ -18,10 +18,15 @@ IMPORTANT — verify before the event
 """
 from __future__ import annotations
 
+import warnings
 import numpy as np
 import rasterio
 from rasterio.enums import Resampling
 from rasterio.windows import from_bounds
+import rasterio.errors
+
+# Suppress harmless rasterio in-memory reprojection warnings
+warnings.filterwarnings("ignore", category=rasterio.errors.NotGeoreferencedWarning)
 
 from . import config as C
 
@@ -155,6 +160,8 @@ def load_s2_composite(
     )
     if not items:
         raise ValueError(f"No Sentinel-2 scenes found for bbox {bbox} in {date_range}.")
+    # Keep up to 6 least cloudy scenes to optimize bandwidth, memory, and speed
+    items = sorted(items, key=lambda x: x.properties.get("eo:cloud_cover", 100))[:6]
     lon = (bbox[0] + bbox[2]) / 2
     lat = (bbox[1] + bbox[3]) / 2
     bands = ["B02", "B04", "B08", "B11", "B12", "SCL"]
