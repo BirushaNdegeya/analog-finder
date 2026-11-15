@@ -54,11 +54,11 @@ def render_documentation_tab() -> None:
     st.caption("Theoretical framework, multi-sensor satellite ingestion, literature confrontation, and open data sources.")
 
     doc_tab1, doc_tab2, doc_tab3, doc_tab4, doc_tab5 = st.tabs([
-        "📐 Mathematical Methodology",
+        "📐 Mathematical Methodology & Scoring",
         "🛰️ Satellite Data Acquisition Pipeline",
         "🔬 Confrontation with Scientific Literature",
         "🔗 References & Data Catalogs",
-        "📖 Glossary, Abbreviations & Score Guide",
+        "📖 Glossary & Abbreviations",
     ])
 
     with doc_tab1:
@@ -90,6 +90,116 @@ $$D_{KS} = \sup_{x} |F_{T_0}(x) - F_{T_1}(x)|$$
 To resolve the spatial blind spot of 1D global histograms (where localized mass movement could be averaged out), the engine divides the raster grid into sliding spatial patches ($P_{x, y}$) and computes the localized divergence:
 $$W_1(P_{x,y}^{T_0}, P_{x,y}^{T_1})$$
 yielding 2D continuous deformation heatmaps that pinpoint active fault scarps and landslide toes.
+""")
+
+        st.markdown("---")
+        # ---- Step-by-Step Scoring Engine ----
+        st.subheader("2. Step-by-Step Scoring Engine & Dynamic Aggregation")
+        st.markdown(r"""
+Every score displayed in the platform is deterministically computed through a rigorous 6-step Optimal Transport formulation:
+
+```
+[Satellite STAC Ingestion]
+        │
+        ▼ (Spatial sampling N ≥ 300)
+[Continuous Probability Distributions u_i (Earth) & v_i (Target)]
+        │
+        ▼ (Quantile mapping: W₁ = ∫ |U(t) - V(t)| dt)
+[1D Wasserstein Distances W₁(u_i, v_i)]
+        │
+        ▼ (Exponential decay: S_i = exp(-W₁ / σ_i))
+[Indicator Similarity Scores S_i ∈ [0, 1]]
+        │
+        ▼ (Arithmetic mean over valid domain indicators)
+[Criterion Domain Scores C_k (Topography, Geology, Environment, Resources)]
+        │
+        ▼ (Dynamic normalized weighted sum)
+[Global Score ∈ [0, 1] & Confidence Index]
+```
+
+1. **Continuous Empirical Sampling**: For candidate Earth area and planetary target, physical indicators (slope, elevation, bare ground fraction, iron oxide, clay, aridity) are sampled as continuous empirical distributions $u_i, v_i$ rather than simplistic scalar averages.
+2. **Earth Mover's Distance ($W_1$)**: The minimal mathematical effort to transport distribution $u_i$ into target distribution $v_i$:
+   $$W_1(u_i, v_i) = \int_0^1 |F_{u_i}^{-1}(t) - F_{v_i}^{-1}(t)| \, dt$$
+3. **Indicator Score ($S_i$)**: Converted into a bounded score $[0, 1]$ using empirical domain dispersion $\sigma_i$:
+   $$S_i = \exp\left(-\frac{W_1(u_i, v_i)}{\sigma_i}\right)$$
+4. **Domain Score ($C_k$)**: The unweighted mean of all successfully measured indicators belonging to criterion $k$:
+   $$C_k = \frac{1}{|I_k|} \sum_{i \in I_k} S_i$$
+5. **Dynamic Weighted Aggregation**: The final composite score combines user weights $w_k$:
+   $$\text{Global Score} = \frac{\sum_{k \in \mathcal{K}_{\text{valid}}} w_k \cdot C_k}{\sum_{k \in \mathcal{K}_{\text{valid}}} w_k}$$
+   *Notice the dynamic denominator*: if an indicator or criterion cannot be evaluated due to sensor coverage, its weight is **not** counted as a zero penalty. The system dynamically renormalizes over valid criteria.
+6. **Confidence Formulation**:
+   $$\text{Confidence} = \frac{\text{Number of computed physical indicators}}{\text{Total theoretical catalog indicators}}$$
+""")
+
+        st.markdown("---")
+        # ---- The Role of Criterion Weights and What Happens When You Change Them ----
+        st.subheader("3. Role of Criterion Weights & Impact of Changing Them")
+        st.info(
+            "**Operational Weight Tuning**: The sidebar sliders allow mission planners and hazard analysts to adjust the relative importance ($w_k \\in [0.0, 1.0]$) "
+            "of each physical domain. Below is the mathematical role of weights and how the leaderboard shifts when you adjust them."
+        )
+
+        st.markdown(r"""
+#### A. What Do the Weights Represent?
+Weights represent the **operational prioritization** of the exploration mission or hazard assessment:
+* **Equal Weights ($0.25 / 0.25 / 0.25 / 0.25$)** represents a balanced, holistic planetary analog search with no specific instrument bias.
+* **Non-equal weights** tailor the algorithm to a **specific mission profile** or a **specific scientific payload test**.
+
+---
+
+#### B. Concrete Mission Scenarios: What Happens When Weights Are Changed?
+
+##### 🚀 In Mode A: Planetary Mission Analogs
+
+| Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
+|:---|:---|:---|
+| **Autonomous Rover Mobility & Chassis Testing** | **Topography: 0.70 – 1.00**<br>Geology: 0.10<br>Environment: 0.10<br>Resources: 0.10 | • Prioritizes slope distribution, roughness, relief variation, and escarpments.<br>• Sites with steep volcanic crater slopes and rugged terrain match lunar volcanic domes.<br>• **Atacama Desert and Lava Beds rise** due to smooth-to-rugged transitions; flat coastal plains drop. |
+| **Geological Drilling & In-Situ Spectroscopy** | Topography: 0.10<br>**Geology: 0.70 – 1.00**<br>Environment: 0.10<br>Resources: 0.10 | • Prioritizes basaltic iron oxide richness ($B_{04}/B_{02}$) and clay mineral hydrothermal alteration ($B_{11}/B_{12}$).<br>• **Lanzarote (Timanfaya) and Harrat Khaybar surge to the top** because their basaltic shield geology and sub-surface lava tubes perfectly match lunar/martian volcanic compositions. |
+| **Extreme Vacuum & Hyper-Arid Preservation** | Topography: 0.10<br>Geology: 0.10<br>**Environment: 0.70 – 1.00**<br>Resources: 0.10 | • Heavily penalizes any vegetation presence and rainfall; prioritizes zero bare-soil moisture.<br>• **Atacama Desert (Chile) and Death Valley (USA) take #1 and #2** due to extreme aridity ($< 20\\,\\text{mm/yr}$ precipitation) and near-zero NDVI. |
+| **Subsurface Habitat & In-Situ Caves (ISRU)** | Topography: 0.10<br>Geology: 0.20<br>Environment: 0.10<br>**In-Situ Resources / Cavities: 0.80** | • Filters strictly for confirmed lava tubes, volcanic skylights, and basaltic regolith thickness.<br>• **Harrat Khaybar (Umm Jirsan cave) and Lanzarote rise decisively**, while volcanic sites lacking caves are penalized. |
+
+##### 🌋 In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
+
+In Geohazard mode, the space ISRU resource criterion is completely excluded, leaving the 3 core geophysical drivers:
+
+| Crisis Scenario | Weight Adjustments | Impact on Criticality Index & Emergency Alerts |
+|:---|:---|:---|
+| **Active Volcanic Eruption & Lava Flooding** | Topography: 0.15<br>**Geology: 0.70**<br>Environment: 0.15 | • Detects fresh basaltic lava flows, cooling lava crust, and fumarolic hydrothermal alterations.<br>• **Nyiragongo Volcano reaches Criticality = 1.00 (CRITICAL ALERT)** due to radical spectral shifts in fresh basaltic cover. |
+| **Urban Landslide, Mudflow & Gully Collapse** | **Topography: 0.45**<br>Geology: 0.10<br>**Environment: 0.45** | • Focuses on sudden steepening of scarp slopes combined with massive stripping of vegetation and bare ground exposure.<br>• **Bukavu (Kadutu & Funu Valley, Ibanda Escarpment) jumps to CRITICAL (Index = 0.9126)**, triggering civil protection alerts for urban evacuation. |
+
+---
+
+#### C. What Happens Mathematically When a Weight is Set to 0.0?
+Setting a criterion weight to `0.0` completely **deactivates** that domain:
+* It does not act as a negative score; rather, that domain's Wasserstein divergence is entirely ignored.
+* The remaining active domains are **automatically renormalized** to sum to $1.0$:
+$$w'_k = \frac{w_k}{\sum_{j \in \text{active}} w_j}$$
+* For example, if you set `Environment = 0.0` and leave the other three at `0.25`, the effective weight of each remaining domain automatically becomes $0.333$.
+
+---
+
+#### D. Monte Carlo Sensitivity Proof: Ranking Stability Across Random Weights
+Does changing weights make the results arbitrary? **No.**
+To prove scientific validity, our verification pipeline executes a **1,000-iteration Monte Carlo Dirichlet test**:
+* In each iteration, weights are randomized completely across all domains.
+* The Spearman rank correlation across 1,000 random permutations achieves **$\\rho = 0.95$**.
+* **Conclusion**: While weight adjustments allow fine-tuning for specific mission goals (e.g. rover chassis vs mineralogy), the underlying physical analog ranking is **intrinsically stable**, anchored by fundamental terrain physics and not by subjective weight choices.
+""")
+
+        st.markdown("---")
+        # ---- Scientific Ranks Explanation ----
+        st.subheader("4. Scientific Validation Ranks & Benchmark Rules")
+        st.markdown("""
+The **Scientific Validation** panel displays programmatic checks designed to prevent false positives:
+
+1. **Known Literature Analogs in Top-Tier**:
+   * Decades of NASA and ESA field expeditions benchmarked **Hawaii (Kilauea)**, **Lanzarote (Timanfaya)**, and **Lava Beds** as genuine lunar volcanic analogs.
+   * Our automated pipeline passes **✅ Passed** only if these peer-reviewed sites naturally emerge in the **Top 5** without hardcoding.
+2. **Negative Control Rejection**:
+   * **Central Congo Rainforest** is tested simultaneously as a sanity control.
+   * Due to high rainfall and dense canopy, it must systematically achieve **Rank #9 (Last place, Score < 0.05)**. If a tropical rainforest were ranked as a lunar analog, the model would fail validation.
+3. **Reproducibility Guarantee**:
+   * Every score is generated directly from open STAC satellite APIs (Copernicus, Sentinel-2, TerraClimate, JAXA Kaguya) with deterministic random seeds and zero synthetic extrapolation.
 """)
 
     with doc_tab2:
@@ -225,111 +335,25 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 | **$W_1$** | 1st Wasserstein Metric | Mathematical distance for mass distribution transport |
 """)
 
-        # ---- Score Calculation ----
-        st.markdown("### 🧮 Mathematical Step-by-Step: How the Global Score is Computed")
-        st.markdown(r"""
-Every score displayed in the platform is deterministically computed through a rigorous 6-step Optimal Transport formulation:
-
-```
-[Satellite STAC Ingestion]
-        │
-        ▼ (Spatial sampling N ≥ 300)
-[Continuous Probability Distributions u_i (Earth) & v_i (Target)]
-        │
-        ▼ (Quantile mapping: W₁ = ∫ |U(t) - V(t)| dt)
-[1D Wasserstein Distances W₁(u_i, v_i)]
-        │
-        ▼ (Exponential decay: S_i = exp(-W₁ / σ_i))
-[Indicator Similarity Scores S_i ∈ [0, 1]]
-        │
-        ▼ (Arithmetic mean over valid domain indicators)
-[Criterion Domain Scores C_k (Topography, Geology, Environment, Resources)]
-        │
-        ▼ (Dynamic normalized weighted sum)
-[Global Score ∈ [0, 1] & Confidence Index]
-```
-
-1. **Continuous Sampling**: For candidate Earth area and planetary target, physical indicators (slope, elevation, bare ground fraction, iron oxide, clay, aridity) are sampled as continuous empirical distributions $u_i, v_i$ rather than simplistic scalar averages.
-2. **Earth Mover's Distance ($W_1$)**: The minimal mathematical effort to transport distribution $u_i$ into target distribution $v_i$:
-   $$W_1(u_i, v_i) = \int_0^1 |F_{u_i}^{-1}(t) - F_{v_i}^{-1}(t)| \, dt$$
-3. **Indicator Score ($S_i$)**: Converted into a bounded score $[0, 1]$ using empirical domain dispersion $\sigma_i$:
-   $$S_i = \exp\left(-\frac{W_1(u_i, v_i)}{\sigma_i}\right)$$
-4. **Domain Score ($C_k$)**: The unweighted mean of all successfully measured indicators belonging to criterion $k$:
-   $$C_k = \frac{1}{|I_k|} \sum_{i \in I_k} S_i$$
-5. **Dynamic Weighted Aggregation**: The final composite score combines user weights $w_k$:
-   $$\text{Global Score} = \frac{\sum_{k \in \mathcal{K}_{\text{valid}}} w_k \cdot C_k}{\sum_{k \in \mathcal{K}_{\text{valid}}} w_k}$$
-   *Notice the dynamic denominator*: if an indicator or criterion cannot be evaluated due to sensor coverage, its weight is **not** counted as a zero penalty. The system dynamically renormalizes over valid criteria.
-6. **Confidence Formulation**:
-   $$\text{Confidence} = \frac{\text{Number of computed physical indicators}}{\text{Total theoretical catalog indicators}}$$
-""")
-
-        # ---- The Role of Criterion Weights and What Happens When You Change Them ----
-        st.markdown("### ⚖️ The Role of Criterion Weights & Impact of Changing Them")
-        st.info(
-            "**Interactive Weight Tuning**: The sidebar sliders allow mission planners and hazard analysts to adjust the relative importance ($w_k \\in [0.0, 1.0]$) "
-            "of each physical domain. Below is what each weight governs and how the leaderboard shifts when you adjust them."
-        )
-
-        st.markdown(r"""
-#### 1. What Do the Weights Represent?
-Weights represent the **operational prioritization** of the exploration mission or hazard assessment:
-* **Equal Weights ($0.25 / 0.25 / 0.25 / 0.25$)** represents a balanced, holistic planetary analog search with no specific instrument bias.
-* **Non-equal weights** tailor the algorithm to a **specific mission profile** or a **specific scientific payload test**.
-
----
-
-#### 2. How the Platform Reacts When You Change Weights (Concrete Scenarios)
-
-##### 🚀 In Mode A: Planetary Mission Analogs
-
-| Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
-|:---|:---|:---|
-| **Autonomous Rover Mobility & Chassis Testing** | **Topography: 0.70 – 1.00**<br>Geology: 0.10<br>Environment: 0.10<br>Resources: 0.10 | • Prioritizes slope distribution, roughness, relief variation, and escarpments.<br>• Sites with steep volcanic crater slopes and rugged terrain match lunar volcanic domes.<br>• **Atacama Desert and Lava Beds rise** due to smooth-to-rugged transitions; flat coastal plains drop. |
-| **Geological Drilling & In-Situ Spectroscopy** | Topography: 0.10<br>**Geology: 0.70 – 1.00**<br>Environment: 0.10<br>Resources: 0.10 | • Prioritizes basaltic iron oxide richness ($B_{04}/B_{02}$) and clay mineral hydrothermal alteration ($B_{11}/B_{12}$).<br>• **Lanzarote (Timanfaya) and Harrat Khaybar surge to the top** because their basaltic shield geology and sub-surface lava tubes perfectly match lunar/martian volcanic compositions. |
-| **Extreme Vacuum & Hyper-Arid Preservation** | Topography: 0.10<br>Geology: 0.10<br>**Environment: 0.70 – 1.00**<br>Resources: 0.10 | • Heavily penalizes any vegetation presence and rainfall; prioritizes zero bare-soil moisture.<br>• **Atacama Desert (Chile) and Death Valley (USA) take #1 and #2** due to extreme aridity ($< 20\\,\\text{mm/yr}$ precipitation) and near-zero NDVI. |
-| **Subsurface Habitat & In-Situ Caves (ISRU)** | Topography: 0.10<br>Geology: 0.20<br>Environment: 0.10<br>**In-Situ Resources / Cavities: 0.80** | • Filters strictly for confirmed lava tubes, volcanic skylights, and basaltic regolith thickness.<br>• **Harrat Khaybar (Umm Jirsan cave) and Lanzarote rise decisively**, while volcanic sites lacking caves are penalized. |
-
-##### 🌋 In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
-
-In Geohazard mode, the ISRU resource criterion is completely excluded, leaving the 3 core geophysical drivers:
-
-| Crisis Scenario | Weight Adjustments | Impact on Criticality Index & Emergency Alerts |
-|:---|:---|:---|
-| **Active Volcanic Eruption & Lava Flooding** | Topography: 0.15<br>**Geology: 0.70**<br>Environment: 0.15 | • Detects fresh basaltic lava flows, cooling lava crust, and fumarolic hydrothermal alterations.<br>• **Nyiragongo Volcano reaches Criticality = 1.00 (CRITICAL ALERT)** due to radical spectral shifts in fresh basaltic cover. |
-| **Urban Landslide, Mudflow & Gully Collapse** | **Topography: 0.45**<br>Geology: 0.10<br>**Environment: 0.45** | • Focuses on sudden steepening of scarp slopes combined with massive stripping of vegetation and bare ground exposure.<br>• **Bukavu (Kadutu & Funu Valley, Ibanda Escarpment) jumps to CRITICAL (Index = 0.9126)**, triggering civil protection alerts for urban evacuation. |
-
----
-
-#### 3. What Happens Mathematically When a Weight is Set to 0.0?
-Setting a criterion weight to `0.0` completely **deactivates** that domain:
-* It does not act as a negative score; rather, that domain's Wasserstein divergence is entirely ignored.
-* The remaining active domains are **automatically renormalized** to sum to $1.0$:
-$$w'_k = \frac{w_k}{\sum_{j \in \text{active}} w_j}$$
-* For example, if you set `Environment = 0.0` and leave the other three at `0.25`, the effective weight of each remaining domain automatically becomes $0.333$.
-
----
-
-#### 4. Scientific Verification: Monte Carlo Sensitivity Proof
-Does changing weights make the results arbitrary? **No.**
-To prove scientific validity, our verification pipeline executes a **1,000-iteration Monte Carlo Dirichlet test**:
-* In each iteration, weights are randomized completely across all domains.
-* The Spearman rank correlation across 1,000 random permutations achieves **$\\rho = 0.95$**.
-* **Conclusion**: While weight adjustments allow fine-tuning for specific mission goals (e.g. rover chassis vs mineralogy), the underlying physical analog ranking is **intrinsically stable**, anchored by fundamental terrain physics and not by subjective weight choices.
-""")
-
-        # ---- Scientific Ranks Explanation ----
-        st.markdown("### 🏆 Scientific Validation Ranks & Benchmark Rules")
+        # ---- Operational Decision Reference ----
+        st.markdown("### 🚨 Operational Decision & Alert Thresholds Guide")
         st.markdown("""
-The **Scientific Validation** panel displays programmatic checks designed to prevent false positives:
+Summary of decision thresholds applied across both operational personas:
 
-1. **Known Literature Analogs in Top-Tier**:
-   * Decades of NASA and ESA field expeditions benchmarked **Hawaii (Kilauea)**, **Lanzarote (Timanfaya)**, and **Lava Beds** as genuine lunar volcanic analogs.
-   * Our automated pipeline passes **✅ Passed** only if these peer-reviewed sites naturally emerge in the **Top 5** without hardcoding.
-2. **Negative Control Rejection**:
-   * **Central Congo Rainforest** is tested simultaneously as a sanity control.
-   * Due to high rainfall and dense canopy, it must systematically achieve **Rank #9 (Last place, Score < 0.05)**. If a tropical rainforest were ranked as a lunar analog, the model would fail validation.
-3. **Reproducibility Guarantee**:
-   * Every score is generated directly from open STAC satellite APIs (Copernicus, Sentinel-2, TerraClimate, JAXA Kaguya) with deterministic random seeds and zero synthetic extrapolation.
+#### A. Mode B: Geohazard Crisis Alert Tiers (Criticality Index)
+| Alert Level | Criticality Index | Color Code | Automated Recommended Action |
+|:---|:---:|:---:|:---|
+| 🟢 **STABLE** | $< 0.20$ | Green | Baseline observation; routine satellite monitoring cycle. |
+| 🟡 **WATCH** | $0.20 – 0.40$ | Yellow | Heightened observation frequency; notify provincial disaster coordination. |
+| 🟠 **WARNING** | $0.40 – 0.65$ | Orange | High hazard shift detected; field inspection & drone reconnaissance recommended. |
+| 🔴 **CRITICAL** | $\\ge 0.65$ | Red | Imminent landslide rupture or volcanic effusion; trigger emergency contingency protocol & evacuations. |
+
+#### B. Mode A: Planetary Mission Analog Suitability Tiers (Global Score)
+| Analog Tier | Global Score | Color Code | Recommended Space Mission Testing Application |
+|:---|:---:|:---:|:---|
+| 🟢 **Strong Analog** | $\\ge 0.70$ | Green | Priority field trials: rover locomotion, autonomous navigation, drill testbeds, astronaut EVA simulations. |
+| 🟡 **Partial Analog** | $0.40 – 0.70$ | Yellow | Specialized testing: valid for specific subsystems (e.g. slope trials only or spectral calibration only). |
+| 🔴 **Weak / Inapplicable** | $< 0.40$ | Red | Unsuitable for planetary analog operations; serves as negative control reference. |
 """)
 
 
