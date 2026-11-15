@@ -358,16 +358,546 @@ Summary of decision thresholds applied across both operational personas:
 
 
 # ---------------------------------------------------------------------------
+# Tooltip Definitions for Multi-Criteria Sliders
+# ---------------------------------------------------------------------------
+ANALOG_TOOLTIPS = {
+    "topographie": (
+        "📐 Slope, elevation & rugosity: increases focus on terrain roughness and slope distribution. "
+        "Crucial for testing rover mobility, traction, wheel wear, and obstacle traversal over lunar/martian terrains."
+    ),
+    "geologie": (
+        "🪨 Basaltic iron oxide & clay minerals: increases focus on spectral mineral signatures. "
+        "Crucial for drilling tests, sampling mechanisms, and in-situ geochemical spectrometer calibration."
+    ),
+    "environnement": (
+        "☀️ Aridity & barren regolith: heavily penalizes moisture and vegetation canopy, rewarding barren ground. "
+        "Crucial for simulating extreme planetary thermal vacuum and hyper-arid climates."
+    ),
+    "ressources": (
+        "🕳️ Lava tubes & sub-surface cavities: increases focus on volcanic caves and basalt thickness. "
+        "Crucial for testing astronaut habitats, radiation shielding, and subsurface robotic exploration."
+    ),
+}
+
+TEMPORAL_TOOLTIPS = {
+    "topographie": (
+        "📉 Slope steepening & scarp failure: detects rapid vertical ground displacement and structural collapse "
+        "along active fault scarps and landslide heads."
+    ),
+    "geologie": (
+        "🌋 Basaltic lava effusion & mineral alteration: detects active volcanic flows, fresh basaltic cooling crust, "
+        "and hydrothermal mineral deposition."
+    ),
+    "environnement": (
+        "🌱 Bare soil stripping & vegetation loss: detects mass movement scouring, mudflow erosion, and catastrophic "
+        "canopy removal during acute geohazard events."
+    ),
+}
+
+
+# ---------------------------------------------------------------------------
+# Developer Portal & Open Science API Documentation Component
+# ---------------------------------------------------------------------------
+def render_api_docs_page() -> None:
+    """Render comprehensive Open Science REST API & Developer SDK documentation."""
+    st.title("🔌 Analog Finder Open Science REST API & Developer SDK")
+    st.caption(
+        "Free, public, programmatic access to Earth, Moon, and Mars satellite data, "
+        "Wasserstein-1 Optimal Transport models, and real-time geohazard early warning diagnostics."
+    )
+
+    # Status Badges
+    col_b1, col_b2, col_b3, col_b4 = st.columns(4)
+    col_b1.metric("API Version", "v1.1.0 (FastAPI)")
+    col_b2.metric("License", "Creative Commons / MIT")
+    col_b3.metric("Access Tier", "100% Free Open Science")
+    col_b4.metric("Supported Bodies", "Earth · Moon · Mars")
+
+    st.info(
+        "💡 **Public Good Mission**: Analog Finder exposes its complete algorithmic engine as a free, open REST API "
+        "to empower university researchers, space exploration scientists (NASA, ESA, JAXA), humanitarian NGOs "
+        "(Red Cross, UN-OCHA), and African geological observatories (OVG, CRSN, UOB). "
+        "No API keys, payment, or proprietary lock-in required."
+    )
+
+    api_tab1, api_tab2, api_tab3, api_tab4, api_tab5, api_tab6 = st.tabs([
+        "🚀 Quickstart & Health",
+        "🪐 Planetary STAC Bridge (Earth, Moon, Mars)",
+        "🧪 Similarity & Hazard Engine (Mode A & B)",
+        "📦 Catalogs & Precomputed Datasets",
+        "💻 Code Recipes (Python, cURL, JS)",
+        "🤝 Academic & NGO Partnerships",
+    ])
+
+    # -----------------------------------------------------------------------
+    # TAB 1: Quickstart & Architecture
+    # -----------------------------------------------------------------------
+    with api_tab1:
+        st.subheader("1. API Architecture & Quickstart")
+        st.markdown(r"""
+The Analog Finder API is built on **FastAPI** and provides high-throughput, asynchronous geospatial computing.
+It dynamically bridges cloud-native STAC catalogs (Microsoft Planetary Computer & USGS Astrogeology) and executes
+1D/2D Optimal Transport calculations in real time.
+
+#### Service Endpoints
+* **Base URL (Local Dev):** `http://localhost:8000/v1`
+* **Interactive Swagger UI:** [`http://localhost:8000/docs`](http://localhost:8000/docs)
+* **ReDoc Specification:** [`http://localhost:8000/redoc`](http://localhost:8000/redoc)
+* **OpenAPI 3.0 JSON Schema:** [`http://localhost:8000/openapi.json`](http://localhost:8000/openapi.json)
+
+---
+
+#### Launching the Local API Server
+To start the FastAPI REST daemon locally in your Python environment:
+```bash
+# From the repository root with virtual environment activated:
+uvicorn analog_finder.api.app:app --host 0.0.0.0 --port 8000 --reload
+```
+
+---
+
+#### Health Check Endpoint
+Verify server responsiveness and enabled compute engines:
+* **HTTP Method:** `GET`
+* **Endpoint:** `/v1/health`
+""")
+
+        st.markdown("##### Example Request & Response")
+        col_q1, col_q2 = st.columns(2)
+        with col_q1:
+            st.code("""# cURL health ping
+curl -X GET "http://localhost:8000/v1/health" \\
+     -H "Accept: application/json"
+""", language="bash")
+        with col_q2:
+            st.code("""// HTTP 200 OK Response
+{
+  "status": "healthy",
+  "version": "1.1.0",
+  "engine": "wasserstein_optimal_transport",
+  "modes": ["analog", "temporal"]
+}
+""", language="json")
+
+    # -----------------------------------------------------------------------
+    # TAB 2: Planetary STAC Bridge (Earth, Moon, Mars)
+    # -----------------------------------------------------------------------
+    with api_tab2:
+        st.subheader("2. Cross-Body Planetary STAC Bridge")
+        st.markdown("""
+Query and stream satellite altimetry and multispectral imagery across **Earth**, the **Moon**, and **Mars**
+without downloading gigabyte-sized files. The bridge uses HTTP range requests on Cloud-Optimized GeoTIFFs (COGs).
+""")
+
+        with st.expander("📡 GET /v1/planetary/bodies — Supported Bodies & Catalogs", expanded=True):
+            st.markdown("Returns supported celestial targets, their resolution, and primary STAC catalog endpoints.")
+            col_pb1, col_pb2 = st.columns(2)
+            with col_pb1:
+                st.code("""curl -X GET "http://localhost:8000/v1/planetary/bodies" \\
+     -H "Accept: application/json"
+""", language="bash")
+            with col_pb2:
+                st.code("""{
+  "supported_bodies": {
+    "earth": {
+      "name": "Earth",
+      "primary_dem": "cop-dem-glo-30 (30m)",
+      "primary_optical": "sentinel-2-l2a (10m)",
+      "access": "Public, no authentication required"
+    },
+    "moon": {
+      "name": "Moon",
+      "primary_dem": "Kaguya TC DTM v2 (26.2 m/pixel)",
+      "stac_endpoint": "https://stac.astrogeology.usgs.gov/api",
+      "access": "Public AWS S3 COG"
+    },
+    "mars": {
+      "name": "Mars",
+      "primary_dem": "MRO CTX Controlled DTMs (20.0 m/pixel)",
+      "access": "Public AWS S3 COG"
+    }
+  }
+}
+""", language="json")
+
+        with st.expander("🔍 GET /v1/planetary/search — Discover COG Assets by Bounding Box", expanded=False):
+            st.markdown("""
+Search for Cloud-Optimized GeoTIFFs over any planetary bounding box.
+
+**Query Parameters:**
+* `body` (*string*): `earth`, `moon`, or `mars` (default: `moon`)
+* `min_lon`, `min_lat`, `max_lon`, `max_lat` (*float*): Bounding box in decimal degrees
+* `data_type` (*string*): `dem` (altimetry) or `optical` (imagery)
+* `limit` (*integer*): Max results to return (1 to 20)
+""")
+            st.code("""# Search for lunar Kaguya DTM tiles over Marius Hills:
+curl -X GET "http://localhost:8000/v1/planetary/search?body=moon&min_lon=-57.0&min_lat=13.0&max_lon=-55.0&max_lat=15.0&data_type=dem&limit=2" \\
+     -H "Accept: application/json"
+""", language="bash")
+
+        with st.expander("📐 GET /v1/planetary/sample — Stream Elevation & Compute Topography", expanded=False):
+            st.markdown("""
+Streams a 200×200 pixel sub-window from a remote planetary COG and calculates slope and roughness metrics in memory.
+""")
+            st.code("""# Stream lunar terrain metrics from Kaguya COG on AWS:
+curl -X GET "http://localhost:8000/v1/planetary/sample?body=moon&min_lon=-57.0&min_lat=13.0&max_lon=-55.0&max_lat=15.0" \\
+     -H "Accept: application/json"
+""", language="bash")
+            st.caption("Returns: min/max/median/mean elevation (meters), mean slope (degrees), and roughness index.")
+
+    # -----------------------------------------------------------------------
+    # TAB 3: Core Similarity & Hazard Engine
+    # -----------------------------------------------------------------------
+    with api_tab3:
+        st.subheader("3. Core Unified Analysis Engine (`POST /v1/analyze`)")
+        st.markdown("""
+The single computational entry point for both **Mode A (Planetary Mission Analogs)** and **Mode B (Geohazard Surveillance)**.
+Driven by the 1st Wasserstein Earth Mover's Distance.
+""")
+
+        st.markdown("#### Mode A: Planetary Mission Analog Assessment")
+        st.markdown("Compares a candidate terrestrial site or custom bounding box against a Moon or Mars target.")
+        col_m_req, col_m_res = st.columns(2)
+        with col_m_req:
+            st.markdown("**Request Payload (`application/json`)**")
+            st.code("""{
+  "mode": "analog",
+  "site_id": "lanzarote",
+  "target_ref": {
+    "target_id": "marius_hills"
+  },
+  "criterion_weights": {
+    "topographie": 0.25,
+    "geologie": 0.40,
+    "environnement": 0.15,
+    "ressources": 0.20
+  },
+  "options": {
+    "synthetic": false
+  }
+}
+""", language="json")
+        with col_m_res:
+            st.markdown("**Response (`AnalysisResponse`)**")
+            st.code("""{
+  "mode": "analog",
+  "site_id": "lanzarote",
+  "site_name": "Lanzarote - Timanfaya (Spain)",
+  "reference_summary": "Planetary Target: Marius Hills (Moon)",
+  "global_score": 0.6796,
+  "analog_tier": "partial",
+  "confidence": 1.0,
+  "criteria": {
+    "topographie": {"score": 0.654, "confidence": 1.0},
+    "geologie": {"score": 0.812, "confidence": 1.0},
+    "environnement": {"score": 0.720, "confidence": 1.0},
+    "ressources": {"score": 0.532, "confidence": 1.0}
+  },
+  "validity_card": {
+    "reproduced_or_stable": ["geologie", "environnement"],
+    "partial_drift": ["topographie", "ressources"],
+    "recommended_actions": [
+      "Rover locomotion testbed",
+      "Spectroscopy instrument calibration",
+      "Lava tube subsurface trials"
+    ]
+  }
+}
+""", language="json")
+
+        st.markdown("---")
+        st.markdown("#### Mode B: Multi-Temporal Geohazard Early Warning")
+        st.markdown("Compares baseline distribution ($T_0$) with surveillance distribution ($T_1$) and runs two-sample Kolmogorov-Smirnov significance testing.")
+        col_t_req, col_t_res = st.columns(2)
+        with col_t_req:
+            st.markdown("**Request Payload (`application/json`)**")
+            st.code("""{
+  "mode": "temporal",
+  "site_id": "bukavu_ibanda",
+  "temporal_ref": {
+    "pair_id": "bukavu_ibanda",
+    "date_t0": "2019-06-01/2019-09-01",
+    "date_t1": "2024-06-01/2024-09-01"
+  },
+  "criterion_weights": {
+    "topographie": 0.45,
+    "geologie": 0.10,
+    "environnement": 0.45
+  }
+}
+""", language="json")
+        with col_t_res:
+            st.markdown("**Response (`AnalysisResponse`)**")
+            st.code("""{
+  "mode": "temporal",
+  "site_id": "bukavu_ibanda",
+  "site_name": "Bukavu - Ibanda Escarpment",
+  "hazard_type": "landslide",
+  "global_score": 0.9126,
+  "alert_level": "critical",
+  "confidence": 1.0,
+  "indicators": {
+    "sol_nu": {
+      "delta_median": 0.54,
+      "wasserstein_distance": 0.512,
+      "p_value": 0.0001,
+      "is_significant": true,
+      "interpretation": "Massive bare soil exposure (+54%) along urban scarp"
+    }
+  },
+  "explanation": "Criticality index 0.91 — Alert Status: CRITICAL."
+}
+""", language="json")
+
+    # -----------------------------------------------------------------------
+    # TAB 4: Catalogs & Precomputed Datasets
+    # -----------------------------------------------------------------------
+    with api_tab4:
+        st.subheader("4. Pre-computed Datasets & Catalog Endpoints")
+        st.markdown("""
+Instant access to our peer-reviewed terrestrial candidate panels, planetary reference targets, and monitored rift zones.
+""")
+
+        st.markdown("""
+| HTTP Method | Endpoint | Description |
+|:---|:---|:---|
+| `GET` | `/v1/sites` | List all 9 pre-computed candidate Earth sites (Hawaii, Lanzarote, Virunga, Atacama, etc.) with coordinates and testable processes. |
+| `GET` | `/v1/targets` | List configured planetary targets (Marius Hills Moon, Jezero Crater Mars) and their baseline properties. |
+| `GET` | `/v1/temporal-pairs` | List monitored East African Rift geohazard zones (Nyiragongo, Bukavu Kadutu, Bukavu Ibanda) with baseline dates. |
+| `GET` | `/v1/indicators` | Catalog of all 8 physical indicators (elevation, slope, roughness, NDVI, bare soil, iron oxide, clay, aridity) and their units. |
+""")
+
+        st.code("""# Inspect configured terrestrial analog candidates:
+curl -X GET "http://localhost:8000/v1/sites" -H "Accept: application/json"
+""", language="bash")
+
+    # -----------------------------------------------------------------------
+    # TAB 5: Code Recipes (Python, cURL, JavaScript)
+    # -----------------------------------------------------------------------
+    with api_tab5:
+        st.subheader("5. Ready-to-Run Code Recipes")
+        st.caption("Copy-pasteable code examples for integrating Analog Finder into your research pipeline, web app, or automated alerts.")
+
+        recipe_choice = st.selectbox(
+            "Select Code Recipe:",
+            [
+                "🐍 Python: Batch Evaluate & Rank Candidate Sites (Requests + Pandas)",
+                "🚨 Python: Automated Geohazard Monitor & Slack/Webhook Dispatcher (NGOs)",
+                "🌐 JavaScript / TypeScript: Web App Integration (Fetch API)",
+                "💻 Bash / cURL: Pipeline Automation Script",
+            ]
+        )
+
+        if "Batch Evaluate" in recipe_choice:
+            st.markdown("#### Evaluate Terrestrial Sites against Marius Hills (Moon)")
+            st.code('''import requests
+import pandas as pd
+
+BASE_URL = "http://localhost:8000/v1"
+
+# 1. Fetch available candidate sites
+sites_resp = requests.get(f"{BASE_URL}/sites").json()
+sites = sites_resp["sites"]
+print(f"Found {len(sites)} candidate analog sites.")
+
+# 2. Evaluate each site against Marius Hills with customized weights
+results = []
+for s in sites:
+    payload = {
+        "mode": "analog",
+        "site_id": s["id"],
+        "target_ref": {"target_id": "marius_hills"},
+        "criterion_weights": {
+            "topographie": 0.35,  # Focus on rover mobility slopes
+            "geologie": 0.35,     # Basaltic lava match
+            "environnement": 0.15,
+            "ressources": 0.15
+        }
+    }
+    r = requests.post(f"{BASE_URL}/analyze", json=payload)
+    if r.status_code == 200:
+        res = r.json()
+        results.append({
+            "Site": res["site_name"],
+            "Global Score": res["global_score"],
+            "Tier": res["analog_tier"].upper(),
+            "Confidence": f"{res['confidence'] * 100:.0f}%",
+            "Topography": res["criteria"]["topographie"]["score"],
+            "Geology": res["criteria"]["geologie"]["score"],
+        })
+
+# 3. Build ranked leaderboard
+df = pd.DataFrame(results).sort_values("Global Score", ascending=False).reset_index(drop=True)
+df.index += 1
+print("\\n=== ANALOG FINDER LEADERBOARD ===")
+print(df.to_string())
+''', language="python")
+
+        elif "Automated Geohazard" in recipe_choice:
+            st.markdown("#### Automated Disaster Surveillance & Webhook Notification")
+            st.code('''import requests
+import time
+
+BASE_URL = "http://localhost:8000/v1"
+SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+def monitor_geohazard_zone(pair_id="bukavu_ibanda"):
+    payload = {
+        "mode": "temporal",
+        "site_id": pair_id,
+        "criterion_weights": {
+            "topographie": 0.45,
+            "geologie": 0.10,
+            "environnement": 0.45
+        }
+    }
+    resp = requests.post(f"{BASE_URL}/analyze", json=payload)
+    if resp.status_code != 200:
+        print(f"Error querying API: {resp.text}")
+        return
+
+    data = resp.json()
+    criticality = data["global_score"]
+    alert = data["alert_level"].upper()
+    print(f"Zone: {data['site_name']} | Criticality: {criticality:.4f} | Alert: {alert}")
+
+    # Trigger emergency alert if CRITICAL
+    if alert == "CRITICAL":
+        alert_msg = {
+            "text": (
+                f"🚨 *DISASTER ALERT: {data['site_name']}*\\n"
+                f"Criticality Index: *{criticality:.3f}* (Threshold ≥ 0.65)\\n"
+                f"Status: *CRITICAL* — Immediate field reconnaissance recommended."
+            )
+        }
+        print("Dispatching webhook to Civil Protection & Disaster Response teams...")
+        # requests.post(SLACK_WEBHOOK_URL, json=alert_msg)
+
+if __name__ == "__main__":
+    monitor_geohazard_zone("bukavu_ibanda")
+''', language="python")
+
+        elif "JavaScript" in recipe_choice:
+            st.markdown("#### Client-Side JavaScript / Web Integration")
+            st.code('''// Modern ES6 Fetch example
+async function evaluateAnalog(siteId = "lanzarote") {
+  const url = "http://localhost:8000/v1/analyze";
+  const payload = {
+    mode: "analog",
+    site_id: siteId,
+    target_ref: { target_id: "marius_hills" },
+    criterion_weights: { topographie: 0.25, geologie: 0.40, environnement: 0.15, ressources: 0.20 }
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    
+    const data = await response.json();
+    console.log(`Evaluated ${data.site_name}: Global Score = ${data.global_score} [${data.analog_tier.toUpperCase()}]`);
+    return data;
+  } catch (error) {
+    console.error("Failed to query Analog Finder API:", error);
+  }
+}
+
+evaluateAnalog("lanzarote");
+''', language="javascript")
+
+        else:
+            st.markdown("#### Shell / cURL Automation Script")
+            st.code('''#!/usr/bin/env bash
+# Test planetary and geohazard endpoints via CLI
+
+set -e
+API="http://localhost:8000/v1"
+
+echo "=== 1. Checking API Health ==="
+curl -s "$API/health" | jq .
+
+echo -e "\\n=== 2. Querying Lunar Kaguya Assets over Marius Hills ==="
+curl -s "$API/planetary/search?body=moon&min_lon=-57.0&min_lat=13.0&max_lon=-55.0&max_lat=15.0&limit=1" | jq .
+
+echo -e "\\n=== 3. Running Lanzarote Lunar Analog Assessment ==="
+curl -s -X POST "$API/analyze" \\
+     -H "Content-Type: application/json" \\
+     -d '{
+       "mode": "analog",
+       "site_id": "lanzarote",
+       "target_ref": {"target_id": "marius_hills"}
+     }' | jq '{site_name, global_score, analog_tier, criteria}'
+''', language="bash")
+
+    # -----------------------------------------------------------------------
+    # TAB 6: Partnerships & Free Usage Guidelines
+    # -----------------------------------------------------------------------
+    with api_tab6:
+        st.subheader("6. Free Open Science & Institutional Partnerships")
+        st.markdown(r"""
+#### Who Can Use This API for Free?
+1. 🎓 **Universities & Student Researchers**:
+   * Master's and PhD candidates in planetary geomorphology, remote sensing, and geophysics may query our endpoints for thesis simulations and paper benchmarking.
+   * Cite GeoCongo AI in your papers using the BibTeX citation below.
+2. 🏥 **Humanitarian NGOs & Civil Protection**:
+   * Disaster risk reduction organizations (*Red Cross, Protection Civile RDC, UN-OCHA*) can integrate our `/v1/analyze` endpoint into automated hazard dashboards for the Kivu rift.
+   * Free high-frequency polling is permitted for crisis prevention.
+3. 🚀 **Space Agencies & Rover Robotics Labs**:
+   * NASA, ESA, JAXA, and NewSpace rover manufacturers can leverage our STAC cross-body bridge to locate suitable Earth test sites for landing gear, autonomous mobility, and drill mechanisms.
+
+---
+
+#### Academic Citation (BibTeX)
+```bibtex
+@software{geocongoai_analog_finder_2026,
+  author = {GeoCongo AI Team},
+  title = {Analog Finder: Dual-Mode Geospatial Decision Engine for Planetary Mission Analogs and Geohazard Surveillance},
+  year = {2026},
+  publisher = {NASA Space Apps Challenge 2026},
+  url = {https://github.com/GeoCongo-AI/analog-finder}
+}
+```
+""")
+
+
+# ---------------------------------------------------------------------------
 # Sidebar Persona Selector
 # ---------------------------------------------------------------------------
-st.sidebar.title("Operational Focus")
+st.sidebar.title("🌍 Analog Finder")
+st.sidebar.markdown(
+    "**GeoCongo AI Decision Engine** — Dual-mode geospatial intelligence driven by "
+    "1D/2D Optimal Transport (Wasserstein Distance). Connects open planetary satellite catalogs "
+    "(Copernicus DEM, Sentinel-2, TerraClimate, JAXA Kaguya, NASA MRO) "
+    "to evaluate planetary exploration testbeds on Earth and monitor geophysical hazard crises in the East African Rift."
+)
+st.sidebar.markdown("---")
+st.sidebar.subheader("Operational Focus")
+
+persona_options = [
+    "🚀 Planetary Mission Analogs (Mode A)",
+    "🌋 Geohazard & Risk Monitor (Mode B)",
+    "🔌 Open Science API & Developer Hub",
+]
+persona_captions = [
+    "Benchmark Earth testbeds against Moon & Mars using continuous Wasserstein-1 Optimal Transport.",
+    "Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga Rift, DR Congo).",
+    "Free programmatic REST API with Python & cURL for researchers, NGOs & universities.",
+]
+
 app_mode = st.sidebar.radio(
     "Choose Platform Persona:",
-    [
-        "🚀 Planetary Mission Analogs (Mode A)",
-        "🌋 Geohazard & Risk Monitor (Mode B)",
-    ],
+    persona_options,
+    captions=persona_captions,
     index=0,
+    help=(
+        "Select operational persona:\n\n"
+        "• Mode A (Planetary Analogs): Finds and ranks Earth sites resembling Moon or Mars targets.\n"
+        "• Mode B (Geohazard Monitor): Quantifies ground deformation, urban landslides, and volcanic flows.\n"
+        "• API Hub: Complete programmatic REST endpoints and developer code recipes for universities & NGOs."
+    ),
+    key="platform_persona_radio",
 )
 st.sidebar.markdown("---")
 
@@ -404,13 +934,33 @@ if "Planetary" in app_mode:
 
     # Sidebar: Criterion weights
     st.sidebar.header("Criterion Weights")
-    st.sidebar.caption("Adjust weight distribution for multi-criteria aggregation:")
+    st.sidebar.caption("Adjust weight distribution for multi-criteria aggregation (hover over '?' on each slider for guidance):")
     weights = {
         C.CRITERIA_LABELS.get(c, c): st.sidebar.slider(
-            C.CRITERIA_LABELS.get(c, c), 0.0, 1.0, 0.25, 0.05, key=f"analog_w_{c}"
+            C.CRITERIA_LABELS.get(c, c),
+            0.0,
+            1.0,
+            0.25,
+            0.05,
+            key=f"analog_w_{c}",
+            help=ANALOG_TOOLTIPS.get(c, f"Adjust importance weight for {c}"),
         )
         for c in C.CRITERIA
     }
+
+    # Sidebar: Open Science API Quick Access Section
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🔌 Open Science API & SDK")
+    st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
+    st.sidebar.markdown("""
+* **Status:** 🟢 `FastAPI v1.1.0 Online`
+* **Base URL:** `http://localhost:8000/v1`
+* **Interactive Docs:** [Swagger UI](/docs) · [ReDoc](/redoc)
+* **Access Policy:** Free open-access (no API key required)
+""")
+    if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_a"):
+        st.session_state["platform_persona_radio"] = "🔌 Open Science API & Developer Hub"
+        st.rerun()
 
     _label_to_key = {v: k for k, v in C.CRITERIA_LABELS.items()}
     internal_weights = {_label_to_key.get(lab, lab): w for lab, w in weights.items()}
@@ -802,7 +1352,7 @@ if "Planetary" in app_mode:
 # ===========================================================================
 # PERSONA 2: MODE B — GEOHAZARD & VOLCANIC RISK MONITOR
 # ===========================================================================
-else:
+elif "Geohazard" in app_mode:
     changes_path = C.PROCESSED_DIR / "changes.json"
     if not changes_path.exists():
         st.error(
@@ -830,7 +1380,7 @@ else:
 
     # Sidebar: Hazard Criticality Weights
     st.sidebar.header("Hazard Criticality Weights")
-    st.sidebar.caption("Fine-tune hazard sensitivity by domain:")
+    st.sidebar.caption("Fine-tune hazard sensitivity by domain (hover over '?' on each slider for guidance):")
     temporal_crits = getattr(C, "TEMPORAL_CRITERIA", ["topographie", "geologie", "environnement"])
     temporal_crit_labels = getattr(
         C,
@@ -843,11 +1393,31 @@ else:
     )
     t_weights = {
         c: st.sidebar.slider(
-            temporal_crit_labels.get(c, c), 0.0, 1.0, 0.33, 0.05, key=f"t_w_{c}"
+            temporal_crit_labels.get(c, c),
+            0.0,
+            1.0,
+            0.33,
+            0.05,
+            key=f"t_w_{c}",
+            help=TEMPORAL_TOOLTIPS.get(c, f"Adjust sensitivity for {c}"),
         )
         for c in temporal_crits
     }
     internal_t_weights = t_weights
+
+    # Sidebar: Open Science API Quick Access Section
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🔌 Open Science API & SDK")
+    st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
+    st.sidebar.markdown("""
+* **Status:** 🟢 `FastAPI v1.1.0 Online`
+* **Base URL:** `http://localhost:8000/v1`
+* **Interactive Docs:** [Swagger UI](/docs) · [ReDoc](/redoc)
+* **Access Policy:** Free open-access (no API key required)
+""")
+    if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_b"):
+        st.session_state["platform_persona_radio"] = "🔌 Open Science API & Developer Hub"
+        st.rerun()
 
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
@@ -1189,3 +1759,11 @@ else:
     # -----------------------------------------------------------------------
     with tab_tdocs:
         render_documentation_tab()
+
+
+# ===========================================================================
+# PERSONA 3: MODE C — OPEN SCIENCE API & DEVELOPER HUB
+# ===========================================================================
+else:
+    render_api_docs_page()
+
