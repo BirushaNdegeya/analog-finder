@@ -415,6 +415,12 @@ def render_api_docs_page() -> None:
         "Free, public, programmatic access to Earth, Moon, and Mars satellite data, "
         "Wasserstein-1 Optimal Transport models, and real-time geohazard early warning diagnostics."
     )
+    st.markdown(
+        "**Exposed Endpoints & Data Models:**  \n"
+        "• **Catalog Endpoints:** Planetary targets (Moon/Mars), Earth analog sites, and multi-temporal geohazard pairs  \n"
+        "• **Engine Endpoints:** Continuous Wasserstein distance ($W_1$), multi-criteria weighting, and Kolmogorov-Smirnov statistical testing  \n"
+        "• **STAC Ingestion:** Cloud-native raster querying for Copernicus DEM, Sentinel-2, TerraClimate, and JAXA/NASA DTMs"
+    )
 
     # Status Badges
     col_b1, col_b2, col_b3, col_b4 = st.columns(4)
@@ -883,11 +889,17 @@ curl -s -X POST "$API/analyze" \\
 # Sidebar Persona Selector
 # ---------------------------------------------------------------------------
 if ICON_PATH.exists():
-    c_icon, c_title = st.sidebar.columns([1, 3.5])
-    with c_icon:
-        st.image(str(ICON_PATH), width=58)
-    with c_title:
-        st.markdown("<h2 style='margin-top: 10px; margin-bottom: 0px; font-weight: 700;'>Analog Finder</h2>", unsafe_allow_html=True)
+    import base64
+    icon_b64 = base64.b64encode(ICON_PATH.read_bytes()).decode("utf-8")
+    st.sidebar.markdown(
+        f"""
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 2px; margin-bottom: 12px;">
+            <img src="data:image/png;base64,{icon_b64}" style="width: 42px; height: 42px; object-fit: contain; flex-shrink: 0;" alt="GeoCongo AI Logo" />
+            <span style="font-size: 1.6rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: var(--text-color, #111827);">Analog Finder</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 else:
     st.sidebar.title("Analog Finder")
 st.sidebar.markdown(
@@ -915,7 +927,6 @@ if st.sidebar.button(
 ):
     st.session_state["app_mode"] = "Planetary Mission Analogs (Mode A)"
     st.rerun()
-st.sidebar.caption("Benchmark Earth testbeds against Moon & Mars (Optimal Transport).")
 
 # Mode B Navigation Button
 is_mode_b = "Geohazard" in current_mode
@@ -928,7 +939,6 @@ if st.sidebar.button(
 ):
     st.session_state["app_mode"] = "Geohazard & Risk Monitor (Mode B)"
     st.rerun()
-st.sidebar.caption("Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga).")
 
 # Open Science API Hub Navigation Button
 is_mode_api = "Open Science" in current_mode or "API" in current_mode
@@ -941,7 +951,6 @@ if st.sidebar.button(
 ):
     st.session_state["app_mode"] = "Open Science API & Developer Hub"
     st.rerun()
-st.sidebar.caption("Free programmatic REST API with Python & cURL for researchers & universities.")
 
 app_mode = st.session_state["app_mode"]
 st.sidebar.markdown("---")
@@ -967,6 +976,13 @@ if "Planetary" in app_mode:
         f"Target: **{data['target']['name']}** — "
         "Candidate Earth sites ranked by geomorphological and geological similarity to the planetary target "
         "(relative Wasserstein metric across the candidate panel)."
+    )
+    st.markdown(
+        "**Core Scientific Criteria & Physical Indicators:**  \n"
+        "• **Topography:** Slope (°) · Terrain Roughness (variability)  \n"
+        "• **Geology:** Basalt Fraction · Iron Oxides Index · Clay Minerals (SWIR)  \n"
+        "• **Environment:** Bare Ground Fraction · Aridity (Annual Precipitation)  \n"
+        "• **In-Situ Resources:** Subsurface Cavities & Lava Skylights · Accessible Basalt Regolith"
     )
 
     if data.get("synthetic"):
@@ -1410,6 +1426,12 @@ elif "Geohazard" in app_mode:
         "Kivu Rift & Virunga Province (DR Congo) — "
         "Multi-temporal satellite surveillance quantifying ground deformation, volcanic eruption signatures, "
         "and catastrophic urban landslide displacement using differential Optimal Transport."
+    )
+    st.markdown(
+        "**Geohazard Surveillance Criteria & Physical Indicators ($T_0 \\to T_1$):**  \n"
+        "• **Topography:** Elevation displacement, scarp slope gradient, terrain subsidence / destabilization  \n"
+        "• **Geology:** Volcanic lava effusion, basaltic deposit expansion, ash alteration & spectral change  \n"
+        "• **Environment:** Bare soil exposure, landslide scar vegetation loss, surface moisture disruption"
     )
 
     if tdata.get("synthetic"):
