@@ -268,11 +268,13 @@ The interface features an **Operational Focus** selector in the sidebar:
 1. **Interactive Global Map & Ranking**: Georeferenced candidate sites color-coded by similarity tier (Green: $\ge 0.70$, Yellow: $0.40 - 0.70$, Red: $< 0.40$) relative to the Moon target.
 2. **Site Detail & Scientific Validity Card**: Multi-criteria radar chart, physical indicator medians vs target, and actionable mission testing domains (rover mobility, EVA ergonomics, ISRU regolith).
 3. **Scientific Validation Tab**: Benchmark verification of known lunar analogs, negative control exclusion, and Monte Carlo Dirichlet sensitivity ($\rho$).
+4. **Custom Live Study (Draw & Analyze)**: On-demand interactive evaluation of any user-defined bounding box on Earth against lunar (Marius Hills) or Martian (Jezero Crater) targets, featuring Folium rectangle drawing, dynamic STAC streaming, and comparative ranking against world benchmark sites.
 
 #### 🌋 Persona 2: Mode B — Geohazard & Volcanic Risk Monitor
 1. **Surveillance Map & Alert Tiers**: Active monitoring map centered on the East African Rift (Bukavu & Virunga) with color-coded 4-tier alert badges (🔴 Critical, 🟠 Warning, 🟡 Watch, 🟢 Stable).
 2. **Zone Criticality & Decision Card**: Detailed deformation radar, two-sample Kolmogorov-Smirnov significance testing table ($p$-values), and actionable civil protection mandates (drainage reinforcement, building moratoria, sensor deployment).
 3. **2D Spatial Patch Differencing Simulation**: Localized sliding-window patch heatmap resolving the spatial blind spot and mapping exact deformation peaks ($W_1$).
+4. **On-Demand Hazard Surveillance**: Interactive multi-temporal deformation detection on any custom bounding box on Earth with user-selected observation dates ($T_0$ vs $T_1$), automated Sentinel-2 / DEM ingestion, and Kolmogorov-Smirnov significance testing.
 
 ### 7.3 Launch the FastAPI REST Backend
 
