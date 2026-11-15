@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: analog_finder_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    volumes:
+      - processed_data:/app/data/processed
+    networks:
+      - geocongo_net
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: analog_finder_dashboard
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      - API_URL=https://api.analog.geocongoai.com
+      - STREAMLIT_SERVER_PORT=8501
+    depends_on:
+      - api
+    volumes:
+      - processed_data:/app/data/processed
+    networks:
+      - geocongo_net
+
+volumes:
+  processed_data:
+
+networks:
+  geocongo_net:
+    driver: bridge

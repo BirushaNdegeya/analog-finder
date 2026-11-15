@@ -439,11 +439,13 @@ The Analog Finder API is built on **FastAPI** and provides high-throughput, asyn
 It dynamically bridges cloud-native STAC catalogs (Microsoft Planetary Computer & USGS Astrogeology) and executes
 1D/2D Optimal Transport calculations in real time.
 
-#### Service Endpoints
-* **Base URL (Local Dev):** `http://localhost:8000/v1`
-* **Interactive Swagger UI:** [`http://localhost:8000/docs`](http://localhost:8000/docs)
-* **ReDoc Specification:** [`http://localhost:8000/redoc`](http://localhost:8000/redoc)
-* **OpenAPI 3.0 JSON Schema:** [`http://localhost:8000/openapi.json`](http://localhost:8000/openapi.json)
+#### Production Endpoints (GeoCongo AI)
+* **Backend REST API:** [`https://api.analog.geocongoai.com/v1`](https://api.analog.geocongoai.com/v1)
+* **Interactive Swagger UI:** [`https://api.analog.geocongoai.com/docs`](https://api.analog.geocongoai.com/docs)
+* **ReDoc Specification:** [`https://api.analog.geocongoai.com/redoc`](https://api.analog.geocongoai.com/redoc)
+* **OpenAPI 3.0 JSON Schema:** [`https://api.analog.geocongoai.com/openapi.json`](https://api.analog.geocongoai.com/openapi.json)
+* **Frontend Dashboard:** [`https://analog.geocongoai.com`](https://analog.geocongoai.com)
+* **Local Development Base URL:** `http://localhost:8000/v1`
 
 ---
 
@@ -465,9 +467,11 @@ Verify server responsiveness and enabled compute engines:
         st.markdown("##### Example Request & Response")
         col_q1, col_q2 = st.columns(2)
         with col_q1:
-            st.code("""# cURL health ping
-curl -X GET "http://localhost:8000/v1/health" \\
+            st.code("""# Production cURL health ping
+curl -X GET "https://api.analog.geocongoai.com/v1/health" \\
      -H "Accept: application/json"
+
+# (Or for local development: http://localhost:8000/v1/health)
 """, language="bash")
         with col_q2:
             st.code("""// HTTP 200 OK Response
@@ -693,7 +697,8 @@ curl -X GET "http://localhost:8000/v1/sites" -H "Accept: application/json"
             st.code('''import requests
 import pandas as pd
 
-BASE_URL = "http://localhost:8000/v1"
+# GeoCongo AI Production API (or "http://localhost:8000/v1" for local dev)
+BASE_URL = "https://api.analog.geocongoai.com/v1"
 
 # 1. Fetch available candidate sites
 sites_resp = requests.get(f"{BASE_URL}/sites").json()
@@ -738,7 +743,8 @@ print(df.to_string())
             st.code('''import requests
 import time
 
-BASE_URL = "http://localhost:8000/v1"
+# GeoCongo AI Production API (or "http://localhost:8000/v1" for local dev)
+BASE_URL = "https://api.analog.geocongoai.com/v1"
 SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 
 def monitor_geohazard_zone(pair_id="bukavu_ibanda"):
@@ -778,10 +784,11 @@ if __name__ == "__main__":
 ''', language="python")
 
         elif "JavaScript" in recipe_choice:
-            st.markdown("#### Client-Side JavaScript / Web Integration")
-            st.code('''// Modern ES6 Fetch example
+            st.markdown("#### Client-Side JavaScript / React / Web Integration")
+            st.code('''// Modern ES6 Fetch example for React / Vue / Next.js
 async function evaluateAnalog(siteId = "lanzarote") {
-  const url = "http://localhost:8000/v1/analyze";
+  // GeoCongo AI Production API (or "http://localhost:8000/v1" for local dev)
+  const url = "https://api.analog.geocongoai.com/v1/analyze";
   const payload = {
     mode: "analog",
     site_id: siteId,
@@ -813,7 +820,7 @@ evaluateAnalog("lanzarote");
 # Test planetary and geohazard endpoints via CLI
 
 set -e
-API="http://localhost:8000/v1"
+API="https://api.analog.geocongoai.com/v1"
 
 echo "=== 1. Checking API Health ==="
 curl -s "$API/health" | jq .
@@ -954,8 +961,8 @@ if "Planetary" in app_mode:
     st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
     st.sidebar.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
-* **Base URL:** `http://localhost:8000/v1`
-* **Interactive Docs:** [Swagger UI](/docs) · [ReDoc](/redoc)
+* **Base URL:** [`api.analog.geocongoai.com`](https://api.analog.geocongoai.com/v1)
+* **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
     if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_a"):
@@ -1411,8 +1418,8 @@ elif "Geohazard" in app_mode:
     st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
     st.sidebar.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
-* **Base URL:** `http://localhost:8000/v1`
-* **Interactive Docs:** [Swagger UI](/docs) · [ReDoc](/redoc)
+* **Base URL:** [`api.analog.geocongoai.com`](https://api.analog.geocongoai.com/v1)
+* **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
     if st.sidebar.button("📖 Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_b"):
