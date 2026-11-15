@@ -18,7 +18,8 @@ import sys
 from pathlib import Path
 
 import folium
-from streamlit_folium import folium_static
+from folium.plugins import Draw
+from streamlit_folium import folium_static, st_folium
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -1283,7 +1284,7 @@ if "Planetary" in app_mode:
 
         active_bbox = (float(w_in), float(s_in), float(e_in), float(n_in))
 
-        # Stable Map Preview with folium_static (eliminates removeChild error)
+        # Interactive Map with Draw plugin — allows user to draw a custom rectangle AOI
         center_lat = (active_bbox[1] + active_bbox[3]) / 2
         center_lon = (active_bbox[0] + active_bbox[2]) / 2
         m_draw = folium.Map(location=[center_lat, center_lon], zoom_start=9)
@@ -1292,18 +1293,65 @@ if "Planetary" in app_mode:
             attr="Esri World Imagery",
             name="Satellite",
         ).add_to(m_draw)
+
+        # FeatureGroup holds the current bbox rectangle (deletable by the trash icon)
+        fg = folium.FeatureGroup(name="drawn_items")
         folium.Rectangle(
             bounds=[[active_bbox[1], active_bbox[0]], [active_bbox[3], active_bbox[2]]],
             color="#2196f3",
             fill=True,
             fill_opacity=0.3,
-            tooltip=f"Selected Bounding Box: {c_name}",
+            tooltip=f"Current AOI: {c_name} — Delete and draw a new rectangle to change area.",
+        ).add_to(fg)
+        fg.add_to(m_draw)
+
+        # Draw toolbar — only rectangle enabled, all others disabled
+        Draw(
+            export=False,
+            feature_group=fg,
+            position="topleft",
+            show_geometry_on_click=False,
+            draw_options={
+                "polyline": False,
+                "polygon": False,
+                "circle": False,
+                "circlemarker": False,
+                "marker": False,
+                "rectangle": {"shapeOptions": {"color": "#2196f3", "fillOpacity": 0.3}},
+            },
+            edit_options={"edit": False, "remove": True},
         ).add_to(m_draw)
-        folium_static(m_draw, width=680, height=320)
-        st.caption(
-            "**Bounding Box Preview**: The blue outline indicates the geographic footprint where Copernicus DEM elevation, "
-            "Sentinel-2 multispectral bands, and TerraClimate aridity data are extracted via open STAC protocols."
+
+        draw_output = st_folium(
+            m_draw,
+            key=f"draw_analog_{preset_choice}",
+            height=340,
+            use_container_width=True,
+            returned_objects=["last_active_drawing", "all_drawings"],
         )
+        st.caption(
+            "**Interactive AOI Tool**: Delete the existing rectangle (trash icon) and draw a new one to select your custom Area of Interest. "
+            "Coordinates update automatically below — or type them directly in the number fields above."
+        )
+
+        # Extract bbox from last drawn rectangle
+        if draw_output and draw_output.get("last_active_drawing"):
+            geom = draw_output["last_active_drawing"].get("geometry", {})
+            if geom.get("type") == "Polygon":
+                coords = geom["coordinates"][0]
+                dlons = [pt[0] for pt in coords]
+                dlats = [pt[1] for pt in coords]
+                drawn_bbox = (
+                    round(min(dlons), 4),
+                    round(min(dlats), 4),
+                    round(max(dlons), 4),
+                    round(max(dlats), 4),
+                )
+                active_bbox = drawn_bbox
+                st.info(
+                    f"Rectangle drawn — Captured BBox: "
+                    f"W={drawn_bbox[0]}, S={drawn_bbox[1]}, E={drawn_bbox[2]}, N={drawn_bbox[3]}"
+                )
 
         col_exec, col_mode = st.columns([2, 1])
         with col_mode:
@@ -1719,7 +1767,7 @@ elif "Geohazard" in app_mode:
 
         active_tbbox = (float(tw_in), float(ts_in), float(te_in), float(tn_in))
 
-        # Stable Map Preview with folium_static
+        # Interactive Map with Draw plugin for Mode B On-Demand Hazard Surveillance
         t_center_lat = (active_tbbox[1] + active_tbbox[3]) / 2
         t_center_lon = (active_tbbox[0] + active_tbbox[2]) / 2
         m_tdraw = folium.Map(location=[t_center_lat, t_center_lon], zoom_start=12)
@@ -1728,18 +1776,65 @@ elif "Geohazard" in app_mode:
             attr="Esri World Imagery",
             name="Satellite",
         ).add_to(m_tdraw)
+
+        # FeatureGroup holds the current bbox rectangle (deletable by the trash icon)
+        fg_t = folium.FeatureGroup(name="drawn_items_t")
         folium.Rectangle(
             bounds=[[active_tbbox[1], active_tbbox[0]], [active_tbbox[3], active_tbbox[2]]],
             color="#d32f2f",
             fill=True,
             fill_opacity=0.35,
-            tooltip=f"Monitored AOI: {t_name}",
+            tooltip=f"Monitored AOI: {t_name} — Delete and draw a new rectangle to change area.",
+        ).add_to(fg_t)
+        fg_t.add_to(m_tdraw)
+
+        # Draw toolbar — only rectangle enabled
+        Draw(
+            export=False,
+            feature_group=fg_t,
+            position="topleft",
+            show_geometry_on_click=False,
+            draw_options={
+                "polyline": False,
+                "polygon": False,
+                "circle": False,
+                "circlemarker": False,
+                "marker": False,
+                "rectangle": {"shapeOptions": {"color": "#d32f2f", "fillOpacity": 0.35}},
+            },
+            edit_options={"edit": False, "remove": True},
         ).add_to(m_tdraw)
-        folium_static(m_tdraw, width=680, height=320)
-        st.caption(
-            "**Monitored Bounding Box Preview**: The red outline shows the exact territorial footprint where bi-temporal Sentinel-2 optical "
-            "passes and Copernicus DEM elevation profiles are ingested and differenced."
+
+        tdraw_output = st_folium(
+            m_tdraw,
+            key=f"draw_temporal_{t_preset}",
+            height=340,
+            use_container_width=True,
+            returned_objects=["last_active_drawing", "all_drawings"],
         )
+        st.caption(
+            "**Interactive AOI Tool**: Delete the existing rectangle (trash icon) and draw a new one to select your monitored zone. "
+            "Coordinates update automatically — or type them directly in the number fields above."
+        )
+
+        # Extract bbox from last drawn rectangle
+        if tdraw_output and tdraw_output.get("last_active_drawing"):
+            geom = tdraw_output["last_active_drawing"].get("geometry", {})
+            if geom.get("type") == "Polygon":
+                coords = geom["coordinates"][0]
+                dlons = [pt[0] for pt in coords]
+                dlats = [pt[1] for pt in coords]
+                drawn_tbbox = (
+                    round(min(dlons), 4),
+                    round(min(dlats), 4),
+                    round(max(dlons), 4),
+                    round(max(dlats), 4),
+                )
+                active_tbbox = drawn_tbbox
+                st.info(
+                    f"Rectangle drawn — Captured BBox: "
+                    f"W={drawn_tbbox[0]}, S={drawn_tbbox[1]}, E={drawn_tbbox[2]}, N={drawn_tbbox[3]}"
+                )
 
         texec_col, tmode_col = st.columns([2, 1])
         with tmode_col:
