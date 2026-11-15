@@ -31,12 +31,12 @@
         "pente": {
           "site": 3.824881076812744,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 1.4925605058670044,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 0.0,
@@ -69,7 +69,13 @@
         "usages_partiels": []
       },
       "processes": "Active alkaline volcanism, fresh basaltic lava flows, collapse pits, Nyamuragira lava tubes.",
-      "local_data": "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions)."
+      "local_data": "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions).",
+      "bbox": [
+        29.1,
+        -1.6,
+        29.4,
+        -1.35
+      ]
     },
     {
       "id": "harrat_khaybar",
@@ -95,12 +101,12 @@
         "pente": {
           "site": 2.202270030975342,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 0.8554980754852295,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 1.0,
@@ -136,7 +142,13 @@
         "usages_partiels": []
       },
       "processes": "Intraplate bimodal volcanic field, extensive basaltic lava tubes (Umm Jirsan), hyper-arid preservation.",
-      "local_data": "Morphological inventory of lava tubes, Copernicus DEM and Sentinel-2 composites."
+      "local_data": "Morphological inventory of lava tubes, Copernicus DEM and Sentinel-2 composites.",
+      "bbox": [
+        39.8,
+        25.6,
+        40.0,
+        25.8
+      ]
     },
     {
       "id": "suswa",
@@ -162,12 +174,12 @@
         "pente": {
           "site": 2.7097511291503906,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 1.2239854335784912,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 0.019999999552965164,
@@ -200,7 +212,13 @@
         "usages_partiels": []
       },
       "processes": "Shield volcano with double caldera, complex braided lava tube networks in phonolitic-trachytic rocks.",
-      "local_data": "Speleological survey literature and satellite terrain models."
+      "local_data": "Speleological survey literature and satellite terrain models.",
+      "bbox": [
+        36.25,
+        -1.27,
+        36.45,
+        -1.07
+      ]
     },
     {
       "id": "hawaii",
@@ -226,12 +244,12 @@
         "pente": {
           "site": 3.090480089187622,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 0.8870705366134644,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 0.019999999552965164,
@@ -264,7 +282,13 @@
         "usages_partiels": []
       },
       "processes": "Active tholeiitic shield basalt, extensive pahoehoe flow fields, active and relict lava tubes, NASA analog test site.",
-      "local_data": "USGS Hawaiian Volcano Observatory geological maps and high-res DEMs."
+      "local_data": "USGS Hawaiian Volcano Observatory geological maps and high-res DEMs.",
+      "bbox": [
+        -155.4,
+        19.33,
+        -155.2,
+        19.53
+      ]
     },
     {
       "id": "lanzarote",
@@ -290,12 +314,12 @@
         "pente": {
           "site": 2.394895315170288,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 1.5204007625579834,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 1.0,
@@ -331,7 +355,13 @@
         "usages_partiels": []
       },
       "processes": "Historical basaltic fissure eruptions (1730-1736), pristine volcanic terrain, ESA PANGAEA astronaut training site.",
-      "local_data": "Simplified geological map of Lanzarote (ResearchGate) and CHELSA / Meteostat climate records."
+      "local_data": "Simplified geological map of Lanzarote (ResearchGate) and CHELSA / Meteostat climate records.",
+      "bbox": [
+        -13.85,
+        28.93,
+        -13.65,
+        29.07
+      ]
     },
     {
       "id": "lava_beds",
@@ -357,12 +387,12 @@
         "pente": {
           "site": 2.4856889247894287,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 1.3691350221633911,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 0.6200000047683716,
@@ -398,7 +428,13 @@
         ]
       },
       "processes": "Medicine Lake basaltic shield volcano, highest concentration of accessible lava tube caves in North America.",
-      "local_data": "NPS Geodiversity Atlas geological map and USGS 3DEP elevation products."
+      "local_data": "NPS Geodiversity Atlas geological map and USGS 3DEP elevation products.",
+      "bbox": [
+        -121.6,
+        41.62,
+        -121.4,
+        41.8
+      ]
     },
     {
       "id": "atacama",
@@ -424,12 +460,12 @@
         "pente": {
           "site": 4.245386123657227,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 2.2730002403259277,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 1.0,
@@ -465,7 +501,13 @@
         "usages_partiels": []
       },
       "processes": "Extreme hyper-aridity, high solar radiation, duricrusts, severe lack of vegetation; Mars analog control.",
-      "local_data": "Regional geological and meteorological observatory data."
+      "local_data": "Regional geological and meteorological observatory data.",
+      "bbox": [
+        -70.1,
+        -24.2,
+        -69.9,
+        -24.0
+      ]
     },
     {
       "id": "vallee_mort",
@@ -491,12 +533,12 @@
         "pente": {
           "site": 3.14666748046875,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 0.7650836706161499,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 1.0,
@@ -534,7 +576,13 @@
         ]
       },
       "processes": "Extensional tectonic basin, alluvial fans, salt flats, extreme thermal amplitude and aridity.",
-      "local_data": "USGS geological maps and weather station series."
+      "local_data": "USGS geological maps and weather station series.",
+      "bbox": [
+        -116.97,
+        36.35,
+        -116.77,
+        36.55
+      ]
     },
     {
       "id": "foret_congo",
@@ -560,12 +608,12 @@
         "pente": {
           "site": 1.6602389812469482,
           "target": 1.8980610370635986,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "rugosite": {
           "site": 1.2992149591445923,
           "target": 4.676552772521973,
-          "unit": "°"
+          "unit": "\u00b0"
         },
         "sol_nu": {
           "site": 0.0,
@@ -598,7 +646,13 @@
         "usages_partiels": []
       },
       "processes": "Dense equatorial canopy, high annual rainfall (>1800 mm), deep organic soils, total lack of planetary analog fidelity.",
-      "local_data": "NASA/Copernicus global datasets for negative control verification."
+      "local_data": "NASA/Copernicus global datasets for negative control verification.",
+      "bbox": [
+        21.9,
+        -0.1,
+        22.1,
+        0.1
+      ]
     }
   ],
   "validation": {

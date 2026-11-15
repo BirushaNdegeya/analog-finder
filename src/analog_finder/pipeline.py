@@ -230,6 +230,7 @@ def run(synthetic: bool) -> dict:
             "role": meta[sid]["role"],
             "lat": lat,
             "lon": lon,
+            "bbox": meta[sid].get("bbox"),
             "indicators": {k: round(v, 4) for k, v in sim.items()},
             "criteria": {k: (round(v, 4) if v is not None else None) for k, v in crit.items()},
             "confidence": round(S.confidence(sim), 4),
