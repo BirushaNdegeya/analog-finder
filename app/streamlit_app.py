@@ -583,14 +583,12 @@ else:
     st.sidebar.header("Hazard Criticality Weights")
     st.sidebar.caption("Fine-tune hazard sensitivity by domain:")
     t_weights = {
-        C.CRITERIA_LABELS.get(c, c): st.sidebar.slider(
-            f"Risk: {C.CRITERIA_LABELS.get(c, c)}", 0.0, 1.0, 0.25, 0.05, key=f"t_w_{c}"
+        c: st.sidebar.slider(
+            C.TEMPORAL_CRITERIA_LABELS.get(c, c), 0.0, 1.0, 0.33, 0.05, key=f"t_w_{c}"
         )
-        for c in C.CRITERIA
+        for c in C.TEMPORAL_CRITERIA
     }
-
-    _label_to_key = {v: k for k, v in C.CRITERIA_LABELS.items()}
-    internal_t_weights = {_label_to_key.get(lab, lab): w for lab, w in t_weights.items()}
+    internal_t_weights = t_weights
 
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
@@ -657,8 +655,8 @@ else:
 
         c_radar, c_meta = st.columns(2)
         with c_radar:
-            crit_labels = [C.CRITERIA_LABELS.get(c, c) for c in C.CRITERIA]
-            crit_vals = [z["criteria"].get(c) or 0.0 for c in C.CRITERIA]
+            crit_labels = [C.TEMPORAL_CRITERIA_LABELS.get(c, c) for c in C.TEMPORAL_CRITERIA]
+            crit_vals = [z["criteria"].get(c) or 0.0 for c in C.TEMPORAL_CRITERIA]
             fig_t = go.Figure(go.Scatterpolar(
                 r=crit_vals + [crit_vals[0]],
                 theta=crit_labels + [crit_labels[0]],

@@ -49,6 +49,15 @@ CRITERIA_LABELS = {
     "ressources": "In-Situ Resources",
 }
 
+# Geohazard Risk Criteria (In-Situ Resources excluded as irrelevant to disaster monitoring)
+TEMPORAL_CRITERIA = ["topographie", "geologie", "environnement"]
+TEMPORAL_CRITERIA_LABELS = {
+    "topographie": "Topography (Slope & Scarp)",
+    "geologie": "Geology (Lava & Mineral Alteration)",
+    "environnement": "Environment (Bare Soil & Vegetation Loss)",
+}
+TEMPORAL_DEFAULT_WEIGHTS = {c: 1.0 / len(TEMPORAL_CRITERIA) for c in TEMPORAL_CRITERIA}
+
 INDICATOR_LABELS = {
     "pente": "Slope",
     "rugosite": "Roughness",

@@ -160,10 +160,13 @@ def analyze_indicator_change(
 def temporal_criteria_scores(indicator_metrics: Dict[str, Dict[str, Any]]) -> Dict[str, Optional[float]]:
     """Aggregate per-indicator temporal criticality into criterion-level scores.
 
-    A criterion with no non-empty indicators evaluates to None.
+    Focuses strictly on disaster and deformation domains (Topography, Geology, Environment),
+    omitting space ISRU resources. A criterion with no non-empty indicators evaluates to None.
     """
     crit_scores = {}
-    for crit, inds in C.CRITERIA.items():
+    temporal_crits = getattr(C, "TEMPORAL_CRITERIA", ["topographie", "geologie", "environnement"])
+    for crit in temporal_crits:
+        inds = C.CRITERIA.get(crit, [])
         scores = [
             indicator_metrics[i]["score"]
             for i in inds
