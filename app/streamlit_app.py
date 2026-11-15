@@ -1,13 +1,13 @@
 """Analog Finder — Dual-Mode Interactive Decision-Support Dashboard.
 
 Provides two operational personas driven by a single Optimal Transport core:
-  - Mode A:  Planetary Mission Analogs (Earth vs Moon/Mars)
-  - Mode B:  Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
+  - Mode A: Planetary Mission Analogs (Earth vs Moon/Mars)
+  - Mode B: Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
 
 Features a streamlined 3-tab layout per mode:
-  1.  Benchmark Analogs / Crisis Surveillance
-  2.  Custom Live Study (Draw & Analyze) / On-Demand Hazard Surveillance
-  3.  Documentation & Scientific References
+  1. Benchmark Analogs / Crisis Surveillance
+  2. Custom Live Study (Draw & Analyze) / On-Demand Hazard Surveillance
+  3. Documentation & Scientific References
 
 NASA Space Apps Challenge 2026 - GeoCongo AI
 """
@@ -159,7 +159,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 
 #### B. Concrete Mission Scenarios: What Happens When Weights Are Changed?
 
-#####  In Mode A: Planetary Mission Analogs
+##### In Mode A: Planetary Mission Analogs
 
 | Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
 |:---|:---|:---|
@@ -168,7 +168,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 | **Extreme Vacuum & Hyper-Arid Preservation** | Topography: 0.10<br>Geology: 0.10<br>**Environment: 0.70 – 1.00**<br>Resources: 0.10 | • Heavily penalizes any vegetation presence and rainfall; prioritizes zero bare-soil moisture.<br>• **Atacama Desert (Chile) and Death Valley (USA) take #1 and #2** due to extreme aridity ($< 20\\,\\text{mm/yr}$ precipitation) and near-zero NDVI. |
 | **Subsurface Habitat & In-Situ Caves (ISRU)** | Topography: 0.10<br>Geology: 0.20<br>Environment: 0.10<br>**In-Situ Resources / Cavities: 0.80** | • Filters strictly for confirmed lava tubes, volcanic skylights, and basaltic regolith thickness.<br>• **Harrat Khaybar (Umm Jirsan cave) and Lanzarote rise decisively**, while volcanic sites lacking caves are penalized. |
 
-#####  In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
+##### In Mode B: Geohazard & Risk Monitor (Kivu Rift & Virunga)
 
 In Geohazard mode, the space ISRU resource criterion is completely excluded, leaving the 3 core geophysical drivers:
 
@@ -293,7 +293,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
         )
 
         # ---- Glossary ----
-        st.markdown("###  Glossary of Core Terminology")
+        st.markdown("### Glossary of Core Terminology")
         st.markdown("""
 | Term | Plain-Language Definition |
 |:---|:---|
@@ -317,7 +317,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 """)
 
         # ---- Abbreviations ----
-        st.markdown("###  Technical Abbreviations Reference")
+        st.markdown("### Technical Abbreviations Reference")
         st.markdown("""
 | Abbreviation | Expanded Name | Organization / Context |
 |:---|:---|:---|
@@ -346,7 +346,7 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 """)
 
         # ---- Operational Decision Reference ----
-        st.markdown("###  Operational Decision & Alert Thresholds Guide")
+        st.markdown("### Operational Decision & Alert Thresholds Guide")
         st.markdown("""
 Summary of decision thresholds applied across both operational personas:
 
@@ -1308,7 +1308,7 @@ if "Planetary" in app_mode:
             # Spider / Radar Chart
             c_left, c_right = st.columns([1, 1])
             with c_left:
-                st.markdown("####  Multi-Criteria Comparative Profile")
+                st.markdown("#### Multi-Criteria Comparative Profile")
                 crit_cats = [C.CRITERIA_LABELS.get(k, k) for k in C.CRITERIA.keys()]
                 crit_vals = [cs["criteria"].get(k) or 0.0 for k in C.CRITERIA.keys()]
                 fig_radar = go.Figure()
@@ -1323,7 +1323,7 @@ if "Planetary" in app_mode:
                 )
 
             with c_right:
-                st.markdown("####  Scientific Validity Card")
+                st.markdown("#### Scientific Validity Card")
                 st.caption(cs["explanation"])
                 v = cs["validity"]
                 if v["reproduit"]:
@@ -1337,7 +1337,7 @@ if "Planetary" in app_mode:
                     st.write("**Never Reproducible (Earth Physics):**", v["jamais_reproductible"])
 
             # Indicators breakdown table
-            st.markdown("####  Physical Indicator Breakdown")
+            st.markdown("#### Physical Indicator Breakdown")
             ind_rows = []
             for ind, vinfo in cs.get("values", {}).items():
                 ind_rows.append({
@@ -1356,7 +1356,7 @@ if "Planetary" in app_mode:
                 )
 
             # Integrated Leaderboard
-            st.markdown("####  Integrated Global Ranking (Custom Site Included)")
+            st.markdown("#### Integrated Global Ranking (Custom Site Included)")
             lb_df = pd.DataFrame(res_a["leaderboard"])
             lb_df = lb_df[["name", "role", "global", "confidence"]].rename(columns={"name": "Site", "role": "Role", "global": "Global Score", "confidence": "Data Confidence"})
             lb_df.index = range(1, len(lb_df) + 1)
@@ -1745,10 +1745,10 @@ elif "Geohazard" in app_mode:
 
             # Risk validity card
             tv = res_t["validity_card"]
-            st.markdown("####  Geohazard Decision Breakdown")
+            st.markdown("#### Geohazard Decision Breakdown")
             if tv["divergent_or_critical"]:
                 for item in tv["divergent_or_critical"]:
-                    st.error(f"{item}")
+                    st.error(f"🔴 {item}")
             if tv["partial_drift"]:
                 for item in tv["partial_drift"]:
                     st.warning(f"🟠 {item}")
@@ -1760,7 +1760,7 @@ elif "Geohazard" in app_mode:
                 st.info("**Civil Protection Directives:**\n" + "\n".join(f"- {act}" for act in tv["recommended_actions"]))
 
             # Table KS
-            st.markdown("####  Statistical Indicator Metrics (Two-Sample Kolmogorov-Smirnov Test)")
+            st.markdown("#### Statistical Indicator Metrics (Two-Sample Kolmogorov-Smirnov Test)")
             tind_rows = []
             for ind, m in res_t.get("indicators", {}).items():
                 tind_rows.append({
