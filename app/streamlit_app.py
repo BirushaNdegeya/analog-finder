@@ -582,11 +582,21 @@ else:
     # Sidebar: Hazard Criticality Weights
     st.sidebar.header("Hazard Criticality Weights")
     st.sidebar.caption("Fine-tune hazard sensitivity by domain:")
+    temporal_crits = getattr(C, "TEMPORAL_CRITERIA", ["topographie", "geologie", "environnement"])
+    temporal_crit_labels = getattr(
+        C,
+        "TEMPORAL_CRITERIA_LABELS",
+        {
+            "topographie": "Topography (Slope & Scarp)",
+            "geologie": "Geology (Lava & Mineral Alteration)",
+            "environnement": "Environment (Bare Soil & Vegetation Loss)",
+        },
+    )
     t_weights = {
         c: st.sidebar.slider(
-            C.TEMPORAL_CRITERIA_LABELS.get(c, c), 0.0, 1.0, 0.33, 0.05, key=f"t_w_{c}"
+            temporal_crit_labels.get(c, c), 0.0, 1.0, 0.33, 0.05, key=f"t_w_{c}"
         )
-        for c in C.TEMPORAL_CRITERIA
+        for c in temporal_crits
     }
     internal_t_weights = t_weights
 
@@ -655,8 +665,8 @@ else:
 
         c_radar, c_meta = st.columns(2)
         with c_radar:
-            crit_labels = [C.TEMPORAL_CRITERIA_LABELS.get(c, c) for c in C.TEMPORAL_CRITERIA]
-            crit_vals = [z["criteria"].get(c) or 0.0 for c in C.TEMPORAL_CRITERIA]
+            crit_labels = [temporal_crit_labels.get(c, c) for c in temporal_crits]
+            crit_vals = [z["criteria"].get(c) or 0.0 for c in temporal_crits]
             fig_t = go.Figure(go.Scatterpolar(
                 r=crit_vals + [crit_vals[0]],
                 theta=crit_labels + [crit_labels[0]],
