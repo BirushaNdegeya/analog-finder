@@ -262,19 +262,17 @@ Output artifacts:
 streamlit run app/streamlit_app.py
 ```
 
-The interface features an **Operational Focus** selector in the sidebar:
+The interface features an **Operational Focus** selector in the sidebar, presenting a streamlined **3-tab operational layout** per persona:
 
 #### 🚀 Persona 1: Mode A — Planetary Mission Analogs
-1. **Interactive Global Map & Ranking**: Georeferenced candidate sites color-coded by similarity tier (Green: $\ge 0.70$, Yellow: $0.40 - 0.70$, Red: $< 0.40$) relative to the Moon target.
-2. **Site Detail & Scientific Validity Card**: Multi-criteria radar chart, physical indicator medians vs target, and actionable mission testing domains (rover mobility, EVA ergonomics, ISRU regolith).
-3. **Scientific Validation Tab**: Benchmark verification of known lunar analogs, negative control exclusion, and Monte Carlo Dirichlet sensitivity ($\rho$).
-4. **Custom Live Study (Draw & Analyze)**: On-demand interactive evaluation of any user-defined bounding box on Earth against lunar (Marius Hills) or Martian (Jezero Crater) targets, featuring Folium rectangle drawing, dynamic STAC streaming, and comparative ranking against world benchmark sites.
+1. **Benchmark Analogs & Validity**: Comprehensive global candidate map, leaderboard ranking, candidate site deep-dive, multi-criteria polar radar chart, physical indicator distributions vs target, and Monte Carlo Dirichlet sensitivity verification ($\rho$).
+2. **Custom Live Study (Draw & Analyze)**: On-demand interactive evaluation of any user-defined bounding box on Earth against lunar (Marius Hills) or Martian (Jezero Crater) targets, featuring live STAC streaming, candidate presets (Etna, Hawaii, Piton de la Fournaise, Erg Chebbi), and instant comparative ranking against world benchmark sites.
+3. **Documentation & Scientific References**: In-depth theoretical methodology (1D Wasserstein Optimal Transport $W_1$, exponential fidelity scaling), multi-sensor satellite ingestion architecture, confrontation with peer-reviewed literature (Farr 2004, Sauro 2020 on lava tubes), and open data access links (NASA PDS, USGS STAC, ESA Copernicus, Planetary Computer).
 
 #### 🌋 Persona 2: Mode B — Geohazard & Volcanic Risk Monitor
-1. **Surveillance Map & Alert Tiers**: Active monitoring map centered on the East African Rift (Bukavu & Virunga) with color-coded 4-tier alert badges (🔴 Critical, 🟠 Warning, 🟡 Watch, 🟢 Stable).
-2. **Zone Criticality & Decision Card**: Detailed deformation radar, two-sample Kolmogorov-Smirnov significance testing table ($p$-values), and actionable civil protection mandates (drainage reinforcement, building moratoria, sensor deployment).
-3. **2D Spatial Patch Differencing Simulation**: Localized sliding-window patch heatmap resolving the spatial blind spot and mapping exact deformation peaks ($W_1$).
-4. **On-Demand Hazard Surveillance**: Interactive multi-temporal deformation detection on any custom bounding box on Earth with user-selected observation dates ($T_0$ vs $T_1$), automated Sentinel-2 / DEM ingestion, and Kolmogorov-Smirnov significance testing.
+1. **Crisis Surveillance & Risk Validation**: Active geohazard surveillance map centered on the East African Rift (Bukavu & Virunga) with color-coded 4-tier alert badges (🔴 Critical, 🟠 Warning, 🟡 Watch, 🟢 Stable), zone decision cards, two-sample Kolmogorov-Smirnov significance testing table ($p$-values), civil protection directives, and 2D spatial patch differencing simulation.
+2. **On-Demand Hazard Surveillance**: Interactive multi-temporal deformation detection on any custom bounding box on Earth with user-selected observation intervals ($T_0$ vs $T_1$), automated Sentinel-2 / DEM ingestion, Kolmogorov-Smirnov significance testing, and actionable civil protection mandates.
+3. **Documentation & Scientific References**: Multi-temporal differential Wasserstein formulation, Kivu rift literature confrontation (Smets et al. 2021 Nature on Nyiragongo; Michellier et al. 2020 and Delvaux et al. 2017 on Bukavu landslides), and open data citations.
 
 ### 7.3 Launch the FastAPI REST Backend
 
