@@ -227,6 +227,84 @@ def load_local_raster(
 
 
 # ---------------------------------------------------------------------------
+# TerraClimate / Aridity STAC loader
+# ---------------------------------------------------------------------------
+
+def load_aridity(
+    bbox: tuple[float, float, float, float],
+    shape: tuple[int, int] | None = None,
+    year: int = 2020,
+) -> np.ndarray | None:
+    """Retrieve annual cumulative precipitation (mm/year) from TerraClimate STAC on Planetary Computer.
+
+    Calculates annual cumulative precipitation (mm/year) across the bounding box.
+    Falls back gracefully to local raster data/raw/climate/annual_precip.tif or None.
+
+    Parameters
+    ----------
+    bbox : (west, south, east, north) in EPSG:4326.
+    shape : optional (rows, cols) to resample the resulting array.
+    year : reference year for climatological precipitation.
+
+    Returns
+    -------
+    2-D float32 array of annual precipitation (mm/year), or None.
+    """
+    try:
+        import odc.stac
+        items = list(
+            _catalog().search(
+                collections=[C.TERRACLIMATE_COLLECTION],
+                bbox=bbox,
+                datetime=f"{year}-01-01/{year}-12-31",
+            ).items()
+        )
+        if items:
+            lon = (bbox[0] + bbox[2]) / 2
+            lat = (bbox[1] + bbox[3]) / 2
+            ds = odc.stac.load(
+                items,
+                bands=["ppt"],
+                bbox=bbox,
+                crs=f"EPSG:{utm_epsg(lon, lat)}",
+                chunks={},
+            )
+            if "ppt" in ds:
+                # Sum monthly precipitation over the year to get cumulative annual mm/year
+                arr = ds["ppt"].sum(dim="time", skipna=True).compute().values.astype("float32")
+                # Handle fill/nodata values
+                arr[arr < 0] = np.nan
+                if np.any(np.isfinite(arr)):
+                    print(f"[SUCCESS] Streamed TerraClimate precipitation for bbox {bbox}: mean={np.nanmean(arr):.1f} mm/yr.")
+                    if shape is not None and arr.shape != shape:
+                        from rasterio.warp import reproject
+                        dest = np.empty(shape, dtype=np.float32)
+                        reproject(
+                            arr,
+                            dest,
+                            resampling=Resampling.bilinear,
+                        )
+                        return dest
+                    return arr
+    except Exception as exc:
+        print(f"[INFO] Planetary Computer TerraClimate unavailable ({exc}). Checking local fallback...")
+
+    # Fallback to local raster if present
+    local_path = C.RAW_DIR / "climate" / "annual_precip.tif"
+    if local_path.exists():
+        if shape is not None:
+            return load_local_raster(str(local_path), bbox, shape)
+        try:
+            with rasterio.open(str(local_path)) as src:
+                win = from_bounds(*bbox, transform=src.transform)
+                return src.read(1, window=win, boundless=True).astype("float32")
+        except Exception:
+            pass
+
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Multi-temporal ingestion (Mode B)
 # ---------------------------------------------------------------------------
 

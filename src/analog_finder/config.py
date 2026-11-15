@@ -19,6 +19,7 @@ DEM_COLLECTION = "cop-dem-glo-30"
 S2_COLLECTION = "sentinel-2-l2a"
 S2_DATE_RANGE = "2025-01-01/2025-12-31"
 S2_MAX_CLOUD = 30
+TERRACLIMATE_COLLECTION = "terraclimate"
 
 # Planetary STAC APIs (USGS Astrogeology - Moon & Mars)
 PLANETARY_STAC_URL = "https://stac.astrogeology.usgs.gov/api"

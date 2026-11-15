@@ -163,9 +163,7 @@ def _real_site(site: dict) -> dict:
     basalt = ingest.load_local_raster(
         C.RAW_DIR / site["id"] / "basalt_mask.tif", bbox, dem100.shape
     )
-    precip = ingest.load_local_raster(
-        C.RAW_DIR / "climate" / "annual_precip.tif", bbox, dem100.shape
-    )
+    precip = ingest.load_aridity(bbox, dem100.shape)
     return I.compute_site_indicators(dem100, dem30, s2, basalt, precip)
 
 
