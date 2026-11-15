@@ -24,6 +24,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+from PIL import Image
 
 # Ensure the package is importable when launching from the app/ directory
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,11 +36,20 @@ from analog_finder import temporal as T          # noqa: E402
 from analog_finder import interactive as IA      # noqa: E402
 
 # ---------------------------------------------------------------------------
-# Page configuration
+# Brand Assets & Page Configuration
 # ---------------------------------------------------------------------------
+APP_DIR = Path(__file__).resolve().parent
+ICON_PATH = APP_DIR / "assets" / "icon.png"
+if not ICON_PATH.exists():
+    fallback_icon = Path("/home/gerard/Documents/GEOCONGOAI/NASA-APPS-CHALLENG/icon.png")
+    if fallback_icon.exists():
+        ICON_PATH = fallback_icon
+
+favicon = Image.open(ICON_PATH) if ICON_PATH.exists() else "🌍"
+
 st.set_page_config(
     page_title="Analog Finder — GeoCongo AI",
-    page_icon="🌍",
+    page_icon=favicon,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -872,7 +882,14 @@ curl -s -X POST "$API/analyze" \\
 # ---------------------------------------------------------------------------
 # Sidebar Persona Selector
 # ---------------------------------------------------------------------------
-st.sidebar.title("🌍 Analog Finder")
+if ICON_PATH.exists():
+    c_icon, c_title = st.sidebar.columns([1, 3.5])
+    with c_icon:
+        st.image(str(ICON_PATH), width=58)
+    with c_title:
+        st.markdown("<h2 style='margin-top: 10px; margin-bottom: 0px; font-weight: 700;'>Analog Finder</h2>", unsafe_allow_html=True)
+else:
+    st.sidebar.title("Analog Finder")
 st.sidebar.markdown(
     "**GeoCongo AI Decision Engine** — Dual-mode geospatial intelligence driven by "
     "1D/2D Optimal Transport (Wasserstein Distance). Connects open planetary satellite catalogs "
