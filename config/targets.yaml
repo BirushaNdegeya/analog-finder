@@ -7,12 +7,16 @@
 
 marius_hills:
   name: "Marius Hills (Moon)"
-  body: "Moon"
+  body: "moon"
   lat: 14.1
   lon: -56.0
+  bbox: [-57.0, 13.0, -55.0, 15.0]
   lead_collector: "Gérard"
-  dem_raster: "data/raw/targets/marius_hills_dem.tif"  # High-resolution LOLA/LROC metric DEM
-  reference_catalog: "https://pgda.gsfc.nasa.gov/search?quicksearchcat=89"
+  dem_raster: "data/raw/targets/marius_hills_dem.tif"  # Optional local file
+  stac_collection: "kaguya_terrain_camera_usgs_dtms_v2_equi"
+  stac_asset_dem: "dtm"
+  stac_asset_optical: "orthoimage_left"
+  reference_catalog: "https://stac.astrogeology.usgs.gov/api"
   description: "Volcanic dome complex in Oceanus Procellarum featuring the Marius Hills pit crater (probable lava tube skylight)."
   indicators:
     basalte:            {mean: null, std: null, source: "Clementine / LRO spectral data (Oceanus Procellarum mare basalt composition)"}
@@ -22,3 +26,25 @@ marius_hills:
     aridite:            {mean: 0.0,  std: 0.0,  source: "Expected 0.0 mm/yr (hard vacuum, zero atmospheric precipitation; lunar surface)"}
     cavites:            {mean: null, std: null, source: "Marius Hills Pit Crater skylight (JAXA SELENE / NASA LROC inventory)"}
     basalte_accessible: {mean: null, std: null, source: "Mare basalt regolith interface"}
+
+jezero_crater:
+  name: "Jezero Crater (Mars)"
+  body: "mars"
+  lat: 18.38
+  lon: 77.58
+  bbox: [77.0, 18.0, 78.0, 19.0]
+  lead_collector: "Gérard"
+  dem_raster: "data/raw/targets/jezero_crater_dem.tif"
+  stac_collection: "mro_ctx_controlled_usgs_dtms"
+  stac_asset_dem: "dem"
+  stac_asset_optical: "orthoimage"
+  reference_catalog: "https://stac.astrogeology.usgs.gov/api"
+  description: "Ancient Martian lakebed and delta deposit explored by NASA Mars 2020 Perseverance rover."
+  indicators:
+    basalte:            {mean: null, std: null, source: "CRISM spectral mapping of basaltic floor units"}
+    oxydes_fer:         {mean: null, std: null, source: "OMEGA / CRISM ferric oxide mineral signatures"}
+    argiles:            {mean: null, std: null, source: "Jezero delta smectite & Fe/Mg phyllosilicates"}
+    sol_nu:             {mean: 1.0,  std: 0.0,  source: "Expected 1.0 (zero vegetative cover on Mars)"}
+    aridite:            {mean: 0.0,  std: 0.0,  source: "Expected 0.0 mm/yr (hyper-arid Martian surface)"}
+    cavites:            {mean: null, std: null, source: "Volcanic collapse cavities & crater walls"}
+    basalte_accessible: {mean: null, std: null, source: "Surface basaltic regolith & aeolian sand units"}

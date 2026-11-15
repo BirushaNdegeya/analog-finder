@@ -1,6 +1,6 @@
 {
   "mode": "temporal",
-  "synthetic": true,
+  "synthetic": false,
   "zones": [
     {
       "id": "nyiragongo_2021",
@@ -17,125 +17,123 @@
       ],
       "baseline_t0": "2021-01-01/2021-05-15",
       "observation_t1": "2021-06-01/2021-09-30",
-      "criticality_index": 0.1889,
-      "alert_level": "stable",
+      "criticality_index": 0.5495,
+      "alert_level": "warning",
       "criteria": {
-        "topographie": 0.2289,
-        "geologie": 0.0274,
-        "environnement": 0.2687,
-        "ressources": 0.2307
+        "topographie": null,
+        "geologie": 1.0,
+        "environnement": 0.099,
+        "ressources": null
       },
       "indicators": {
         "pente": {
           "indicator_id": "pente",
           "label": "Slope",
           "unit": "°",
-          "wasserstein_distance": 3.5813,
-          "score": 0.2388,
-          "delta_median": 3.6033,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Slope steepening (potential scarp formation) (+3.60°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "rugosite": {
           "indicator_id": "rugosite",
           "label": "Roughness",
           "unit": "°",
-          "wasserstein_distance": 1.3148,
-          "score": 0.2191,
-          "delta_median": 1.317,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Surface terrain roughening (rockfall/fissuring) (+1.32°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "basalte": {
           "indicator_id": "basalte",
           "label": "Basalt Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.0127,
-          "score": 0.0255,
-          "delta_median": 0.0101,
-          "p_value": 0.013431,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+1.0%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "oxydes_fer": {
           "indicator_id": "oxydes_fer",
           "label": "Iron Oxides Index",
           "unit": "Red/Blue ratio",
-          "wasserstein_distance": 0.025,
-          "score": 0.025,
-          "delta_median": 0.0308,
-          "p_value": 0.004687,
+          "wasserstein_distance": 20.2484,
+          "score": 1.0,
+          "delta_median": 0.0,
+          "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Shift in oxidized mineral spectral signatures (+0.03)"
+          "interpretation": "Shift in oxidized mineral spectral signatures (0.00)"
         },
         "argiles": {
           "indicator_id": "argiles",
           "label": "Clay Minerals Index",
           "unit": "SWIR1/SWIR2 ratio",
-          "wasserstein_distance": 0.0254,
-          "score": 0.0318,
-          "delta_median": 0.0261,
-          "p_value": 0.001159,
+          "wasserstein_distance": 5768.0393,
+          "score": 1.0,
+          "delta_median": 17877.5234,
+          "p_value": 7e-06,
           "is_significant": true,
-          "interpretation": "Alteration in hydrous clay signatures (+0.03)"
+          "interpretation": "Alteration in hydrous clay signatures (+17877.52)"
         },
         "sol_nu": {
           "indicator_id": "sol_nu",
           "label": "Bare Ground Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.3145,
-          "score": 0.5242,
-          "delta_median": 0.3096,
+          "wasserstein_distance": 0.0594,
+          "score": 0.099,
+          "delta_median": 0.0,
           "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Vegetation removal & bare soil exposure (+31.0%)"
+          "interpretation": "Vegetative recovery / regreening (0.0%)"
         },
         "aridite": {
           "indicator_id": "aridite",
           "label": "Annual Precipitation",
           "unit": "mm/year",
-          "wasserstein_distance": 6.5764,
-          "score": 0.0132,
-          "delta_median": 4.9868,
-          "p_value": 0.049503,
-          "is_significant": true,
-          "interpretation": "Observed shift of +4.99 mm/year"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "cavites": {
           "indicator_id": "cavites",
           "label": "Cavities & Skylights",
           "unit": "areal fraction",
-          "wasserstein_distance": 0.0006,
-          "score": 0.0114,
-          "delta_median": 0.0003,
-          "p_value": 0.001478,
-          "is_significant": true,
-          "interpretation": "Observed shift of +0.00 areal fraction"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "basalte_accessible": {
           "indicator_id": "basalte_accessible",
           "label": "Accessible Basalt",
           "unit": "fraction",
-          "wasserstein_distance": 0.2249,
-          "score": 0.4499,
-          "delta_median": 0.2264,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+22.6%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         }
       },
       "validity_card": {
         "reproduced_or_stable": [
-          "Geology (Stable: 0.03)"
+          "Environment (Stable: 0.10)"
         ],
-        "partial_drift": [
-          "Topography (Moderate drift: 0.23)",
-          "Environment (Moderate drift: 0.27)",
-          "In-Situ Resources (Moderate drift: 0.23)"
+        "partial_drift": [],
+        "divergent_or_critical": [
+          "Geology (Critical deformation index: 1.00)"
         ],
-        "divergent_or_critical": [],
         "not_evaluated": [
           "Deep subterranean shear planes (> 50 m depth)",
           "Groundwater pore-pressure variations",
@@ -145,7 +143,7 @@
           "Human socio-economic informal building dynamics (not captured in satellite physics)"
         ],
         "recommended_actions": [
-          "Normal territorial maintenance and ongoing baseline environmental observation"
+          "Restricted construction zoning, high-frequency InSAR monitoring, and drainage stabilization"
         ]
       },
       "authority": "Observatoire Volcanologique de Goma (OVG)"
@@ -155,135 +153,131 @@
       "name": "Bukavu - Kadutu & Funu Valley",
       "hazard_type": "landslide",
       "description": "Catastrophic gully erosion, chronic rotational landslides, and slope destabilization in high-density informal urban settlements.",
-      "lat": -2.5,
-      "lon": 28.845,
+      "lat": -2.52075,
+      "lon": 28.84415,
       "bbox": [
-        28.82,
-        -2.52,
-        28.87,
-        -2.48
+        28.8399,
+        -2.5259,
+        28.8484,
+        -2.5156
       ],
       "baseline_t0": "2018-06-01/2018-09-01",
       "observation_t1": "2024-06-01/2024-09-01",
-      "criticality_index": 0.2209,
-      "alert_level": "watch",
+      "criticality_index": 0.7772,
+      "alert_level": "critical",
       "criteria": {
-        "topographie": 0.2339,
-        "geologie": 0.2295,
-        "environnement": 0.4025,
-        "ressources": 0.0179
+        "topographie": null,
+        "geologie": 0.5544,
+        "environnement": 1.0,
+        "ressources": null
       },
       "indicators": {
         "pente": {
           "indicator_id": "pente",
           "label": "Slope",
           "unit": "°",
-          "wasserstein_distance": 3.6259,
-          "score": 0.2417,
-          "delta_median": 3.697,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Slope steepening (potential scarp formation) (+3.70°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "rugosite": {
           "indicator_id": "rugosite",
           "label": "Roughness",
           "unit": "°",
-          "wasserstein_distance": 1.356,
-          "score": 0.226,
-          "delta_median": 1.3295,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Surface terrain roughening (rockfall/fissuring) (+1.33°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "basalte": {
           "indicator_id": "basalte",
           "label": "Basalt Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.0205,
-          "score": 0.0411,
-          "delta_median": 0.0176,
-          "p_value": 0.000546,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+1.8%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "oxydes_fer": {
           "indicator_id": "oxydes_fer",
           "label": "Iron Oxides Index",
           "unit": "Red/Blue ratio",
-          "wasserstein_distance": 0.0253,
-          "score": 0.0253,
-          "delta_median": 0.0155,
-          "p_value": 0.041586,
+          "wasserstein_distance": 25720.1896,
+          "score": 1.0,
+          "delta_median": -25698.2969,
+          "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Shift in oxidized mineral spectral signatures (+0.02)"
+          "interpretation": "Shift in oxidized mineral spectral signatures (-25698.30)"
         },
         "argiles": {
           "indicator_id": "argiles",
           "label": "Clay Minerals Index",
           "unit": "SWIR1/SWIR2 ratio",
-          "wasserstein_distance": 0.4977,
-          "score": 0.6221,
-          "delta_median": 0.5054,
+          "wasserstein_distance": 0.087,
+          "score": 0.1087,
+          "delta_median": -0.0722,
           "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Alteration in hydrous clay signatures (+0.51)"
+          "interpretation": "Alteration in hydrous clay signatures (-0.07)"
         },
         "sol_nu": {
           "indicator_id": "sol_nu",
           "label": "Bare Ground Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.3187,
-          "score": 0.5312,
-          "delta_median": 0.3148,
+          "wasserstein_distance": 0.7146,
+          "score": 1.0,
+          "delta_median": 0.73,
           "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Vegetation removal & bare soil exposure (+31.5%)"
+          "interpretation": "Vegetation removal & bare soil exposure (+73.0%)"
         },
         "aridite": {
           "indicator_id": "aridite",
           "label": "Annual Precipitation",
           "unit": "mm/year",
-          "wasserstein_distance": 136.9032,
-          "score": 0.2738,
-          "delta_median": 134.8828,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Observed shift of +134.88 mm/year"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "cavites": {
           "indicator_id": "cavites",
           "label": "Cavities & Skylights",
           "unit": "areal fraction",
-          "wasserstein_distance": 0.0006,
-          "score": 0.0111,
-          "delta_median": 0.0006,
-          "p_value": 0.000248,
-          "is_significant": true,
-          "interpretation": "Observed shift of +0.00 areal fraction"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "basalte_accessible": {
           "indicator_id": "basalte_accessible",
           "label": "Accessible Basalt",
           "unit": "fraction",
-          "wasserstein_distance": 0.0123,
-          "score": 0.0246,
-          "delta_median": 0.0094,
-          "p_value": 0.008922,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+0.9%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         }
       },
       "validity_card": {
-        "reproduced_or_stable": [
-          "In-Situ Resources (Stable: 0.02)"
-        ],
-        "partial_drift": [
-          "Topography (Moderate drift: 0.23)",
-          "Geology (Moderate drift: 0.23)"
-        ],
+        "reproduced_or_stable": [],
+        "partial_drift": [],
         "divergent_or_critical": [
-          "Environment (Critical deformation index: 0.40)"
+          "Geology (Critical deformation index: 0.55)",
+          "Environment (Critical deformation index: 1.00)"
         ],
         "not_evaluated": [
           "Deep subterranean shear planes (> 50 m depth)",
@@ -294,7 +288,7 @@
           "Human socio-economic informal building dynamics (not captured in satellite physics)"
         ],
         "recommended_actions": [
-          "Routine geotechnical surveillance and quarterly multi-spectral satellite updates"
+          "Immediate field inspection, sensor deployment, and evacuation preparedness in high-slope zones"
         ]
       },
       "authority": "Protection Civile Sud-Kivu / Université Officielle de Bukavu (UOB)"
@@ -304,135 +298,132 @@
       "name": "Bukavu - Ibanda Escarpment",
       "hazard_type": "landslide",
       "description": "Creeping translational landslides along active Lake Kivu tectonic fault scarps threatening critical urban infrastructure.",
-      "lat": -2.525,
-      "lon": 28.865000000000002,
+      "lat": -2.5232,
+      "lon": 28.860599999999998,
       "bbox": [
-        28.84,
-        -2.55,
-        28.89,
-        -2.5
+        28.8559,
+        -2.5297,
+        28.8653,
+        -2.5167
       ],
-      "baseline_t0": "2019-01-01/2019-12-31",
-      "observation_t1": "2024-01-01/2024-12-31",
-      "criticality_index": 0.1381,
-      "alert_level": "stable",
+      "baseline_t0": "2019-06-01/2019-09-01",
+      "observation_t1": "2024-06-01/2024-09-01",
+      "criticality_index": 0.9126,
+      "alert_level": "critical",
       "criteria": {
-        "topographie": 0.2304,
-        "geologie": 0.0363,
-        "environnement": 0.2682,
-        "ressources": 0.0174
+        "topographie": null,
+        "geologie": 1.0,
+        "environnement": 0.8253,
+        "ressources": null
       },
       "indicators": {
         "pente": {
           "indicator_id": "pente",
           "label": "Slope",
           "unit": "°",
-          "wasserstein_distance": 3.5605,
-          "score": 0.2374,
-          "delta_median": 3.5507,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Slope steepening (potential scarp formation) (+3.55°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "rugosite": {
           "indicator_id": "rugosite",
           "label": "Roughness",
           "unit": "°",
-          "wasserstein_distance": 1.3412,
-          "score": 0.2235,
-          "delta_median": 1.3412,
-          "p_value": 0.0,
-          "is_significant": true,
-          "interpretation": "Surface terrain roughening (rockfall/fissuring) (+1.34°)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "Stable — no statistically significant deformation."
         },
         "basalte": {
           "indicator_id": "basalte",
           "label": "Basalt Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.0159,
-          "score": 0.0318,
-          "delta_median": 0.0148,
-          "p_value": 0.000705,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+1.5%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "oxydes_fer": {
           "indicator_id": "oxydes_fer",
           "label": "Iron Oxides Index",
           "unit": "Red/Blue ratio",
-          "wasserstein_distance": 0.0285,
-          "score": 0.0285,
-          "delta_median": 0.0248,
-          "p_value": 0.00299,
+          "wasserstein_distance": 12509.2806,
+          "score": 1.0,
+          "delta_median": -9248.2979,
+          "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Shift in oxidized mineral spectral signatures (+0.02)"
+          "interpretation": "Shift in oxidized mineral spectral signatures (-9248.30)"
         },
         "argiles": {
           "indicator_id": "argiles",
           "label": "Clay Minerals Index",
           "unit": "SWIR1/SWIR2 ratio",
-          "wasserstein_distance": 0.0389,
-          "score": 0.0486,
-          "delta_median": 0.0363,
-          "p_value": 4.6e-05,
+          "wasserstein_distance": 2312.535,
+          "score": 1.0,
+          "delta_median": -0.3165,
+          "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Alteration in hydrous clay signatures (+0.04)"
+          "interpretation": "Alteration in hydrous clay signatures (-0.32)"
         },
         "sol_nu": {
           "indicator_id": "sol_nu",
           "label": "Bare Ground Fraction",
           "unit": "fraction",
-          "wasserstein_distance": 0.3144,
-          "score": 0.524,
-          "delta_median": 0.3163,
+          "wasserstein_distance": 0.4952,
+          "score": 0.8253,
+          "delta_median": 0.54,
           "p_value": 0.0,
           "is_significant": true,
-          "interpretation": "Vegetation removal & bare soil exposure (+31.6%)"
+          "interpretation": "Vegetation removal & bare soil exposure (+54.0%)"
         },
         "aridite": {
           "indicator_id": "aridite",
           "label": "Annual Precipitation",
           "unit": "mm/year",
-          "wasserstein_distance": 6.1813,
-          "score": 0.0124,
-          "delta_median": 5.1454,
-          "p_value": 0.008922,
-          "is_significant": true,
-          "interpretation": "Observed shift of +5.15 mm/year"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "cavites": {
           "indicator_id": "cavites",
           "label": "Cavities & Skylights",
           "unit": "areal fraction",
-          "wasserstein_distance": 0.0006,
-          "score": 0.0117,
-          "delta_median": 0.0005,
-          "p_value": 0.000108,
-          "is_significant": true,
-          "interpretation": "Observed shift of +0.00 areal fraction"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         },
         "basalte_accessible": {
           "indicator_id": "basalte_accessible",
           "label": "Accessible Basalt",
           "unit": "fraction",
-          "wasserstein_distance": 0.0115,
-          "score": 0.023,
-          "delta_median": 0.0115,
-          "p_value": 0.002374,
-          "is_significant": true,
-          "interpretation": "New basaltic lava flow deposition (+1.2%)"
+          "wasserstein_distance": 0.0,
+          "score": 0.0,
+          "delta_median": 0.0,
+          "p_value": 1.0,
+          "is_significant": false,
+          "interpretation": "No data available for temporal comparison."
         }
       },
       "validity_card": {
-        "reproduced_or_stable": [
-          "Geology (Stable: 0.04)",
-          "In-Situ Resources (Stable: 0.02)"
+        "reproduced_or_stable": [],
+        "partial_drift": [],
+        "divergent_or_critical": [
+          "Geology (Critical deformation index: 1.00)",
+          "Environment (Critical deformation index: 0.83)"
         ],
-        "partial_drift": [
-          "Topography (Moderate drift: 0.23)",
-          "Environment (Moderate drift: 0.27)"
-        ],
-        "divergent_or_critical": [],
         "not_evaluated": [
           "Deep subterranean shear planes (> 50 m depth)",
           "Groundwater pore-pressure variations",
@@ -442,7 +433,7 @@
           "Human socio-economic informal building dynamics (not captured in satellite physics)"
         ],
         "recommended_actions": [
-          "Normal territorial maintenance and ongoing baseline environmental observation"
+          "Immediate field inspection, sensor deployment, and evacuation preparedness in high-slope zones"
         ]
       },
       "authority": "Centre de Recherche en Sciences Naturelles de Lwiro (CRSN)"

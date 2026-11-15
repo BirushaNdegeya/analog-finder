@@ -19,6 +19,12 @@ DEM_COLLECTION = "cop-dem-glo-30"
 S2_COLLECTION = "sentinel-2-l2a"
 S2_DATE_RANGE = "2025-01-01/2025-12-31"
 S2_MAX_CLOUD = 30
+TERRACLIMATE_COLLECTION = "terraclimate"
+
+# Planetary STAC APIs (USGS Astrogeology - Moon & Mars)
+PLANETARY_STAC_URL = "https://stac.astrogeology.usgs.gov/api"
+LUNAR_DEM_COLLECTION = "kaguya_terrain_camera_usgs_dtms_v2_equi"
+MARS_DEM_COLLECTION = "mro_ctx_controlled_usgs_dtms"
 
 # --- Spatial Analysis Scales -------------------------------------------------
 COMMON_RES_M = 100            # Common grid cell resolution in meters (slope, roughness)
