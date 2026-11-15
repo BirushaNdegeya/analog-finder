@@ -12,8 +12,12 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
+# Install system dependencies for geospatial libraries (rasterio, GDAL, expat, curl)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    libgdal-dev \
+    libexpat1 \
+    g++ \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
