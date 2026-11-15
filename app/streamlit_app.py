@@ -899,30 +899,51 @@ st.sidebar.markdown(
 st.sidebar.markdown("---")
 st.sidebar.subheader("Operational Focus")
 
-persona_options = [
-    "Planetary Mission Analogs (Mode A)",
-    "Geohazard & Risk Monitor (Mode B)",
-    "Open Science API & Developer Hub",
-]
-persona_captions = [
-    "Benchmark Earth testbeds against Moon & Mars using continuous Wasserstein-1 Optimal Transport.",
-    "Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga Rift, DR Congo).",
-    "Free programmatic REST API with Python & cURL for researchers, NGOs & universities.",
-]
+if "app_mode" not in st.session_state:
+    st.session_state["app_mode"] = "Planetary Mission Analogs (Mode A)"
 
-app_mode = st.sidebar.radio(
-    "Choose Platform Persona:",
-    persona_options,
-    captions=persona_captions,
-    index=0,
-    help=(
-        "Select operational persona:\n\n"
-        "• Mode A (Planetary Analogs): Finds and ranks Earth sites resembling Moon or Mars targets.\n"
-        "• Mode B (Geohazard Monitor): Quantifies ground deformation, urban landslides, and volcanic flows.\n"
-        "• API Hub: Complete programmatic REST endpoints and developer code recipes for universities & NGOs."
-    ),
-    key="platform_persona_radio",
-)
+current_mode = st.session_state["app_mode"]
+
+# Mode A Navigation Button
+is_mode_a = "Planetary" in current_mode
+if st.sidebar.button(
+    "Planetary Mission Analogs (Mode A)",
+    key="nav_mode_a",
+    type="primary" if is_mode_a else "secondary",
+    use_container_width=True,
+    help="Benchmark Earth testbeds against Moon & Mars using continuous Wasserstein-1 Optimal Transport.",
+):
+    st.session_state["app_mode"] = "Planetary Mission Analogs (Mode A)"
+    st.rerun()
+st.sidebar.caption("Benchmark Earth testbeds against Moon & Mars (Optimal Transport).")
+
+# Mode B Navigation Button
+is_mode_b = "Geohazard" in current_mode
+if st.sidebar.button(
+    "Geohazard & Risk Monitor (Mode B)",
+    key="nav_mode_b",
+    type="primary" if is_mode_b else "secondary",
+    use_container_width=True,
+    help="Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga Rift, DR Congo).",
+):
+    st.session_state["app_mode"] = "Geohazard & Risk Monitor (Mode B)"
+    st.rerun()
+st.sidebar.caption("Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga).")
+
+# Open Science API Hub Navigation Button
+is_mode_api = "Open Science" in current_mode or "API" in current_mode
+if st.sidebar.button(
+    "Open Science API & Developer Hub",
+    key="nav_mode_api",
+    type="primary" if is_mode_api else "secondary",
+    use_container_width=True,
+    help="Free programmatic REST API with Python & cURL for researchers, NGOs & universities.",
+):
+    st.session_state["app_mode"] = "Open Science API & Developer Hub"
+    st.rerun()
+st.sidebar.caption("Free programmatic REST API with Python & cURL for researchers & universities.")
+
+app_mode = st.session_state["app_mode"]
 st.sidebar.markdown("---")
 
 
@@ -972,19 +993,15 @@ if "Planetary" in app_mode:
         for c in C.CRITERIA
     }
 
-    # Sidebar: Open Science API Quick Access Section
+    # Sidebar: Open Science API Direct Links
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Open Science API & SDK")
-    st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
-    st.sidebar.markdown("""
+    with st.sidebar.expander("API Endpoints & Direct Links", expanded=False):
+        st.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
 * **Base URL:** [`api.analog.geocongoai.com`](https://api.analog.geocongoai.com/v1)
 * **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
-    if st.sidebar.button("Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_a"):
-        st.session_state["platform_persona_radio"] = "Open Science API & Developer Hub"
-        st.rerun()
 
     _label_to_key = {v: k for k, v in C.CRITERIA_LABELS.items()}
     internal_weights = {_label_to_key.get(lab, lab): w for lab, w in weights.items()}
@@ -1429,19 +1446,15 @@ elif "Geohazard" in app_mode:
     }
     internal_t_weights = t_weights
 
-    # Sidebar: Open Science API Quick Access Section
+    # Sidebar: Open Science API Direct Links
     st.sidebar.markdown("---")
-    st.sidebar.subheader("Open Science API & SDK")
-    st.sidebar.caption("Free programmatic access to all datasets and scoring models.")
-    st.sidebar.markdown("""
+    with st.sidebar.expander("API Endpoints & Direct Links", expanded=False):
+        st.markdown("""
 * **Status:** 🟢 `FastAPI v1.1.0 Online`
 * **Base URL:** [`api.analog.geocongoai.com`](https://api.analog.geocongoai.com/v1)
 * **Interactive Docs:** [Swagger UI](https://api.analog.geocongoai.com/docs) · [ReDoc](https://api.analog.geocongoai.com/redoc)
 * **Access Policy:** Free open-access (no API key required)
 """)
-    if st.sidebar.button("Open API Documentation & SDK", use_container_width=True, key="btn_goto_api_b"):
-        st.session_state["platform_persona_radio"] = "Open Science API & Developer Hub"
-        st.rerun()
 
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
