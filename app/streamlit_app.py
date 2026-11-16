@@ -137,6 +137,7 @@ def get_target_visuals(target_key_or_name: str) -> dict:
             "coords": "18.38°N, 77.58°E (Areocentric)",
             "mission": "NASA Mars 2020 / Perseverance Rover (MRO CTX/HiRISE)",
             "desc": "Ancient Martian paleolake delta and volcanic basaltic floor units with phyllosilicates.",
+            "source": "NASA Ames / USGS / JPL / Corrine Rojas",
             "img_path": str(img_path) if img_path.exists() else None,
         }
     else:
@@ -149,6 +150,7 @@ def get_target_visuals(target_key_or_name: str) -> dict:
             "coords": "14.10°N, 56.00°W (Selenocentric)",
             "mission": "JAXA SELENE Kaguya & NASA LROC",
             "desc": "Lunar volcanic dome complex in Oceanus Procellarum featuring deep pit crater skylight.",
+            "source": "NASA / GSFC / Arizona State University / JAXA / SELENE",
             "img_path": str(img_path) if img_path.exists() else None,
         }
 
@@ -1165,15 +1167,16 @@ if "Earth Analog" in app_mode:
                 if t_vis_bench.get("img_path"):
                     st.image(
                         t_vis_bench["img_path"],
-                        caption=f"🌙 {t_vis_bench['name']} ({t_vis_bench['body']})",
+                        caption=f"{t_vis_bench['name']} ({t_vis_bench['body']})",
                         use_container_width=True,
                     )
             with tc_b2:
                 st.markdown(f"**Extraterrestrial Target Reference: {t_vis_bench['name']} ({t_vis_bench['body']})**")
                 st.caption(
-                    f"• **Selenocentric Coordinates:** `{t_vis_bench['coords']}`\n\n"
-                    f"• **Benchmark Mission:** {t_vis_bench['mission']}\n\n"
-                    f"• **Geological Setting:** {t_vis_bench['desc']}"
+                    f"• **Coordinates:** `{t_vis_bench['coords']}`  \n"
+                    f"• **Mission Data:** {t_vis_bench['mission']}  \n"
+                    f"• **Geological Setting:** {t_vis_bench['desc']}  \n"
+                    f"• **Image Credit / Source:** {t_vis_bench['source']}"
                 )
 
         left, right = st.columns([3, 2])
@@ -1374,15 +1377,16 @@ if "Earth Analog" in app_mode:
                 if t_vis_custom.get("img_path"):
                     st.image(
                         t_vis_custom["img_path"],
-                        caption=f"{'🌙' if t_vis_custom['body'] == 'Moon' else '🔴'} {t_vis_custom['name']} ({t_vis_custom['body']})",
+                        caption=f"{t_vis_custom['name']} ({t_vis_custom['body']})",
                         use_container_width=True,
                     )
             with tc_c2:
                 st.markdown(f"**Target Planetary Reference: {t_vis_custom['name']} ({t_vis_custom['body']})**")
                 st.caption(
-                    f"• **Planetary Coordinates:** `{t_vis_custom['coords']}`\n\n"
-                    f"• **Space Mission Catalog:** {t_vis_custom['mission']}\n\n"
-                    f"• **Extraterrestrial Environment:** {t_vis_custom['desc']}"
+                    f"• **Coordinates:** `{t_vis_custom['coords']}`  \n"
+                    f"• **Mission Catalog:** {t_vis_custom['mission']}  \n"
+                    f"• **Geological Signature:** {t_vis_custom['desc']}  \n"
+                    f"• **Image Credit / Source:** {t_vis_custom['source']}"
                 )
 
         PRESETS = {
@@ -1666,12 +1670,12 @@ if "Earth Analog" in app_mode:
                     f"<b>#{rank_i} — {item.get('name', '?')}</b><br>"
                     f"Role: {item.get('role', '—')}<br>"
                     f"Global Score: {score_i:.4f}<br>"
-                    f"{'<b>📍 Your custom study site</b>' if is_custom else ''}"
+                    f"{'<b>Your custom study site</b>' if is_custom else ''}"
                 )
                 folium.Marker(
                     location=[lat_i, lon_i],
                     popup=folium.Popup(popup_html, max_width=260),
-                    tooltip=f"#{rank_i} {item.get('name', '?')} — {score_i:.3f}{'  📍' if is_custom else ''}",
+                    tooltip=f"#{rank_i} {item.get('name', '?')} — {score_i:.3f}{' [Custom AOI]' if is_custom else ''}",
                     icon=folium.Icon(color=color_i, icon=icon_i),
                 ).add_to(m_rank)
                 # Bounding box for custom site
@@ -1690,7 +1694,7 @@ if "Earth Analog" in app_mode:
             with col_rmap:
                 st_folium(m_rank, key=f"ranking_map_a_{c_name}", use_container_width=True, height=430, returned_objects=[])
                 st.caption(
-                    "**Ranking Map Guide**: 🏠 House icon = your custom study site, colored by its analog score. "
+                    "**Ranking Map Guide**: House icon marker = your custom study site, colored by its analog score. "
                     "🟢 Green = Strong Analog (≥ 0.70) · 🟠 Orange = Partial Analog (0.40–0.70) · 🔴 Red = Weak Analog (< 0.40). "
                     "Hover over each marker for site name, rank, and score. Extraterrestrial reference target displayed on the right."
                 )
@@ -1700,14 +1704,14 @@ if "Earth Analog" in app_mode:
                 if t_vis_res.get("img_path"):
                     st.image(
                         t_vis_res["img_path"],
-                        caption=f"{'🌙' if t_vis_res['body'] == 'Moon' else '🔴'} {t_vis_res['name']} ({t_vis_res['body']})",
+                        caption=f"{t_vis_res['name']} ({t_vis_res['body']})",
                         use_container_width=True,
                     )
                 st.caption(
-                    f"🪐 **Body:** {t_vis_res['body']}\n\n"
-                    f"📍 **Planetary System:**\n`{t_vis_res['coords']}`\n\n"
-                    f"🛰️ **Mission Catalog:**\n{t_vis_res['mission']}\n\n"
-                    f"*(Extraterrestrial body displayed separately to prevent mixing planetary and terrestrial coordinate systems)*"
+                    f"• **Target:** {t_vis_res['name']} ({t_vis_res['body']})  \n"
+                    f"• **Coordinates:** `{t_vis_res['coords']}`  \n"
+                    f"• **Mission:** {t_vis_res['mission']}  \n"
+                    f"• **Image Credit / Source:** {t_vis_res['source']}"
                 )
 
     # -----------------------------------------------------------------------
