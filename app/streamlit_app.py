@@ -155,6 +155,40 @@ def get_target_visuals(target_key_or_name: str) -> dict:
         }
 
 
+def setup_map_layers(m: folium.Map, default: str = "street") -> None:
+    """Attach Map (OpenStreetMap) and Satellite (Esri World Imagery) base layers with an interactive LayerControl toggle."""
+    esri_url = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+    if default == "satellite":
+        folium.TileLayer(
+            tiles=esri_url,
+            attr="Esri World Imagery",
+            name="Satellite",
+            overlay=False,
+            control=True,
+        ).add_to(m)
+        folium.TileLayer(
+            tiles="OpenStreetMap",
+            name="Map (Street)",
+            overlay=False,
+            control=True,
+        ).add_to(m)
+    else:
+        folium.TileLayer(
+            tiles="OpenStreetMap",
+            name="Map (Street)",
+            overlay=False,
+            control=True,
+        ).add_to(m)
+        folium.TileLayer(
+            tiles=esri_url,
+            attr="Esri World Imagery",
+            name="Satellite",
+            overlay=False,
+            control=True,
+        ).add_to(m)
+    folium.LayerControl(position="topright", collapsed=True).add_to(m)
+
+
 # ---------------------------------------------------------------------------
 # Shared Documentation & Scientific References Component
 # ---------------------------------------------------------------------------
@@ -1182,7 +1216,7 @@ if "Earth Analog" in app_mode:
         left, right = st.columns([3, 2])
         with left:
             m = folium.Map(location=[10, 0], zoom_start=2, tiles=None)
-            folium.TileLayer("OpenStreetMap").add_to(m)
+            setup_map_layers(m, default="street")
 
             # Candidate sites — bounding box rectangle + center pin marker (terrestrial only)
             for s in data["sites"]:
@@ -1420,15 +1454,11 @@ if "Earth Analog" in app_mode:
         # Interactive Map with Draw plugin — allows user to draw a custom rectangle AOI
         center_lat = (active_bbox[1] + active_bbox[3]) / 2
         center_lon = (active_bbox[0] + active_bbox[2]) / 2
-        m_draw = folium.Map(location=[center_lat, center_lon], zoom_start=9)
-        folium.TileLayer(
-            tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            attr="Esri World Imagery",
-            name="Satellite",
-        ).add_to(m_draw)
+        m_draw = folium.Map(location=[center_lat, center_lon], zoom_start=9, tiles=None)
+        setup_map_layers(m_draw, default="satellite")
 
         # FeatureGroup holds the current bbox rectangle (deletable by the trash icon)
-        fg = folium.FeatureGroup(name="drawn_items")
+        fg = folium.FeatureGroup(name="drawn_items", control=False)
         folium.Rectangle(
             bounds=[[active_bbox[1], active_bbox[0]], [active_bbox[3], active_bbox[2]]],
             color="#2196f3",
@@ -1643,7 +1673,7 @@ if "Earth Analog" in app_mode:
                 else [20, 10]
             )
             m_rank = folium.Map(location=map_center, zoom_start=2, tiles=None)
-            folium.TileLayer("OpenStreetMap").add_to(m_rank)
+            setup_map_layers(m_rank, default="street")
 
             # Score → color helper (for terrestrial sites)
             def _score_color(score):
@@ -1808,7 +1838,7 @@ elif "Risk Monitor" in app_mode:
         col_m, col_t = st.columns([3, 2])
         with col_m:
             m_rift = folium.Map(location=[-2.0, 29.0], zoom_start=9, tiles=None)
-            folium.TileLayer("OpenStreetMap").add_to(m_rift)
+            setup_map_layers(m_rift, default="street")
 
             alert_colors = {
                 "critical": "#d32f2f", # Red
@@ -2037,15 +2067,11 @@ elif "Risk Monitor" in app_mode:
         # Interactive Map with Draw plugin for Mode B Run New Study
         t_center_lat = (active_tbbox[1] + active_tbbox[3]) / 2
         t_center_lon = (active_tbbox[0] + active_tbbox[2]) / 2
-        m_tdraw = folium.Map(location=[t_center_lat, t_center_lon], zoom_start=12)
-        folium.TileLayer(
-            tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-            attr="Esri World Imagery",
-            name="Satellite",
-        ).add_to(m_tdraw)
+        m_tdraw = folium.Map(location=[t_center_lat, t_center_lon], zoom_start=12, tiles=None)
+        setup_map_layers(m_tdraw, default="satellite")
 
         # FeatureGroup holds the current bbox rectangle (deletable by the trash icon)
-        fg_t = folium.FeatureGroup(name="drawn_items_t")
+        fg_t = folium.FeatureGroup(name="drawn_items_t", control=False)
         folium.Rectangle(
             bounds=[[active_tbbox[1], active_tbbox[0]], [active_tbbox[3], active_tbbox[2]]],
             color="#d32f2f",
@@ -2188,7 +2214,7 @@ elif "Risk Monitor" in app_mode:
             custom_lon_t = res_t.get("lon")
             center_t = [custom_lat_t, custom_lon_t] if custom_lat_t else [-2.0, 29.0]
             m_trank = folium.Map(location=center_t, zoom_start=9, tiles=None)
-            folium.TileLayer("OpenStreetMap").add_to(m_trank)
+            setup_map_layers(m_trank, default="street")
 
             # Draw all known Rift reference zones from tdata
             for z in tdata.get("zones", []):
