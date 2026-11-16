@@ -1477,9 +1477,40 @@ if "Earth Analog" in app_mode:
                     st.warning("**Partial Criteria (Moderate Variance):** " + ", ".join(v["partiel"]))
                 if v["non_reproduit"]:
                     st.error("**Non-Reproduced Criteria:** " + ", ".join(v["non_reproduit"]))
+
+                if v.get("usages_adaptes"):
+                    st.info(
+                        "**Recommended Field Testing Applications:**\n\n"
+                        + "\n".join(
+                            f"• **{u.split(':', 1)[0]}:** {u.split(':', 1)[1].strip()}" if ":" in u else f"• {u}"
+                            for u in v["usages_adaptes"]
+                        )
+                    )
+
                 with st.expander("Parameters Not Evaluated or Never Reproducible on Earth"):
-                    st.write("**Not Evaluated:**", v["non_evalue"])
-                    st.write("**Never Reproducible (Earth Physics):**", v["jamais_reproductible"])
+                    st.markdown("**Parameters Not Evaluated (Satellite Scope Limitations):**")
+                    st.caption(
+                        "These characteristics cannot be measured by orbital imaging and require dedicated on-site instruments or ground surveys:"
+                    )
+                    not_eval = v.get("non_evalue", [])
+                    if not_eval:
+                        for item in not_eval:
+                            st.markdown(f"• {item}")
+                    else:
+                        st.markdown("*(None — all satellite indicators were covered)*")
+
+                    st.markdown("---")
+
+                    st.markdown("**Planetary Physics (Never Reproducible on Earth):**")
+                    st.caption(
+                        "Extraterrestrial environmental conditions that no natural terrestrial site can recreate due to Earth's atmosphere and gravity:"
+                    )
+                    never_rep = v.get("jamais_reproductible", [])
+                    if never_rep:
+                        for item in never_rep:
+                            st.markdown(f"• {item}")
+                    else:
+                        st.markdown("*(None)*")
 
             # Indicators breakdown table
             st.markdown("#### Physical Indicator Breakdown")
