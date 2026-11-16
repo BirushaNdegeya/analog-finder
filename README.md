@@ -26,7 +26,7 @@ GeoCongo AI compares continuous terrain and environmental indicator distribution
 
 | Track | Purpose |
 |---|---|
-| **A — Planetary Mission Analogs (Moon & Mars)** | Characterize terrestrial analog candidates—including volcanic fields, deserts, lava tubes, and basalt quarries—against JAXA SELENE Kaguya lunar and NASA MRO Martian digital terrain models. |
+| **A — Earth Analog (Moon & Mars)** | Characterize terrestrial analog candidates—including volcanic fields, deserts, lava tubes, and basalt quarries—against JAXA SELENE Kaguya lunar and NASA MRO Martian digital terrain models. |
 | **B — East African Rift Geohazard Monitor** | Monitor landslide indicators in Bukavu and volcanic activity in Nyiragongo and Virunga through temporal change detection between baseline $T_0$ and observation $T_1$. |
 
 ## Open data pipeline
