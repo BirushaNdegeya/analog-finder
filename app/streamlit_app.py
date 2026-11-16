@@ -1161,7 +1161,7 @@ if "Earth Analog" in app_mode:
             st.caption(
                 "**Global Map Guide**: The blue star marks the planetary target (Marius Hills, Moon). "
                 "Each candidate Earth site is shown as a **colored bounding box** (geographic footprint) "
-                "plus a **center pin marker** — matching the Geohazard mode's visualization style. "
+                "plus a **center pin marker**"
                 "🟢 Green = High planetary resemblance (≥ 0.70), 🟡 Yellow = Moderate/Partial analog (0.40–0.70), "
                 "🔴 Red = Low resemblance (< 0.40). Click any marker or rectangle for instant site details."
             )
