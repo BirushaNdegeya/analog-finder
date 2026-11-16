@@ -1511,6 +1511,65 @@ if "Earth Analog" in app_mode:
                 "scientific reference analogs (e.g. Death Valley, Lanzarote, Atacama Desert) to assess competitive mission viability."
             )
 
+            # -----------------------------------------------------------------
+            # RANKING MAP — Custom site vs. all benchmark sites (Mode A)
+            # -----------------------------------------------------------------
+            st.markdown("#### Geographic Ranking Map — Your Site vs. Global Analogs")
+            lb_items = res_a["leaderboard"]
+            m_rank = folium.Map(location=[20, 10], zoom_start=2, tiles=None)
+            folium.TileLayer("OpenStreetMap").add_to(m_rank)
+
+            # Score → color helper
+            def _score_color(score):
+                if score is None:
+                    return "gray"
+                if score >= 0.70:
+                    return "green"
+                if score >= 0.40:
+                    return "orange"
+                return "red"
+
+            custom_id = "custom_aoi"
+            for rank_i, item in enumerate(lb_items, 1):
+                is_custom = item.get("id") == custom_id
+                lat_i = item.get("lat")
+                lon_i = item.get("lon")
+                if lat_i is None or lon_i is None:
+                    continue
+                score_i = item.get("global") or 0.0
+                color_i = "blue" if is_custom else _score_color(score_i)
+                icon_i = "star" if is_custom else "info-sign"
+                popup_html = (
+                    f"<b>#{rank_i} — {item.get('name', '?')}</b><br>"
+                    f"Role: {item.get('role', '—')}<br>"
+                    f"Global Score: {score_i:.4f}<br>"
+                    f"{'⭐ Your custom study site' if is_custom else ''}"
+                )
+                folium.Marker(
+                    location=[lat_i, lon_i],
+                    popup=folium.Popup(popup_html, max_width=260),
+                    tooltip=f"#{rank_i} {item.get('name', '?')} — {score_i:.3f}",
+                    icon=folium.Icon(color=color_i, icon=icon_i),
+                ).add_to(m_rank)
+                # Highlight custom site bounding box if available
+                if is_custom and item.get("bbox"):
+                    west, south, east, north = item["bbox"]
+                    folium.Rectangle(
+                        bounds=[[south, west], [north, east]],
+                        color="blue",
+                        weight=2,
+                        fill=True,
+                        fill_opacity=0.15,
+                        tooltip="Your custom AOI",
+                    ).add_to(m_rank)
+
+            st_folium(m_rank, key=f"ranking_map_a_{c_name}", use_container_width=True, height=430, returned_objects=[])
+            st.caption(
+                "**Ranking Map Guide**: 🔵 Blue star = your custom study site. "
+                "🟢 Green = Strong Analog (≥ 0.70) · 🟠 Orange = Partial Analog (0.40–0.70) · 🔴 Red = Weak Analog (< 0.40). "
+                "Hover over each marker for site details and scores."
+            )
+
     # -----------------------------------------------------------------------
     # TAB 3: Documentation & Scientific References
     # -----------------------------------------------------------------------
@@ -1970,6 +2029,82 @@ elif "Risk Monitor" in app_mode:
                 "**Emergency Decision Metrics Guide**: "
                 "Every indicator marked '✅ YES' experienced statistically verifiable deformation exceeding environmental noise thresholds. "
                 "Disaster response teams use these metrics to assess active landslide acceleration, soil erosion severity, or volcanic deposit expansion."
+            )
+
+            # -----------------------------------------------------------------
+            # RANKING MAP — Custom site vs. all monitored Rift zones (Mode B)
+            # -----------------------------------------------------------------
+            st.markdown("#### Geographic Surveillance Map — Your Zone vs. Monitored Rift Zones")
+
+            # Criticality → color helper
+            def _alert_color(alert_lvl):
+                return {"critical": "red", "warning": "orange", "watch": "beige", "stable": "green"}.get(alert_lvl, "gray")
+
+            custom_lat_t = res_t.get("lat")
+            custom_lon_t = res_t.get("lon")
+            center_t = [custom_lat_t, custom_lon_t] if custom_lat_t else [-2.0, 29.0]
+            m_trank = folium.Map(location=center_t, zoom_start=9, tiles=None)
+            folium.TileLayer("OpenStreetMap").add_to(m_trank)
+
+            # Draw all known Rift reference zones from tdata
+            for z in tdata.get("zones", []):
+                z_lat = z.get("lat")
+                z_lon = z.get("lon")
+                if z_lat is None or z_lon is None:
+                    continue
+                z_color = _alert_color(z.get("alert_level", "stable"))
+                z_popup = (
+                    f"<b>{z.get('name', '?')}</b><br>"
+                    f"Alert: {z.get('alert_level', '—').upper()}<br>"
+                    f"Criticality Index: {z.get('criticality_index', '—')}"
+                )
+                folium.Marker(
+                    location=[z_lat, z_lon],
+                    popup=folium.Popup(z_popup, max_width=240),
+                    tooltip=z.get("name", "?"),
+                    icon=folium.Icon(color=z_color, icon="info-sign"),
+                ).add_to(m_trank)
+                if z.get("bbox"):
+                    wb, sb, eb, nb = z["bbox"]
+                    folium.Rectangle(
+                        bounds=[[sb, wb], [nb, eb]],
+                        color=z_color,
+                        weight=2,
+                        fill=True,
+                        fill_opacity=0.15,
+                    ).add_to(m_trank)
+
+            # Draw custom study site on top (blue star)
+            if custom_lat_t and custom_lon_t:
+                custom_alert = res_t.get("alert_level", "stable")
+                custom_popup = (
+                    f"<b>⭐ {res_t.get('name', 'Custom Zone')}</b><br>"
+                    f"Alert: {alert_labels.get(custom_alert, custom_alert)}<br>"
+                    f"Criticality Index: {res_t.get('criticality_index', '—'):.4f}<br>"
+                    f"<i>Your custom study zone</i>"
+                )
+                folium.Marker(
+                    location=[custom_lat_t, custom_lon_t],
+                    popup=folium.Popup(custom_popup, max_width=260),
+                    tooltip=f"⭐ {res_t.get('name', 'Custom Zone')} — {res_t.get('criticality_index', 0):.3f}",
+                    icon=folium.Icon(color="blue", icon="star"),
+                ).add_to(m_trank)
+                if res_t.get("bbox"):
+                    wb_c, sb_c, eb_c, nb_c = res_t["bbox"]
+                    folium.Rectangle(
+                        bounds=[[sb_c, wb_c], [nb_c, eb_c]],
+                        color="blue",
+                        weight=2,
+                        fill=True,
+                        fill_opacity=0.15,
+                        tooltip="Your custom AOI",
+                    ).add_to(m_trank)
+
+            st_folium(m_trank, key=f"ranking_map_b_{t_name}", use_container_width=True, height=430, returned_objects=[])
+            st.caption(
+                "**Surveillance Map Guide**: 🔵 Blue star = your custom study zone. "
+                "Reference Rift zones: 🔴 Red = Critical · 🟠 Orange = Warning · 🟡 Beige = Watch · 🟢 Green = Stable. "
+                "Click markers to compare your zone's criticality index against monitored reference sites."
             )
 
     # -----------------------------------------------------------------------
