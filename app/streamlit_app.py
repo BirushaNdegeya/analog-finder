@@ -1,12 +1,12 @@
 """Analog Finder — Dual-Mode Interactive Decision-Support Dashboard.
 
 Provides two operational personas driven by a single Optimal Transport core:
-  - Mode A: EarthAnalogs (Earth vs Moon/Mars)
+  - Mode A: Earth Analog (Earth vs Moon/Mars)
   - Mode B: Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
 
 Features a streamlined 3-tab layout per mode:
   1. Benchmark Analogs / Crisis Surveillance
-  2. Run new study / Run new stady
+  2. Run New Study
   3. Documentation & Scientific References
 
 NASA Space Apps Challenge 2026 - GeoCongo AI
@@ -19,12 +19,13 @@ from pathlib import Path
 
 import folium
 from folium.plugins import Draw
-from streamlit_folium import folium_static, st_folium
+from streamlit_folium import st_folium
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 from PIL import Image
 
 # Ensure the package is importable when launching from the app/ directory
@@ -53,6 +54,69 @@ st.set_page_config(
     page_icon=favicon,
     layout="wide",
     initial_sidebar_state="expanded",
+)
+
+# ---------------------------------------------------------------------------
+# DOM & React Resilience Patch (prevents removeChild crash on tab/mode switch
+# and protects against browser auto-translate DOM mutations)
+# ---------------------------------------------------------------------------
+components.html(
+    """
+    <script>
+    (function() {
+        try {
+            const w = window.parent;
+            if (!w || !w.Node || !w.Node.prototype) return;
+
+            if (!w.__geo_remove_child_patched__) {
+                w.__geo_remove_child_patched__ = true;
+
+                // Safely intercept removeChild calls on detached nodes
+                const origRemoveChild = w.Node.prototype.removeChild;
+                w.Node.prototype.removeChild = function(child) {
+                    if (child && child.parentNode !== this) {
+                        return child;
+                    }
+                    try {
+                        return origRemoveChild.apply(this, arguments);
+                    } catch (err) {
+                        if (err && (err.name === 'NotFoundError' || err.message?.includes('removeChild'))) {
+                            return child;
+                        }
+                        throw err;
+                    }
+                };
+
+                // Safely intercept insertBefore calls on detached reference nodes
+                const origInsertBefore = w.Node.prototype.insertBefore;
+                w.Node.prototype.insertBefore = function(newNode, referenceNode) {
+                    if (referenceNode && referenceNode.parentNode !== this) {
+                        return newNode;
+                    }
+                    try {
+                        return origInsertBefore.apply(this, arguments);
+                    } catch (err) {
+                        if (err && (err.name === 'NotFoundError' || err.message?.includes('insertBefore'))) {
+                            return newNode;
+                        }
+                        throw err;
+                    }
+                };
+
+                // Inoculate body against translation mutations that break React virtual DOM
+                if (w.document && w.document.body) {
+                    w.document.body.setAttribute('translate', 'no');
+                    w.document.body.classList.add('notranslate');
+                }
+            }
+        } catch (e) {
+            // sandbox boundary fallback
+        }
+    })();
+    </script>
+    """,
+    height=0,
+    width=0,
 )
 
 
@@ -86,7 +150,7 @@ The geometric divergence between candidate distribution $u$ and planetary target
 $$W_1(u, v) = \int_0^1 |U(t) - V(t)| \, dt = \int_{-\infty}^{+\infty} |F_u(x) - F_v(x)| \, dx$$
 where $U(t) = F_u^{-1}(t)$ and $V(t) = F_v^{-1}(t)$ are the continuous quantile (inverse cumulative distribution) functions.
 
-* **Physical Interpretation**: $W_1(u, v)$ represents the minimal physical "work" required to transport the probability mass of the terrestrial terrain into the exact distribution of the planetary target.
+* **Physical Interpretation**: $W_1(u, v)$ represents the minimal physical "work" required to transport the probability mass of the terrestrial terrain into the exact distribution of the planetary target (Moon or Mars).
 * **Criterion Similarity Score**: Transformed via exponential decay into a normalized fidelity metric $S_i \in [0, 1]$:
 $$S_i = \exp\left(-\frac{W_1(u_i, v_i)}{\sigma_i}\right)$$
 where $\sigma_i$ is the empirical domain scale factor.
@@ -160,7 +224,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 
 #### B. Concrete Mission Scenarios: What Happens When Weights Are Changed?
 
-##### In Mode A: EarthAnalogs
+##### In Mode A: Earth Analog
 
 | Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
 |:---|:---|:---|
@@ -359,7 +423,7 @@ Summary of decision thresholds applied across both operational personas:
 | 🟠 **WARNING** | $0.40 – 0.65$ | Orange | High hazard shift detected; field inspection & drone reconnaissance recommended. |
 | 🔴 **CRITICAL** | $\\ge 0.65$ | Red | Imminent landslide rupture or volcanic effusion; trigger emergency contingency protocol & evacuations. |
 
-#### B. Mode A: EarthAnalog Suitability Tiers (Global Score)
+#### B. Mode A: Earth Analog Suitability Tiers (Global Score)
 | Analog Tier | Global Score | Color Code | Recommended Space Mission Testing Application |
 |:---|:---:|:---:|:---|
 | 🟢 **Strong Analog** | $\\ge 0.70$ | Green | Priority field trials: rover locomotion, autonomous navigation, drill testbeds, astronaut EVA simulations. |
@@ -572,11 +636,11 @@ curl -X GET "http://localhost:8000/v1/planetary/sample?body=moon&min_lon=-57.0&m
     with api_tab3:
         st.subheader("3. Core Unified Analysis Engine (`POST /v1/analyze`)")
         st.markdown("""
-The single computational entry point for both **Mode A (EarthAnalogs)** and **Mode B (Geohazard Surveillance)**.
+The single computational entry point for both **Mode A (Earth Analog)** and **Mode B (Geohazard Surveillance)**.
 Driven by the 1st Wasserstein Earth Mover's Distance.
 """)
 
-        st.markdown("#### Mode A: EarthAnalog Assessment")
+        st.markdown("#### Mode A: Earth Analog Assessment")
         st.markdown("Compares a candidate terrestrial site or custom bounding box against a Moon or Mars target.")
         col_m_req, col_m_res = st.columns(2)
         with col_m_req:
@@ -877,7 +941,7 @@ curl -s -X POST "$API/analyze" \\
 ```bibtex
 @software{geocongoai_analog_finder_2026,
   author = {GeoCongo AI Team},
-  title = {Analog Finder: Dual-Mode Geospatial Decision Engine for EarthAnalogs and Geohazard Surveillance},
+  title = {Analog Finder: Dual-Mode Geospatial Decision Engine for Earth Analog and Geohazard Surveillance},
   year = {2026},
   publisher = {NASA Space Apps Challenge 2026},
   url = {https://github.com/GeoCongo-AI/analog-finder}
@@ -972,7 +1036,7 @@ if "Earth Analog" in app_mode:
 
     data = json.loads(scores_path.read_text(encoding="utf-8"))
 
-    st.title("Planetary Analog Finder")
+    st.title("Earth Analog Finder")
     st.caption(
         f"Target: **{data['target']['name']}** — "
         "Candidate Earth sites ranked by geomorphological and geological similarity to the planetary target "
@@ -1093,7 +1157,7 @@ if "Earth Analog" in app_mode:
                     icon=folium.Icon(color=icon_color, icon="info-sign"),
                 ).add_to(m)
 
-            folium_static(m, width=680, height=450)
+            st_folium(m, key="bench_map_a", use_container_width=True, height=450, returned_objects=[])
             st.caption(
                 "**Global Map Guide**: The blue star marks the planetary target (Marius Hills, Moon). "
                 "Each candidate Earth site is shown as a **colored bounding box** (geographic footprint) "
@@ -1225,7 +1289,7 @@ if "Earth Analog" in app_mode:
     # TAB 2: Run new study
     # -----------------------------------------------------------------------
     with tab_custom:
-        st.subheader("Custom Planetary Analog Studio — Test Any Area on Earth")
+        st.subheader("Earth Analog Studio — Test Any Area on Earth")
         st.write(
             "Evaluate any custom Area of Interest (AOI) on Earth against the selected Moon or Mars target. "
             "Select an iconic volcanic field, enter custom coordinates, and run live optimal transport scoring."
@@ -1529,7 +1593,7 @@ elif "Risk Monitor" in app_mode:
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
         "Case study",
-        "Run new stady",
+        "Run New Study",
         "Documentation & Scientific References",
     ])
 
@@ -1568,7 +1632,7 @@ elif "Risk Monitor" in app_mode:
                     ),
                 ).add_to(m_rift)
 
-            folium_static(m_rift, width=680, height=450)
+            st_folium(m_rift, key="bench_map_b", use_container_width=True, height=450, returned_objects=[])
             st.caption(
                 "**Kivu Rift Surveillance Map Guide**: Bounding boxes outline priority disaster monitoring zones. "
                 "Colors reflect civil protection alert levels: 🔴 Red = Critical rapid rupture, 🟠 Orange = Warning / high hazard shift, "
@@ -1701,10 +1765,10 @@ elif "Risk Monitor" in app_mode:
         )
 
     # -----------------------------------------------------------------------
-    # TAB 2: Run new stady
+    # TAB 2: Run New Study
     # -----------------------------------------------------------------------
     with tab_tondemand:
-        st.subheader("Run new stady — Dynamic Multi-Temporal Testing")
+        st.subheader("Run New Study — Dynamic Multi-Temporal Testing")
         st.write(
             "Monitor geomorphological and spectral deformation across any custom Area of Interest (AOI) on Earth between two satellite acquisition intervals. "
             "Computes Kolmogorov-Smirnov significance testing and Wasserstein divergence live."
@@ -1767,7 +1831,7 @@ elif "Risk Monitor" in app_mode:
 
         active_tbbox = (float(tw_in), float(ts_in), float(te_in), float(tn_in))
 
-        # Interactive Map with Draw plugin for Mode B Run new stady
+        # Interactive Map with Draw plugin for Mode B Run New Study
         t_center_lat = (active_tbbox[1] + active_tbbox[3]) / 2
         t_center_lon = (active_tbbox[0] + active_tbbox[2]) / 2
         m_tdraw = folium.Map(location=[t_center_lat, t_center_lon], zoom_start=12)

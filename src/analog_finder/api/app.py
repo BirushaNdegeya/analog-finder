@@ -1,7 +1,7 @@
 """FastAPI REST application exposing the Analog Finder Dual-Mode Engine.
 
 Provides unified endpoints for:
-  - Mode A: Planetary mission analog assessment (Earth vs Moon/Mars)
+  - Mode A: Earth Analog assessment (Earth vs Moon/Mars)
   - Mode B: Geohazard early warning & temporal deformation monitoring (T0 vs T1)
 """
 from __future__ import annotations
