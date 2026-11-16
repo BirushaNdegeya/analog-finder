@@ -121,6 +121,39 @@ components.html(
 
 
 # ---------------------------------------------------------------------------
+# Planetary Target Visuals Helper
+# ---------------------------------------------------------------------------
+def get_target_visuals(target_key_or_name: str) -> dict:
+    """Return image path and astronomical metadata for an extraterrestrial target."""
+    assets_dir = Path(__file__).resolve().parent / "assets"
+    key = str(target_key_or_name).lower()
+    if "jezero" in key or "mars" in key:
+        img_path = assets_dir / "jezero.jpeg"
+        if not img_path.exists():
+            img_path = assets_dir / "mars.jpg"
+        return {
+            "name": "Jezero Crater",
+            "body": "Mars",
+            "coords": "18.38°N, 77.58°E (Areocentric)",
+            "mission": "NASA Mars 2020 / Perseverance Rover (MRO CTX/HiRISE)",
+            "desc": "Ancient Martian paleolake delta and volcanic basaltic floor units with phyllosilicates.",
+            "img_path": str(img_path) if img_path.exists() else None,
+        }
+    else:
+        img_path = assets_dir / "mariushills.jpg"
+        if not img_path.exists():
+            img_path = assets_dir / "moon.jpg"
+        return {
+            "name": "Marius Hills",
+            "body": "Moon",
+            "coords": "14.10°N, 56.00°W (Selenocentric)",
+            "mission": "JAXA SELENE Kaguya & NASA LROC",
+            "desc": "Lunar volcanic dome complex in Oceanus Procellarum featuring deep pit crater skylight.",
+            "img_path": str(img_path) if img_path.exists() else None,
+        }
+
+
+# ---------------------------------------------------------------------------
 # Shared Documentation & Scientific References Component
 # ---------------------------------------------------------------------------
 def render_documentation_tab() -> None:
@@ -1123,19 +1156,32 @@ if "Earth Analog" in app_mode:
     # -----------------------------------------------------------------------
     with tab_bench:
         st.subheader("Global Analog Leaderboard & Geographic Distribution")
+
+        # Planetary Target Visual Banner
+        t_vis_bench = get_target_visuals(data.get("target", {}).get("name", "Marius Hills"))
+        with st.container():
+            tc_b1, tc_b2 = st.columns([1, 4])
+            with tc_b1:
+                if t_vis_bench.get("img_path"):
+                    st.image(
+                        t_vis_bench["img_path"],
+                        caption=f"🌙 {t_vis_bench['name']} ({t_vis_bench['body']})",
+                        use_container_width=True,
+                    )
+            with tc_b2:
+                st.markdown(f"**Extraterrestrial Target Reference: {t_vis_bench['name']} ({t_vis_bench['body']})**")
+                st.caption(
+                    f"• **Selenocentric Coordinates:** `{t_vis_bench['coords']}`\n\n"
+                    f"• **Benchmark Mission:** {t_vis_bench['mission']}\n\n"
+                    f"• **Geological Setting:** {t_vis_bench['desc']}"
+                )
+
         left, right = st.columns([3, 2])
         with left:
             m = folium.Map(location=[10, 0], zoom_start=2, tiles=None)
             folium.TileLayer("OpenStreetMap").add_to(m)
 
-            # Target marker
-            folium.Marker(
-                [data["target"]["lat"], data["target"]["lon"]],
-                tooltip=f"Planetary Target: {data['target']['name']}",
-                icon=folium.Icon(color="blue", icon="star"),
-            ).add_to(m)
-
-            # Candidate sites — bounding box rectangle + center pin marker (same pattern as Mode B)
+            # Candidate sites — bounding box rectangle + center pin marker (terrestrial only)
             for s in data["sites"]:
                 sc = float(df.loc[df["id"] == s["id"], "Global Score"].iloc[0])
                 color = "#2e7d32" if sc >= C.STRONG else "#f9a825" if sc >= C.WEAK else "#c62828"
@@ -1159,9 +1205,9 @@ if "Earth Analog" in app_mode:
 
             st_folium(m, key="bench_map_a", use_container_width=True, height=450, returned_objects=[])
             st.caption(
-                "**Global Map Guide**: The blue star marks the planetary target (Marius Hills, Moon). "
+                "**Global Map Guide**: Terrestrial analog candidates evaluated against the planetary target shown above. "
                 "Each candidate Earth site is shown as a **colored bounding box** (geographic footprint) "
-                "plus a **center pin marker**"
+                "plus a **center pin marker**: "
                 "🟢 Green = High planetary resemblance (≥ 0.70), 🟡 Yellow = Moderate/Partial analog (0.40–0.70), "
                 "🔴 Red = Low resemblance (< 0.40). Click any marker or rectangle for instant site details."
             )
@@ -1319,6 +1365,25 @@ if "Earth Analog" in app_mode:
                     "Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)",
                 ],
             )
+
+        # Extraterrestrial Target Visual Banner (dynamically adapts to chosen Moon or Mars target)
+        t_vis_custom = get_target_visuals(target_key)
+        with st.container():
+            tc_c1, tc_c2 = st.columns([1, 4])
+            with tc_c1:
+                if t_vis_custom.get("img_path"):
+                    st.image(
+                        t_vis_custom["img_path"],
+                        caption=f"{'🌙' if t_vis_custom['body'] == 'Moon' else '🔴'} {t_vis_custom['name']} ({t_vis_custom['body']})",
+                        use_container_width=True,
+                    )
+            with tc_c2:
+                st.markdown(f"**Target Planetary Reference: {t_vis_custom['name']} ({t_vis_custom['body']})**")
+                st.caption(
+                    f"• **Planetary Coordinates:** `{t_vis_custom['coords']}`\n\n"
+                    f"• **Space Mission Catalog:** {t_vis_custom['mission']}\n\n"
+                    f"• **Extraterrestrial Environment:** {t_vis_custom['desc']}"
+                )
 
         PRESETS = {
             "Mount Etna, Italy (Active basaltic stratovolcano)": ("Mount Etna (Italy)", (14.95, 37.70, 15.05, 37.80)),
@@ -1562,7 +1627,7 @@ if "Earth Analog" in app_mode:
             )
 
             # -----------------------------------------------------------------
-            # RANKING MAP — Planetary target (blue star) + all terrestrial sites
+            # RANKING MAP — Terrestrial sites + Side-by-side Extraterrestrial Target
             # -----------------------------------------------------------------
             st.markdown("#### Geographic Ranking Map — Your Site vs. Global Analogs")
             lb_items = res_a["leaderboard"]
@@ -1586,23 +1651,7 @@ if "Earth Analog" in app_mode:
                     return "orange"
                 return "red"
 
-            # 1. Planetary TARGET — blue star (extraterrestrial body, not a terrestrial site)
-            target_info = res_a.get("target", {})
-            t_lat = target_info.get("lat")
-            t_lon = target_info.get("lon")
-            if t_lat is not None and t_lon is not None:
-                folium.Marker(
-                    location=[t_lat, t_lon],
-                    popup=folium.Popup(
-                        f"<b>🌙 Planetary Target</b><br>{target_info.get('name', '?')}<br>"
-                        f"<i>Extraterrestrial reference body</i>",
-                        max_width=240,
-                    ),
-                    tooltip=f"🌙 Target: {target_info.get('name', '?')}",
-                    icon=folium.Icon(color="blue", icon="star"),
-                ).add_to(m_rank)
-
-            # 2. All terrestrial sites (benchmark + custom AOI) — colored by analog score class
+            # Terrestrial candidate sites (benchmark + custom AOI) — colored by analog score class
             custom_id = "custom_aoi"
             for rank_i, item in enumerate(lb_items, 1):
                 is_custom = item.get("id") == custom_id
@@ -1637,13 +1686,29 @@ if "Earth Analog" in app_mode:
                         tooltip="Your custom AOI footprint",
                     ).add_to(m_rank)
 
-            st_folium(m_rank, key=f"ranking_map_a_{c_name}", use_container_width=True, height=430, returned_objects=[])
-            st.caption(
-                "**Ranking Map Guide**: 🔵 Blue star = planetary target (extraterrestrial body — not on Earth). "
-                "🏠 House icon = your custom study site, colored by its analog score. "
-                "🟢 Green = Strong Analog (≥ 0.70) · 🟠 Orange = Partial Analog (0.40–0.70) · 🔴 Red = Weak Analog (< 0.40). "
-                "Hover over each marker for site name, rank, and score."
-            )
+            col_rmap, col_rtgt = st.columns([3, 1])
+            with col_rmap:
+                st_folium(m_rank, key=f"ranking_map_a_{c_name}", use_container_width=True, height=430, returned_objects=[])
+                st.caption(
+                    "**Ranking Map Guide**: 🏠 House icon = your custom study site, colored by its analog score. "
+                    "🟢 Green = Strong Analog (≥ 0.70) · 🟠 Orange = Partial Analog (0.40–0.70) · 🔴 Red = Weak Analog (< 0.40). "
+                    "Hover over each marker for site name, rank, and score. Extraterrestrial reference target displayed on the right."
+                )
+            with col_rtgt:
+                t_vis_res = get_target_visuals(res_a.get("target", {}).get("name", target_key))
+                st.markdown(f"**Planetary Target**")
+                if t_vis_res.get("img_path"):
+                    st.image(
+                        t_vis_res["img_path"],
+                        caption=f"{'🌙' if t_vis_res['body'] == 'Moon' else '🔴'} {t_vis_res['name']} ({t_vis_res['body']})",
+                        use_container_width=True,
+                    )
+                st.caption(
+                    f"🪐 **Body:** {t_vis_res['body']}\n\n"
+                    f"📍 **Planetary System:**\n`{t_vis_res['coords']}`\n\n"
+                    f"🛰️ **Mission Catalog:**\n{t_vis_res['mission']}\n\n"
+                    f"*(Extraterrestrial body displayed separately to prevent mixing planetary and terrestrial coordinate systems)*"
+                )
 
     # -----------------------------------------------------------------------
     # TAB 3: Documentation & Scientific References
