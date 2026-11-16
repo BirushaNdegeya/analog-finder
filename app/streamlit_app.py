@@ -1535,7 +1535,7 @@ elif "Risk Monitor" in app_mode:
 
     st.title("Geohazard & Volcanic Risk Monitor")
     st.caption(
-        "Kivu Rift & Virunga Province (DR Congo) — "
+        "East African Rift (DR Congo) — "
         "Multi-temporal satellite surveillance quantifying ground deformation, volcanic eruption signatures, "
         "and catastrophic urban landslide displacement using differential Optimal Transport."
     )
