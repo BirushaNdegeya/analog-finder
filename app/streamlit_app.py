@@ -1,7 +1,7 @@
 """Analog Finder — Dual-Mode Interactive Decision-Support Dashboard.
 
 Provides two operational personas driven by a single Optimal Transport core:
-  - Mode A: Planetary Mission Analogs (Earth vs Moon/Mars)
+  - Mode A: EarthAnalogs (Earth vs Moon/Mars)
   - Mode B: Geohazard & Volcanic Risk Monitor (Bukavu landslides & Virunga volcanism)
 
 Features a streamlined 3-tab layout per mode:
@@ -160,7 +160,7 @@ Weights represent the **operational prioritization** of the exploration mission 
 
 #### B. Concrete Mission Scenarios: What Happens When Weights Are Changed?
 
-##### In Mode A: Planetary Mission Analogs
+##### In Mode A: EarthAnalogs
 
 | Mission Profile / Bias | Weight Adjustments | What Happens Mechanically & Which Sites Rise / Fall? |
 |:---|:---|:---|
@@ -359,7 +359,7 @@ Summary of decision thresholds applied across both operational personas:
 | 🟠 **WARNING** | $0.40 – 0.65$ | Orange | High hazard shift detected; field inspection & drone reconnaissance recommended. |
 | 🔴 **CRITICAL** | $\\ge 0.65$ | Red | Imminent landslide rupture or volcanic effusion; trigger emergency contingency protocol & evacuations. |
 
-#### B. Mode A: Planetary Mission Analog Suitability Tiers (Global Score)
+#### B. Mode A: EarthAnalog Suitability Tiers (Global Score)
 | Analog Tier | Global Score | Color Code | Recommended Space Mission Testing Application |
 |:---|:---:|:---:|:---|
 | 🟢 **Strong Analog** | $\\ge 0.70$ | Green | Priority field trials: rover locomotion, autonomous navigation, drill testbeds, astronaut EVA simulations. |
@@ -572,11 +572,11 @@ curl -X GET "http://localhost:8000/v1/planetary/sample?body=moon&min_lon=-57.0&m
     with api_tab3:
         st.subheader("3. Core Unified Analysis Engine (`POST /v1/analyze`)")
         st.markdown("""
-The single computational entry point for both **Mode A (Planetary Mission Analogs)** and **Mode B (Geohazard Surveillance)**.
+The single computational entry point for both **Mode A (EarthAnalogs)** and **Mode B (Geohazard Surveillance)**.
 Driven by the 1st Wasserstein Earth Mover's Distance.
 """)
 
-        st.markdown("#### Mode A: Planetary Mission Analog Assessment")
+        st.markdown("#### Mode A: EarthAnalog Assessment")
         st.markdown("Compares a candidate terrestrial site or custom bounding box against a Moon or Mars target.")
         col_m_req, col_m_res = st.columns(2)
         with col_m_req:
@@ -877,7 +877,7 @@ curl -s -X POST "$API/analyze" \\
 ```bibtex
 @software{geocongoai_analog_finder_2026,
   author = {GeoCongo AI Team},
-  title = {Analog Finder: Dual-Mode Geospatial Decision Engine for Planetary Mission Analogs and Geohazard Surveillance},
+  title = {Analog Finder: Dual-Mode Geospatial Decision Engine for EarthAnalogs and Geohazard Surveillance},
   year = {2026},
   publisher = {NASA Space Apps Challenge 2026},
   url = {https://github.com/GeoCongo-AI/analog-finder}
@@ -907,50 +907,50 @@ st.sidebar.markdown(
     "**GeoCongo AI Decision Engine** — Dual-mode geospatial intelligence driven by "
     "1D/2D Optimal Transport (Wasserstein Distance). Connects open planetary satellite catalogs "
     "(Copernicus DEM, Sentinel-2, TerraClimate, JAXA Kaguya, NASA MRO) "
-    "to evaluate planetary exploration testbeds on Earth and monitor geophysical hazard crises in the East African Rift."
+    "to evaluate planetary exploration testbeds on Earth and monitor natural hazard crises in the East African Rift."
 )
 st.sidebar.markdown("---")
 st.sidebar.subheader("Operational Focus")
 
 if "app_mode" not in st.session_state:
-    st.session_state["app_mode"] = "Planetary Mission Analogs (Mode A)"
+    st.session_state["app_mode"] = "Earth Analog (Mode A)"
 
 current_mode = st.session_state["app_mode"]
 
 # Mode A Navigation Button
-is_mode_a = "Planetary" in current_mode
+is_mode_a = "Earth Analog" in current_mode
 if st.sidebar.button(
-    "Planetary Mission Analogs (Mode A)",
+    "Earth Analog (Mode A)",
     key="nav_mode_a",
     type="primary" if is_mode_a else "secondary",
     use_container_width=True,
     help="Benchmark Earth testbeds against Moon & Mars using continuous Wasserstein-1 Optimal Transport.",
 ):
-    st.session_state["app_mode"] = "Planetary Mission Analogs (Mode A)"
+    st.session_state["app_mode"] = "Earth Analog (Mode A)"
     st.rerun()
 
 # Mode B Navigation Button
-is_mode_b = "Geohazard" in current_mode
+is_mode_b = "Risk Monitor" in current_mode
 if st.sidebar.button(
-    "Geohazard & Risk Monitor (Mode B)",
+    "Risk Monitor (Mode B)",
     key="nav_mode_b",
     type="primary" if is_mode_b else "secondary",
     use_container_width=True,
     help="Early warning for urban landslides (Bukavu) & volcanic lava flows (Virunga Rift, DR Congo).",
 ):
-    st.session_state["app_mode"] = "Geohazard & Risk Monitor (Mode B)"
+    st.session_state["app_mode"] = "Risk Monitor (Mode B)"
     st.rerun()
 
 # Open Science API Hub Navigation Button
-is_mode_api = "Open Science" in current_mode or "API" in current_mode
+is_mode_api = "API" in current_mode
 if st.sidebar.button(
-    "Open Science API & Developer Hub",
+    "API & Planetary Data Bridge",
     key="nav_mode_api",
     type="primary" if is_mode_api else "secondary",
     use_container_width=True,
     help="Free programmatic REST API with Python & cURL for researchers, NGOs & universities.",
 ):
-    st.session_state["app_mode"] = "Open Science API & Developer Hub"
+    st.session_state["app_mode"] = "API & Planetary Data Bridge"
     st.rerun()
 
 app_mode = st.session_state["app_mode"]
@@ -958,9 +958,9 @@ st.sidebar.markdown("---")
 
 
 # ===========================================================================
-# PERSONA 1: MODE A — PLANETARY MISSION ANALOGS
+# PERSONA 1: MODE A — EARTH ANALOG
 # ===========================================================================
-if "Planetary" in app_mode:
+if "Earth Analog" in app_mode:
     scores_path = C.PROCESSED_DIR / "scores.json"
     if not scores_path.exists():
         st.error(
@@ -1455,9 +1455,9 @@ if "Planetary" in app_mode:
 
 
 # ===========================================================================
-# PERSONA 2: MODE B — GEOHAZARD & VOLCANIC RISK MONITOR
+# PERSONA 2: MODE B — RISK MONITOR
 # ===========================================================================
-elif "Geohazard" in app_mode:
+elif "Risk Monitor" in app_mode:
     changes_path = C.PROCESSED_DIR / "changes.json"
     if not changes_path.exists():
         st.error(
