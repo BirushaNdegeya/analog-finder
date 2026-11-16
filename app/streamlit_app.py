@@ -6,7 +6,7 @@ Provides two operational personas driven by a single Optimal Transport core:
 
 Features a streamlined 3-tab layout per mode:
   1. Benchmark Analogs / Crisis Surveillance
-  2. Custom Live Study (Draw & Analyze) / On-Demand Hazard Surveillance
+  2. Run new study / Run new stady
   3. Documentation & Scientific References
 
 NASA Space Apps Challenge 2026 - GeoCongo AI
@@ -1049,13 +1049,13 @@ if "Planetary" in app_mode:
 
     # Exact 3 Tabs as requested
     tab_bench, tab_custom, tab_docs = st.tabs([
-        "Benchmark Analogs & Validity",
-        "Custom Live Study (Draw & Analyze)",
+        "Case study",
+        "Run new study",
         "Documentation & Scientific References",
     ])
 
     # -----------------------------------------------------------------------
-    # TAB 1: Benchmark Analogs & Validity (Merged Map, Detail, and Validation)
+    # TAB 1: Case study (Merged Map, Detail, and Validation)
     # -----------------------------------------------------------------------
     with tab_bench:
         st.subheader("Global Analog Leaderboard & Geographic Distribution")
@@ -1222,7 +1222,7 @@ if "Planetary" in app_mode:
                 )
 
     # -----------------------------------------------------------------------
-    # TAB 2: Custom Live Study (Draw & Analyze)
+    # TAB 2: Run new study
     # -----------------------------------------------------------------------
     with tab_custom:
         st.subheader("Custom Planetary Analog Studio — Test Any Area on Earth")
@@ -1528,13 +1528,13 @@ elif "Geohazard" in app_mode:
 
     # Exact 3 Tabs as requested
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
-        "Crisis Surveillance & Risk Validation",
-        "On-Demand Hazard Surveillance",
+        "Case study",
+        "Run new stady",
         "Documentation & Scientific References",
     ])
 
     # -----------------------------------------------------------------------
-    # TAB 1: Crisis Surveillance & Risk Validation (Merged Map, Details, & Heatmap)
+    # TAB 1: Case study (Merged Map, Details, & Heatmap)
     # -----------------------------------------------------------------------
     with tab_tcrisis:
         st.subheader("Geohazard Crisis Map & Monitored Zones")
@@ -1701,10 +1701,10 @@ elif "Geohazard" in app_mode:
         )
 
     # -----------------------------------------------------------------------
-    # TAB 2: On-Demand Hazard Surveillance
+    # TAB 2: Run new stady
     # -----------------------------------------------------------------------
     with tab_tondemand:
-        st.subheader("On-Demand Hazard Surveillance — Dynamic Multi-Temporal Testing")
+        st.subheader("Run new stady — Dynamic Multi-Temporal Testing")
         st.write(
             "Monitor geomorphological and spectral deformation across any custom Area of Interest (AOI) on Earth between two satellite acquisition intervals. "
             "Computes Kolmogorov-Smirnov significance testing and Wasserstein divergence live."
@@ -1767,7 +1767,7 @@ elif "Geohazard" in app_mode:
 
         active_tbbox = (float(tw_in), float(ts_in), float(te_in), float(tn_in))
 
-        # Interactive Map with Draw plugin for Mode B On-Demand Hazard Surveillance
+        # Interactive Map with Draw plugin for Mode B Run new stady
         t_center_lat = (active_tbbox[1] + active_tbbox[3]) / 2
         t_center_lon = (active_tbbox[0] + active_tbbox[2]) / 2
         m_tdraw = folium.Map(location=[t_center_lat, t_center_lon], zoom_start=12)
