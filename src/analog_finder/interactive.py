@@ -189,6 +189,8 @@ def run_custom_analog_study(
             "id": target_id,
             "name": tcfg.get("name", target_id),
             "body": tcfg.get("body", "moon"),
+            "lat": tcfg.get("lat", 14.1),
+            "lon": tcfg.get("lon", -56.0),
         },
         "synthetic": synthetic,
     }

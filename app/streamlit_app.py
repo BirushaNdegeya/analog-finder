@@ -1533,24 +1533,50 @@ if "Earth Analog" in app_mode:
 
             # Integrated Leaderboard
             st.markdown("#### Integrated Global Ranking (Custom Site Included)")
-            lb_df = pd.DataFrame(res_a["leaderboard"])
-            lb_df = lb_df[["name", "role", "global", "confidence"]].rename(columns={"name": "Site", "role": "Role", "global": "Global Score", "confidence": "Data Confidence"})
+
+            # Build leaderboard dataframe with criteria columns
+            _crit_keys = list(C.CRITERIA.keys())   # ['topographie', 'geologie', 'environnement', 'ressources']
+            _crit_col_names = {k: C.CRITERIA_LABELS.get(k, k) for k in _crit_keys}
+
+            lb_rows = []
+            for item in res_a["leaderboard"]:
+                row = {
+                    "Site": item.get("name", "—"),
+                    "Role": item.get("role", "—"),
+                    "Global Score": item.get("global"),
+                    "Data Confidence": item.get("confidence"),
+                }
+                for ck in _crit_keys:
+                    val = (item.get("criteria") or {}).get(ck)
+                    row[_crit_col_names[ck]] = round(val, 2) if val is not None else None
+                lb_rows.append(row)
+
+            lb_df = pd.DataFrame(lb_rows)
             lb_df.index = range(1, len(lb_df) + 1)
             st.dataframe(lb_df, use_container_width=True)
             st.caption(
                 "**Integrated Benchmark Ranking**: Seamlessly positions your custom area of interest alongside world-famous "
-                "scientific reference analogs (e.g. Death Valley, Lanzarote, Atacama Desert) to assess competitive mission viability."
+                "scientific reference analogs (e.g. Death Valley, Lanzarote, Atacama Desert) to assess competitive mission viability. "
+                "• **Topography / Geology / Environment / In-Situ Resources**: per-criterion Wasserstein similarity score (0–1). "
+                "A blank cell means the satellite data for that criterion was not available for that site."
             )
 
             # -----------------------------------------------------------------
-            # RANKING MAP — Custom site vs. all benchmark sites (Mode A)
+            # RANKING MAP — Planetary target (blue star) + all terrestrial sites
             # -----------------------------------------------------------------
             st.markdown("#### Geographic Ranking Map — Your Site vs. Global Analogs")
             lb_items = res_a["leaderboard"]
-            m_rank = folium.Map(location=[20, 10], zoom_start=2, tiles=None)
+            # Center map on custom site if available, else world view
+            custom_item = next((it for it in lb_items if it.get("id") == "custom_aoi"), None)
+            map_center = (
+                [custom_item["lat"], custom_item["lon"]]
+                if custom_item and custom_item.get("lat") is not None
+                else [20, 10]
+            )
+            m_rank = folium.Map(location=map_center, zoom_start=2, tiles=None)
             folium.TileLayer("OpenStreetMap").add_to(m_rank)
 
-            # Score → color helper
+            # Score → color helper (for terrestrial sites)
             def _score_color(score):
                 if score is None:
                     return "gray"
@@ -1560,6 +1586,23 @@ if "Earth Analog" in app_mode:
                     return "orange"
                 return "red"
 
+            # 1. Planetary TARGET — blue star (extraterrestrial body, not a terrestrial site)
+            target_info = res_a.get("target", {})
+            t_lat = target_info.get("lat")
+            t_lon = target_info.get("lon")
+            if t_lat is not None and t_lon is not None:
+                folium.Marker(
+                    location=[t_lat, t_lon],
+                    popup=folium.Popup(
+                        f"<b>🌙 Planetary Target</b><br>{target_info.get('name', '?')}<br>"
+                        f"<i>Extraterrestrial reference body</i>",
+                        max_width=240,
+                    ),
+                    tooltip=f"🌙 Target: {target_info.get('name', '?')}",
+                    icon=folium.Icon(color="blue", icon="star"),
+                ).add_to(m_rank)
+
+            # 2. All terrestrial sites (benchmark + custom AOI) — colored by analog score class
             custom_id = "custom_aoi"
             for rank_i, item in enumerate(lb_items, 1):
                 is_custom = item.get("id") == custom_id
@@ -1568,37 +1611,38 @@ if "Earth Analog" in app_mode:
                 if lat_i is None or lon_i is None:
                     continue
                 score_i = item.get("global") or 0.0
-                color_i = "blue" if is_custom else _score_color(score_i)
-                icon_i = "star" if is_custom else "info-sign"
+                color_i = _score_color(score_i)
+                icon_i = "home" if is_custom else "info-sign"
                 popup_html = (
                     f"<b>#{rank_i} — {item.get('name', '?')}</b><br>"
                     f"Role: {item.get('role', '—')}<br>"
                     f"Global Score: {score_i:.4f}<br>"
-                    f"{'⭐ Your custom study site' if is_custom else ''}"
+                    f"{'<b>📍 Your custom study site</b>' if is_custom else ''}"
                 )
                 folium.Marker(
                     location=[lat_i, lon_i],
                     popup=folium.Popup(popup_html, max_width=260),
-                    tooltip=f"#{rank_i} {item.get('name', '?')} — {score_i:.3f}",
+                    tooltip=f"#{rank_i} {item.get('name', '?')} — {score_i:.3f}{'  📍' if is_custom else ''}",
                     icon=folium.Icon(color=color_i, icon=icon_i),
                 ).add_to(m_rank)
-                # Highlight custom site bounding box if available
+                # Bounding box for custom site
                 if is_custom and item.get("bbox"):
                     west, south, east, north = item["bbox"]
                     folium.Rectangle(
                         bounds=[[south, west], [north, east]],
-                        color="blue",
+                        color=color_i,
                         weight=2,
                         fill=True,
-                        fill_opacity=0.15,
-                        tooltip="Your custom AOI",
+                        fill_opacity=0.20,
+                        tooltip="Your custom AOI footprint",
                     ).add_to(m_rank)
 
             st_folium(m_rank, key=f"ranking_map_a_{c_name}", use_container_width=True, height=430, returned_objects=[])
             st.caption(
-                "**Ranking Map Guide**: 🔵 Blue star = your custom study site. "
+                "**Ranking Map Guide**: 🔵 Blue star = planetary target (extraterrestrial body — not on Earth). "
+                "🏠 House icon = your custom study site, colored by its analog score. "
                 "🟢 Green = Strong Analog (≥ 0.70) · 🟠 Orange = Partial Analog (0.40–0.70) · 🔴 Red = Weak Analog (< 0.40). "
-                "Hover over each marker for site details and scores."
+                "Hover over each marker for site name, rank, and score."
             )
 
     # -----------------------------------------------------------------------
