@@ -1113,10 +1113,10 @@ if "Earth Analog" in app_mode:
     )
     st.markdown(
         "**Core Scientific Criteria & Physical Indicators:**  \n"
-        "• **Topography:** Slope (°) · Terrain Roughness (variability)  \n"
-        "• **Geology:** Basalt Fraction · Iron Oxides Index · Clay Minerals (SWIR)  \n"
-        "• **Environment:** Bare Ground Fraction · Aridity (Annual Precipitation)  \n"
-        "• **In-Situ Resources:** Subsurface Cavities & Lava Skylights · Accessible Basalt Regolith"
+        "• **Topography:** Slope · Roughness  \n"
+        "• **Geology:** Basalt Fraction · Iron Oxides Index · Clay Minerals Index  \n"
+        "• **Environment:** Bare Ground Fraction · Annual Precipitation  \n"
+        "• **In-Situ Resources:** Cavities & Skylights · Accessible Basalt"
     )
 
     if data.get("synthetic"):
@@ -1774,9 +1774,9 @@ elif "Risk Monitor" in app_mode:
     )
     st.markdown(
         "**Geohazard Surveillance Criteria & Physical Indicators ($T_0 \\to T_1$):**  \n"
-        "• **Topography:** Elevation displacement, scarp slope gradient, terrain subsidence / destabilization  \n"
-        "• **Geology:** Volcanic lava effusion, basaltic deposit expansion, ash alteration & spectral change  \n"
-        "• **Environment:** Bare soil exposure, landslide scar vegetation loss, surface moisture disruption"
+        "• **Topography:** Slope · Roughness  \n"
+        "• **Geology:** Basalt Fraction · Iron Oxides Index · Clay Minerals Index  \n"
+        "• **Environment:** Bare Ground Fraction · Annual Precipitation"
     )
 
     if tdata.get("synthetic"):
