@@ -1314,7 +1314,10 @@ if "Earth Analog" in app_mode:
         st.markdown("---")
         st.subheader("Candidate Site Deep-Dive & Scientific Validity Card")
 
-        site_name = st.selectbox("Select Candidate Site for Detailed Inspection", [s["name"] for s in data["sites"]])
+        _site_names = [s["name"] for s in data["sites"]]
+        _default_site = "Tibesti Volcanic Province (Chad)"
+        _default_idx = _site_names.index(_default_site) if _default_site in _site_names else 0
+        site_name = st.selectbox("Select Candidate Site for Detailed Inspection", _site_names, index=_default_idx)
         s = next(x for x in data["sites"] if x["name"] == site_name)
 
         crit_labels = [C.CRITERIA_LABELS.get(c, c) for c in C.CRITERIA]
