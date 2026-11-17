@@ -138,6 +138,7 @@ def get_target_visuals(target_key_or_name: str) -> dict:
             "mission": "NASA Mars 2020 / Perseverance Rover (MRO CTX/HiRISE)",
             "desc": "Ancient Martian paleolake delta and volcanic basaltic floor units with phyllosilicates.",
             "source": "NASA Ames / USGS / JPL / Corrine Rojas",
+            "lead": "Gérard",
             "img_path": str(img_path) if img_path.exists() else None,
         }
     else:
@@ -151,6 +152,7 @@ def get_target_visuals(target_key_or_name: str) -> dict:
             "mission": "JAXA SELENE Kaguya & NASA LROC",
             "desc": "Lunar volcanic dome complex in Oceanus Procellarum featuring deep pit crater skylight.",
             "source": "NASA / GSFC / Arizona State University / JAXA / SELENE",
+            "lead": "Gérard",
             "img_path": str(img_path) if img_path.exists() else None,
         }
 
@@ -197,9 +199,10 @@ def render_documentation_tab() -> None:
     st.header("Scientific Documentation, Methodology & References")
     st.caption("Theoretical framework, multi-sensor satellite ingestion, literature confrontation, and open data sources.")
 
-    doc_tab1, doc_tab2, doc_tab3, doc_tab4, doc_tab5 = st.tabs([
+    doc_tab1, doc_tab2, doc_tab3, doc_tab4, doc_tab5, doc_tab6 = st.tabs([
         "Mathematical Methodology & Scoring",
-        "Satellite Data Acquisition Pipeline",
+        "Hybrid Satellite & Local Pipeline",
+        "Field Collection, In-Situ Data & Team Roles",
         "Confrontation with Scientific Literature",
         "References & Data Catalogs",
         "Glossary & Abbreviations",
@@ -347,31 +350,79 @@ The **Scientific Validation** panel displays programmatic checks designed to pre
 """)
 
     with doc_tab2:
-        st.subheader("2. Multi-Sensor Satellite Data Acquisition Pipeline")
+        st.subheader("2. Hybrid Satellite & Local Ingestion Pipeline")
         st.markdown("""
-Analog Finder operates an end-to-end cloud-native pipeline utilizing open **SpatioTemporal Asset Catalogs (STAC)** and **Cloud-Optimized GeoTIFFs (COGs)**. No local rasters are required.
+Analog Finder operates an end-to-end **hybrid geospatial ingestion architecture** bridging global open **SpatioTemporal Asset Catalogs (STAC)** with **locally prepared high-resolution rasters and in-situ field data**.
 
-| Sensor / Mission | Asset Type | Resolution | Coverage | STAC Provider & Ingestion Method |
+| Sensor / Mission | Asset Type | Resolution | Coverage | Ingestion & Preprocessing Method |
 | :--- | :--- | :---: | :---: | :--- |
 | **Copernicus DEM GLO-30** | Altimetry / DEM | 30 m | Global Earth | Microsoft Planetary Computer (`cop-dem-glo-30`) via `odc-stac` |
 | **ESA Sentinel-2 L2A** | Optical Multispectral (12 bands) | 10 m – 20 m | Global Earth | Microsoft Planetary Computer (`sentinel-2-l2a`), SCL cloud masking |
 | **JAXA SELENE Kaguya TC** | Lunar DTM (Elevation) | **26.2 m** | Moon Global | USGS Astrogeology STAC (`kaguya_terrain_camera_usgs_dtms_v2_equi`) |
 | **NASA MRO CTX / HiRISE** | Martian DTM | **20 m / 1 m** | Mars Target AOIs | USGS Astrogeology STAC (`mro_ctx_controlled_usgs_dtms`) |
 | **TerraClimate (Univ. Idaho)** | Climatology / Precipitation ($ppt$) | ~4 km | Global Earth | Microsoft Planetary Computer (`terraclimate`), annual accumulation |
+| **In-Situ & Local Rasters** | Local DEMs, Basalt Masks, Faults | **High-Res / Ground Truth** | Site Specific | Calibrated by GeoCongo AI team (`data/raw/<site_id>/`) |
 
-#### Ingestion Workflow:
-1. **Dynamic Bounding Box Ingestion**: The client sends a target bounding box in `EPSG:4326`.
-2. **On-the-Fly Reprojection**: Satellite cubes are reprojected to the local UTM coordinate reference system (`EPSG:326XX` / `327XX`).
-3. **Cloud Masking**: Scene Classification Layer (SCL) filters clouds, cirrus, cloud shadows, and defective pixels.
-4. **Cloud-Free Median Composite**: Pixels are aggregated across time to generate robust surface reflectance:
+#### Hybrid Ingestion Workflow:
+1. **Local Preprocessed Raster Priority**: The pipeline checks `data/raw/<site_id>/` for custom rasters (e.g. `dem_pre_2021.tif`, `dem_post_2021.tif`, `basalt_mask.tif`). When present, validated ground truth takes precedence to eliminate cloud contamination and micro-relief uncertainties.
+2. **Dynamic Bounding Box Streaming**: When local rasters are absent or supplemental coverage is required, the engine streams cloud-optimized GeoTIFFs (COGs) via STAC in `EPSG:4326`.
+3. **On-the-Fly Reprojection**: Satellite cubes are dynamically reprojected to the local UTM coordinate reference system (`EPSG:326XX` / `327XX`).
+4. **Cloud Masking & Median Compositing**: Scene Classification Layer (SCL) filters clouds, cirrus, and shadows to produce clean radiometric surface reflectance:
    * **Bare Soil Fraction**: $\text{NDVI} = \frac{\text{B08} - \text{B04}}{\text{B08} + \text{B04}} < 0.20$
    * **Iron Oxide Signature**: Ratio $\frac{\text{B04 (Red)}}{\text{B02 (Blue)}}$
    * **Clay Minerals Alteration**: Ratio $\frac{\text{B11 (SWIR1)}}{\text{B12 (SWIR2)}}$
-5. **Non-Blocking Architecture**: Any missing spectral or altimetric band is transparently marked as `not_evaluated` without penalizing available criteria.
+5. **Continuous Distribution Extraction**: Terrestrial and planetary arrays are converted into continuous empirical distributions ($N \ge 300$) for 1D/2D Optimal Transport.
 """)
 
     with doc_tab3:
-        st.subheader("3. Confrontation of Method and Results with Scientific Literature")
+        st.subheader("3. Field Collection, Local Data Preparation & Scientific Team Roles")
+        st.markdown(r"""
+### A. Why APIs Alone Are Insufficient: The Power of Local Field Intelligence
+A central pillar of the **GeoCongo AI** methodology is recognizing that **API queries to remote satellite catalogs are only a starting point**.
+Global orbital sensors operate with fundamental physical limitations:
+* **Resolution Limits**: 30-meter satellite DEMs cannot resolve subsurface lava tube skylights, 2-meter volcanic collapse pits, or micro-topographic rover mobility obstacles.
+* **Canopy & Cloud Occlusion**: Equatorial volcanic zones (such as the Virunga Rift) suffer from chronic tropical cloud cover, requiring ground-truth calibration.
+* **Geochemical Ground Truth**: Satellite multispectral band ratios indicate potential mineral signatures, but true verification of tholeiitic vs alkaline basalt, natrocarbonatite deposits, or hyper-arid dust mechanics requires direct geological field surveys.
+
+By actively collecting in-situ observations, ground-truth GPS perimeters, and specialized local rasters, our team transforms raw satellite telemetry into **calibrated, high-confidence geospatial intelligence**.
+
+---
+
+### B. In-Situ Data Collection & Preprocessing Lifecycle
+
+```
+[1. In-Situ Field Survey] ────► [2. High-Res Preprocessing] ────► [3. Local Asset Ingestion] ────► [4. Enriched Scoring]
+• GPS ground boundaries         • Drone photogrammetry          • Standardized GeoTIFFs          • Quantile-accurate W₁
+• Fault scarp verification      • Cloud-masked compositing        in data/raw/<site_id>/           distributions
+• Cavity & skylight mapping     • Basaltic spectral masking     • Local raster priority          • High-confidence validation
+```
+
+1. **Field Reconnaissance & In-Situ Mapping**: Field geologists record accurate boundary coordinates, fault orientations, active fumarole vents, and exposed volcanic strata.
+2. **Dataset Preprocessing & Standardization**: Ground surveys and high-resolution local imagery are harmonized to match the planetary STAC schemas (standardizing CRS to UTM, computing slope gradients, filtering sensor noise).
+3. **Local Raw Asset Ingestion**: Preprocessed assets (e.g. `data/raw/nyiragongo/dem_pre_2021.tif`, `data/raw/tibesti/basalt_mask.tif`) are placed in the ingestion repository.
+4. **Optimal Transport Enrichment**: The 1D/2D Optimal Transport engine ingests these local layers, producing Wasserstein distances rooted in physical ground truth.
+
+---
+
+### C. Scientific Team & Data Stewardship Matrix
+
+| Team Member | Core Roles & Responsibilities | Geographic & Planetary Scope | Key In-Situ & Preprocessing Contributions |
+|:---|:---|:---|:---|
+| **Gérard** | **Lead Planetary Data Curator & Lead Field Collector** | • **Marius Hills (Moon)**<br>• **Jezero Crater (Mars)**<br>• **Tibesti Volcanic Province (Chad)** | Curated and preprocessed lunar JAXA Kaguya TC (26.2 m) and Martian MRO CTX (20 m) DTMs; defined bounding box coordinates and compiled geological ground surveys for Tarso Tousside and Trou au Natron collapse caldera. |
+| **Nicolas** | **Lead Field Collector (Rift & Desert Systems)** | • **Virunga Volcanic Province (DR Congo)**<br>• **Harrat Khaybar (Saudi Arabia)**<br>• **Atacama Desert (Chile)** | Led field mapping of active Virunga basaltic lava flows and collapse depressions; processed hyper-arid baseline and lava tube cavity datasets for Harrat Khaybar. |
+| **Diego** | **Lead Field Collector (Rift Calderas & Oceanic Analogs)** | • **Suswa Caldera (Kenya)**<br>• **Kilauea / Hawaii (USA)**<br>• **Death Valley (USA)** | Characterized phonolitic/trachytic caldera morphology in the Kenyan Gregory Rift; processed tholeiitic basalt flow rasters and hyper-arid basin altimetry. |
+| **Bosworth** | **Lead Data Collector (Atlantic Basalts & Control Basins)** | • **Lanzarote Timanfaya (Spain)**<br>• **Lava Beds (USA)**<br>• **Central Congo Rainforest (DR Congo)** | Compiled volcanic tube collapse catalogues for Lanzarote and Lava Beds; curated negative control multispectral baselines in dense tropical canopy. |
+
+---
+
+### D. Institutional Ground-Truth Partners & Observatories
+* **Observatoire Volcanologique de Goma (OVG)**: Continuous seismic and deformation monitoring of Nyiragongo and Nyamuragira volcanoes.
+* **Centre de Recherche en Sciences Naturelles (CRSN Lwiro)**: Geophysical field observations and tectonic fault monitoring in the Kivu rift.
+* **Université Officielle de Bukavu (UOB) / Protection Civile Sud-Kivu**: Urban landslide displacement monitoring and active gully mapping in Bukavu.
+""")
+
+    with doc_tab4:
+        st.subheader("4. Confrontation of Method and Results with Scientific Literature")
         st.markdown(r"""
 ### A. Validation Against Planetary Analogs Literature
 Our algorithmic ranking was benchmarked against established terrestrial field analog literature:
@@ -399,8 +450,8 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
    * *Model Result*: In real Sentinel-2 satellite ingestion between 2019 and 2024, our engine detected **Bare Soil Exposure = +54.0% ($p < 10^{-4}$)** and **Criticality = 0.9126 (CRITICAL)** along the Ibanda fault scarp, matching ground-truth field reports from the *Centre de Recherche en Sciences Naturelles (CRSN)* and *Université Officielle de Bukavu (UOB)*.
 """)
 
-    with doc_tab4:
-        st.subheader("4. Bibliographic References & Open Data Repositories")
+    with doc_tab5:
+        st.subheader("5. Bibliographic References & Open Data Repositories")
         st.markdown("""
 #### Peer-Reviewed Publications
 1. **Farr, T. G.** (2004). *Terrestrial analogs to Mars*. Planetary and Space Science, 52(1-3), 201-209.
@@ -419,8 +470,8 @@ Our multi-temporal change detection engine was validated against peer-reviewed g
 * **GeoCongo AI GitHub Repository**: [https://github.com/GeoCongo-AI/analog-finder](https://github.com/GeoCongo-AI/analog-finder)
 """)
 
-    with doc_tab5:
-        st.subheader("5. Glossary, Abbreviations, Scoring & Role of Criterion Weights")
+    with doc_tab6:
+        st.subheader("6. Glossary, Abbreviations, Scoring & Role of Criterion Weights")
         st.caption(
             "Plain-language guide for all technical terminology, abbreviations, mathematical score calculations, "
             "and an in-depth analysis of how adjusting criterion weights affects mission prioritization and hazard decisions."
@@ -1172,6 +1223,7 @@ if "Earth Analog" in app_mode:
             "id": s["id"],
             "Site": s["name"],
             "Role": s["role"],
+            "Lead Collector": s.get("lead_collector", "Team"),
             "Global Score": score,
             "Confidence": round(s["confidence"], 2),
             **criteria_cols,
@@ -1210,6 +1262,7 @@ if "Earth Analog" in app_mode:
                     f"• **Coordinates:** `{t_vis_bench['coords']}`  \n"
                     f"• **Mission Data:** {t_vis_bench['mission']}  \n"
                     f"• **Geological Setting:** {t_vis_bench['desc']}  \n"
+                    f"• **Lead Planetary Curator:** {t_vis_bench.get('lead', 'Gérard')}  \n"
                     f"• **Image Credit / Source:** {t_vis_bench['source']}"
                 )
 
@@ -1223,7 +1276,8 @@ if "Earth Analog" in app_mode:
                 sc = float(df.loc[df["id"] == s["id"], "Global Score"].iloc[0])
                 color = "#2e7d32" if sc >= C.STRONG else "#f9a825" if sc >= C.WEAK else "#c62828"
                 icon_color = "green" if sc >= C.STRONG else "orange" if sc >= C.WEAK else "red"
-                tooltip_txt = f"{s['name']} (Score: {sc:.2f})"
+                lead_txt = f" · Lead: {s.get('lead_collector', 'Team')}" if s.get("lead_collector") else ""
+                tooltip_txt = f"{s['name']} (Score: {sc:.2f}{lead_txt})"
                 # Bounding box rectangle (defensive: bbox may be absent in older scores.json)
                 if s.get("bbox"):
                     folium.Rectangle(
@@ -1244,7 +1298,7 @@ if "Earth Analog" in app_mode:
             st.caption(
                 "**Global Map Guide**: Terrestrial analog candidates evaluated against the planetary target shown above. "
                 "Each candidate Earth site is shown as a **colored bounding box** (geographic footprint) "
-                "plus a **center pin marker**: "
+                "plus a **center pin marker** with lead researcher attribution: "
                 "🟢 Green = High planetary resemblance (≥ 0.70), 🟡 Yellow = Moderate/Partial analog (0.40–0.70), "
                 "🔴 Red = Low resemblance (< 0.40). Click any marker or rectangle for instant site details."
             )
@@ -1253,7 +1307,7 @@ if "Earth Analog" in app_mode:
             st.dataframe(df.drop(columns=["id"]), use_container_width=True)
             st.caption(
                 "**Leaderboard Interpretation**: Sites are sorted by **Global Score** (0.0 to 1.0), "
-                "computed via Earth Mover's Distance. A higher score means closer terrain resemblance. "
+                "computed via Earth Mover's Distance. **Lead Collector** acknowledges team members who surveyed and preprocessed the local datasets. "
                 "**Confidence** indicates the percentage of physical indicators successfully extracted from satellite data."
             )
 
@@ -1299,7 +1353,11 @@ if "Earth Analog" in app_mode:
             if s.get("processes"):
                 st.write(f"**Testable Processes:** {s['processes']}")
             if s.get("local_data"):
-                st.write(f"**Local Data:** {s['local_data']}")
+                st.info(
+                    f"**Local Ground-Truth & In-Situ Data Integration (Lead: {s.get('lead_collector', 'Team')}):**  \n"
+                    f"{s['local_data']}  \n\n"
+                    f"*Methodological Role:* Beyond remote cloud APIs, locally preprocessed field surveys and calibrated regional rasters feed directly into the Optimal Transport pipeline to enrich physical distributions."
+                )
 
         # Validity Card
         v = s["validity"]
@@ -1425,6 +1483,7 @@ if "Earth Analog" in app_mode:
                     f"• **Coordinates:** `{t_vis_custom['coords']}`  \n"
                     f"• **Mission Catalog:** {t_vis_custom['mission']}  \n"
                     f"• **Geological Signature:** {t_vis_custom['desc']}  \n"
+                    f"• **Lead Planetary Curator:** {t_vis_custom.get('lead', 'Gérard')}  \n"
                     f"• **Image Credit / Source:** {t_vis_custom['source']}"
                 )
 
@@ -1739,6 +1798,7 @@ if "Earth Analog" in app_mode:
                     f"• **Target:** {t_vis_res['name']} ({t_vis_res['body']})  \n"
                     f"• **Coordinates:** `{t_vis_res['coords']}`  \n"
                     f"• **Mission:** {t_vis_res['mission']}  \n"
+                    f"• **Lead Planetary Curator:** {t_vis_res.get('lead', 'Gérard')}  \n"
                     f"• **Image Credit / Source:** {t_vis_res['source']}"
                 )
 
