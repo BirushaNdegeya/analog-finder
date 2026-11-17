@@ -14,8 +14,10 @@
 | Open Science REST API (Swagger) | [api.analog.geocongoai.com/docs](https://api.analog.geocongoai.com/docs) |
 | ReDoc | [api.analog.geocongoai.com/redoc](https://api.analog.geocongoai.com/redoc) |
 
+## Earth Analog (Mode A) Case study Tab
 ![Analog Finder dashboard](app/assets/dashboard.png)
 ---
+## Earth Analog (Mode A) Run new study Tab
 ![Analog Finder dashboard](app/assets/dashboard2.png)
 
 ## Problem statement
