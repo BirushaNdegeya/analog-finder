@@ -1215,7 +1215,7 @@ if "Earth Analog" in app_mode:
 
         left, right = st.columns([3, 2])
         with left:
-            m = folium.Map(location=[10, 0], zoom_start=2, tiles=None)
+            m = folium.Map(location=[19.3987, -46.3264], zoom_start=2, tiles=None)
             setup_map_layers(m, default="street")
 
             # Candidate sites — bounding box rectangle + center pin marker (terrestrial only)
@@ -1665,14 +1665,7 @@ if "Earth Analog" in app_mode:
             # -----------------------------------------------------------------
             st.markdown("#### Geographic Ranking Map — Your Site vs. Global Analogs")
             lb_items = res_a["leaderboard"]
-            # Center map on custom site if available, else world view
-            custom_item = next((it for it in lb_items if it.get("id") == "custom_aoi"), None)
-            map_center = (
-                [custom_item["lat"], custom_item["lon"]]
-                if custom_item and custom_item.get("lat") is not None
-                else [20, 10]
-            )
-            m_rank = folium.Map(location=map_center, zoom_start=2, tiles=None)
+            m_rank = folium.Map(location=[19.3987, -46.3264], zoom_start=2, tiles=None)
             setup_map_layers(m_rank, default="street")
 
             # Score → color helper (for terrestrial sites)
