@@ -1184,7 +1184,7 @@ if "Earth Analog" in app_mode:
     tab_bench, tab_custom, tab_docs = st.tabs([
         "Case study",
         "Run new study",
-        "Documentation & Scientific References",
+        "Docs & References",
     ])
 
     # -----------------------------------------------------------------------
@@ -1820,7 +1820,7 @@ elif "Risk Monitor" in app_mode:
     tab_tcrisis, tab_tondemand, tab_tdocs = st.tabs([
         "Case study",
         "Run New Study",
-        "Documentation & Scientific References",
+        "Docs & References",
     ])
 
     # -----------------------------------------------------------------------
