@@ -15,6 +15,7 @@
 | ReDoc | [api.analog.geocongoai.com/redoc](https://api.analog.geocongoai.com/redoc) |
 
 ![Analog Finder dashboard](app/assets/dashboard.png)
+---
 ![Analog Finder dashboard](app/assets/dashboard2.png)
 
 ## Problem statement
