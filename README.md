@@ -1,10 +1,13 @@
 # Analog Finder
 
+**Discovering & characterizing terrestrial analog sites for lunar and Martian exploration using Optimal Transport — GeoCongo AI · NASA Space Apps Challenge 2026**
+
 ![Project](https://img.shields.io/badge/project-Analog%20Finder-183153)
 ![Team](https://img.shields.io/badge/team-GeoCongo%20AI-2f6f5e)
 ![Challenge](https://img.shields.io/badge/challenge-NASA%20Space%20Apps%202026-173b63)
-
-**GeoCongo AI** · NASA Space Apps Challenge 2026
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![Tests](https://img.shields.io/badge/tests-42%20passed-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Live deployments
 
@@ -22,16 +25,64 @@
 
 ## Problem statement
 
-> About the Challenge: Selecting future landing sites and lunar base locations depends on many factors, including topography, geology, environment, and available resources, to name a few. Places on Earth that have analogous characteristics to the Moon or Mars – the Atacama Desert, Haughton Crater, Death Valley – allow mission teams to test equipment and methods before they fly; however, such terrestrial analog sites are not entirely well characterized. Your challenge is to use open Earth, Moon, and Mars data from NASA and other space agencies to identify and characterize new terrestrial analogs for future bases or landing sites, drawing on deserts, polar regions, volcanic and arid terrains, caves, and other environments that share conditions with the lunar or Martian surface, then present your findings as a map, visualization, or other tool.
+Selecting future lunar base locations and Martian landing sites depends on a combination of physical factors — topography, geology, environmental context, and in-situ resources. Earth sites that share comparable conditions (volcanic fields, hyper-arid deserts, lava tube systems, collapse calderas) allow mission teams to train, test equipment, and validate mission protocols before actual deployment. However, the catalog of characterized terrestrial analog sites remains incomplete, especially for lesser-known high-fidelity sites in Africa and the Middle East.
 
-GeoCongo AI compares continuous terrain and environmental indicator distributions using one- and two-dimensional Wasserstein optimal transport ($W_1$). The open-source pipeline discovers and characterizes candidate sites from STAC data, then presents mapped comparisons in an interactive dashboard and REST API.
+**Analog Finder** addresses this gap by comparing continuous terrain and environmental indicator distributions using one- and two-dimensional Wasserstein Optimal Transport ($W_1$). The open-source pipeline automatically discovers, scores, and characterizes candidate sites from open satellite catalogs (STAC), enriched by in-situ field collection and locally preprocessed geospatial rasters. Results are presented in an interactive ranked dashboard and a fully documented REST API, enabling reproducible, data-driven analog site selection.
 
 ## Dual operational capabilities
 
 | Track | Purpose |
 |---|---|
-| **A — Earth Analog (Moon & Mars)** | Characterize terrestrial analog candidates—including volcanic fields, deserts, lava tubes, and basalt quarries—against JAXA SELENE Kaguya lunar and NASA MRO Martian digital terrain models. |
-| **B — East African Rift Geohazard Monitor** | Monitor landslide indicators in Bukavu and volcanic activity in Nyiragongo and Virunga through temporal change detection between baseline $T_0$ and observation $T_1$. |
+| **A — Earth Analog (Moon & Mars)** | Characterize terrestrial analog candidates — volcanic fields, deserts, lava tubes, basalt flows, collapse calderas — against JAXA SELENE Kaguya lunar and NASA MRO Martian digital terrain models using Optimal Transport similarity scoring. |
+| **B — East African Rift Geohazard Monitor** | Monitor landslide indicators in Bukavu (DR Congo) and volcanic activity in Nyiragongo and Virunga through multi-temporal change detection between baseline $T_0$ and observation $T_1$. |
+
+## Architecture
+
+```
+STAC Catalogs (Planetary Computer / USGS Astrogeology)
+         │
+         ▼
+ ┌───────────────────────────────────┐
+ │  Hybrid Ingestion Pipeline        │
+ │  - Satellite COG streaming (STAC) │
+ │  - Local field rasters (priority) │
+ └───────────────┬───────────────────┘
+                 │
+                 ▼
+ ┌───────────────────────────────────────────────┐
+ │  Optimal Transport Engine                     │
+ │  - 1D Wasserstein distance W₁(u,v)            │
+ │  - 2D sliding-window patch differencing       │
+ │  - Criterion scoring & confidence index       │
+ └────────────┬──────────────────────────────────┘
+              │
+   ┌──────────┴───────────┐
+   ▼                      ▼
+scores.json (Mode A)   changes.json (Mode B)
+   │                      │
+   ▼                      ▼
+┌──────────────────┐  ┌──────────────────────┐
+│ Streamlit        │  │  FastAPI REST API     │
+│ Dashboard :8501  │  │  :8000 (Swagger/ReDoc)│
+└──────────────────┘  └──────────────────────┘
+```
+
+## Case studies
+
+The pipeline includes two **in-depth case studies** grounded in original field collection and local data preprocessing, alongside seven reference analog and control sites:
+
+| Site | Role | Lead Collector | Key Processes |
+|---|---|---|---|
+| **Virunga Volcanic Province (DR Congo)** | Case study | Nicolas | Active alkaline volcanism, fresh basaltic lava flows, Nyamuragira lava tubes, collapse pits |
+| **Tibesti Volcanic Province (Chad)** | Case study | Gérard | Tarso Tousside basaltic flows, Trou au Natron collapse caldera (8 km / 1 000 m), hyper-arid Saharan erosion |
+| Harrat Khaybar (Saudi Arabia) | Candidate (lesser-known) | Nicolas | Intraplate basaltic lava tubes (Umm Jirsan), hyper-arid preservation |
+| Mount Suswa Caldera (Kenya) | Candidate (lesser-known) | Diego | Double phonolitic-trachytic caldera with braided lava tube networks |
+| Hawaii — Kilauea / Mauna Loa (USA) | Known analog | Diego | Active tholeiitic shield basalt, NASA analog test site |
+| Lanzarote — Timanfaya (Spain) | Known analog | Bosworth | Historical basaltic fissure eruptions, ESA PANGAEA astronaut training site |
+| Lava Beds National Monument (USA) | Known analog | Bosworth | Highest concentration of accessible lava tube caves in North America |
+| Atacama Desert (Chile) | Cross-validation | Nicolas | Extreme hyper-aridity, Mars analog control |
+| Death Valley (USA) | Cross-validation | Diego | Extensional tectonic basin, extreme thermal amplitude |
+| Central Congo Rainforest (DR Congo) | Negative control | Bosworth | Dense equatorial canopy — zero planetary analog fidelity (validation baseline) |
 
 ## Open data pipeline
 
@@ -40,10 +91,11 @@ GeoCongo AI compares continuous terrain and environmental indicator distribution
 | Copernicus DEM GLO-30 | Global elevation, 30 m | Earth topography and terrain derivatives |
 | Sentinel-2 L2A | Multispectral imagery, 10–20 m | Bare ground, vegetation, and mineral indicators |
 | TerraClimate | Climate and precipitation | Aridity and environmental context |
-| JAXA SELENE Kaguya | Lunar terrain-camera DTMs | Lunar target topography |
-| NASA MRO CTX / HiRISE | Martian terrain models | Mars target topography at CTX and HiRISE scales |
+| JAXA SELENE Kaguya | Lunar terrain-camera DTMs, 26.2 m | Lunar target topography |
+| NASA MRO CTX / HiRISE | Martian terrain models, 20 m / 1 m | Mars target topography |
+| **In-situ & local rasters** | Field DEMs, basalt masks, fault traces | Ground-truth calibration enriching satellite distributions |
 
-Earth collections are accessed through Microsoft Planetary Computer STAC; lunar and Martian collections use USGS Astrogeology STAC. Data products are open and accessed as Cloud-Optimized GeoTIFFs where available.
+Earth collections are accessed through Microsoft Planetary Computer STAC; lunar and Martian collections use USGS Astrogeology STAC. Data products are open and accessed as Cloud-Optimized GeoTIFFs where available. For case study sites, locally preprocessed rasters (placed in `data/raw/<site_id>/`) take priority over API-streamed data to eliminate cloud contamination and micro-relief uncertainties.
 
 ## Mathematical core
 
@@ -65,10 +117,16 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m pip install -e .
 
-# Generate offline demo inputs for both operational tracks
+# Generate offline demo inputs for both operational tracks (synthetic test data)
 python -m analog_finder.pipeline --mode all --synthetic
 streamlit run app/streamlit_app.py
 ```
+
+> **Note:** `--synthetic` generates invented values for local pipeline and interface testing only.
+> To compute real scores from live satellite data (requires internet for STAC access):
+> ```bash
+> python -m analog_finder.pipeline --mode analog
+> ```
 
 ### Docker Compose
 
@@ -106,16 +164,24 @@ response.raise_for_status()
 print(response.json())
 ```
 
-## Team and citation
+## Team
 
 Developed by **GeoCongo AI** for the **NASA Space Apps Challenge 2026**.
 
+| Member | Role |
+|---|---|
+| **Gérard** | Lead Planetary Data Curator · Field Collector (Tibesti, Chad) · Planetary targets (Marius Hills / Moon, Jezero Crater / Mars) |
+| **Nicolas** | Lead Field Collector · Virunga Volcanic Province (DR Congo) · Harrat Khaybar (Saudi Arabia) · Atacama Desert |
+| **Diego** | Lead Field Collector · Suswa Caldera (Kenya) · Hawaii (Kilauea) · Death Valley |
+| **Bosworth** | Lead Data Collector · Lanzarote Timanfaya · Lava Beds National Monument · Negative control (Congo Rainforest) |
+
+## Citation
+
 ```bibtex
 @software{geocongoai_analog_finder_2026,
-  author       = {{GeoCongo AI}},
-  title        = {Analog Finder},
+  author       = {GeoCongo AI},
+  title        = {Analog Finder — Terrestrial Planetary Analog Discovery via Optimal Transport},
   year         = {2026},
-  url          = {https://github.com/BirushaNdegeya/analog-finder},
   note         = {NASA Space Apps Challenge 2026}
 }
 ```
