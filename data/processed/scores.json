@@ -13,6 +13,12 @@
       "role": "case_study",
       "lat": -1.475,
       "lon": 29.25,
+      "bbox": [
+        29.1,
+        -1.6,
+        29.4,
+        -1.35
+      ],
       "indicators": {
         "pente": 0.3679,
         "rugosite": 0.1822,
@@ -70,12 +76,83 @@
       },
       "processes": "Active alkaline volcanism, fresh basaltic lava flows, collapse pits, Nyamuragira lava tubes.",
       "local_data": "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions).",
+      "lead_collector": "Nicolas"
+    },
+    {
+      "id": "tibesti",
+      "name": "Tibesti Volcanic Province (Chad)",
+      "role": "case_study",
+      "lat": 20.9925,
+      "lon": 16.5935,
       "bbox": [
-        29.1,
-        -1.6,
-        29.4,
-        -1.35
-      ]
+        16.275,
+        20.745,
+        16.912,
+        21.24
+      ],
+      "indicators": {
+        "pente": 0.6282,
+        "rugosite": 0.3905,
+        "sol_nu": 0.985
+      },
+      "criteria": {
+        "topographie": 0.5094,
+        "geologie": null,
+        "environnement": 0.985,
+        "ressources": null
+      },
+      "confidence": 0.3333,
+      "global": 0.7472,
+      "explanation": "Strong analog match: Environment. Not evaluated (missing data): Geology, In-Situ Resources.",
+      "values": {
+        "pente": {
+          "site": 3.251915216445923,
+          "target": 1.8980610370635986,
+          "unit": "\u00b0"
+        },
+        "rugosite": {
+          "site": 1.589241623878479,
+          "target": 4.676552772521973,
+          "unit": "\u00b0"
+        },
+        "sol_nu": {
+          "site": 1.0,
+          "target": 1.0,
+          "unit": "fraction"
+        }
+      },
+      "validity": {
+        "reproduit": [
+          "Environment"
+        ],
+        "partiel": [
+          "Topography"
+        ],
+        "non_reproduit": [],
+        "non_evalue": [
+          "Diurnal temperature swings and polar illumination",
+          "Subsurface ice, permafrost, and volatile stability",
+          "Electrostatic regolith dust behavior",
+          "Astrobiology and strict planetary protection constraints",
+          "Geology (insufficient data)",
+          "In-Situ Resources (insufficient data)"
+        ],
+        "jamais_reproductible": [
+          "Reduced lunar gravity (1/6 g) or Martian gravity (3/8 g)",
+          "Hard lunar vacuum and hypervelocity micrometeoroids",
+          "Unshielded solar & galactic cosmic radiation",
+          "Atmospheric density differences (Mars low-pressure CO2 atmosphere)"
+        ],
+        "usages_adaptes": [
+          "Environment: Dust & arid operations, extreme EVA simulation in barren terrain"
+        ],
+        "usages_partiels": [
+          "Topography: Rover mobility, terrain navigation, landing stability"
+        ]
+      },
+      "processes": "Saharan intraplate volcanism, Tarso Tousside black basaltic lava flows, giant Trou au Natron collapse caldera (8 km wide, 1000 m deep), hyper-arid aeolian erosion.",
+      "local_data": "Ground truth geological surveys, Copernicus DEM elevation, and Sentinel-2 multispectral satellite telemetry.",
+      "lead_collector": "G\u00e9rard"
     },
     {
       "id": "harrat_khaybar",
@@ -83,6 +160,12 @@
       "role": "candidate_lesser_known",
       "lat": 25.700000000000003,
       "lon": 39.9,
+      "bbox": [
+        39.8,
+        25.6,
+        40.0,
+        25.8
+      ],
       "indicators": {
         "pente": 0.2561,
         "rugosite": 0.1222,
@@ -143,12 +226,7 @@
       },
       "processes": "Intraplate bimodal volcanic field, extensive basaltic lava tubes (Umm Jirsan), hyper-arid preservation.",
       "local_data": "Morphological inventory of lava tubes, Copernicus DEM and Sentinel-2 composites.",
-      "bbox": [
-        39.8,
-        25.6,
-        40.0,
-        25.8
-      ]
+      "lead_collector": "Nicolas"
     },
     {
       "id": "suswa",
@@ -156,6 +234,12 @@
       "role": "candidate_lesser_known",
       "lat": -1.17,
       "lon": 36.35,
+      "bbox": [
+        36.25,
+        -1.27,
+        36.45,
+        -1.07
+      ],
       "indicators": {
         "pente": 0.4402,
         "rugosite": 0.2004,
@@ -213,12 +297,7 @@
       },
       "processes": "Shield volcano with double caldera, complex braided lava tube networks in phonolitic-trachytic rocks.",
       "local_data": "Speleological survey literature and satellite terrain models.",
-      "bbox": [
-        36.25,
-        -1.27,
-        36.45,
-        -1.07
-      ]
+      "lead_collector": "Diego"
     },
     {
       "id": "hawaii",
@@ -226,6 +305,12 @@
       "role": "known_analog",
       "lat": 19.43,
       "lon": -155.3,
+      "bbox": [
+        -155.4,
+        19.33,
+        -155.2,
+        19.53
+      ],
       "indicators": {
         "pente": 0.0359,
         "rugosite": 0.0,
@@ -283,12 +368,7 @@
       },
       "processes": "Active tholeiitic shield basalt, extensive pahoehoe flow fields, active and relict lava tubes, NASA analog test site.",
       "local_data": "USGS Hawaiian Volcano Observatory geological maps and high-res DEMs.",
-      "bbox": [
-        -155.4,
-        19.33,
-        -155.2,
-        19.53
-      ]
+      "lead_collector": "Diego"
     },
     {
       "id": "lanzarote",
@@ -296,6 +376,12 @@
       "role": "known_analog",
       "lat": 29.0,
       "lon": -13.75,
+      "bbox": [
+        -13.85,
+        28.93,
+        -13.65,
+        29.07
+      ],
       "indicators": {
         "pente": 0.4419,
         "rugosite": 0.3079,
@@ -356,12 +442,7 @@
       },
       "processes": "Historical basaltic fissure eruptions (1730-1736), pristine volcanic terrain, ESA PANGAEA astronaut training site.",
       "local_data": "Simplified geological map of Lanzarote (ResearchGate) and CHELSA / Meteostat climate records.",
-      "bbox": [
-        -13.85,
-        28.93,
-        -13.65,
-        29.07
-      ]
+      "lead_collector": "Bosworth"
     },
     {
       "id": "lava_beds",
@@ -369,6 +450,12 @@
       "role": "known_analog",
       "lat": 41.709999999999994,
       "lon": -121.5,
+      "bbox": [
+        -121.6,
+        41.62,
+        -121.4,
+        41.8
+      ],
       "indicators": {
         "pente": 0.3186,
         "rugosite": 0.1686,
@@ -429,12 +516,7 @@
       },
       "processes": "Medicine Lake basaltic shield volcano, highest concentration of accessible lava tube caves in North America.",
       "local_data": "NPS Geodiversity Atlas geological map and USGS 3DEP elevation products.",
-      "bbox": [
-        -121.6,
-        41.62,
-        -121.4,
-        41.8
-      ]
+      "lead_collector": "Bosworth"
     },
     {
       "id": "atacama",
@@ -442,6 +524,12 @@
       "role": "cross_validation",
       "lat": -24.1,
       "lon": -70.0,
+      "bbox": [
+        -70.1,
+        -24.2,
+        -69.9,
+        -24.0
+      ],
       "indicators": {
         "pente": 0.3003,
         "rugosite": 0.293,
@@ -502,12 +590,7 @@
       },
       "processes": "Extreme hyper-aridity, high solar radiation, duricrusts, severe lack of vegetation; Mars analog control.",
       "local_data": "Regional geological and meteorological observatory data.",
-      "bbox": [
-        -70.1,
-        -24.2,
-        -69.9,
-        -24.0
-      ]
+      "lead_collector": "Nicolas"
     },
     {
       "id": "vallee_mort",
@@ -515,6 +598,12 @@
       "role": "cross_validation",
       "lat": 36.45,
       "lon": -116.87,
+      "bbox": [
+        -116.97,
+        36.35,
+        -116.77,
+        36.55
+      ],
       "indicators": {
         "pente": 0.6672,
         "rugosite": 0.1827,
@@ -577,12 +666,7 @@
       },
       "processes": "Extensional tectonic basin, alluvial fans, salt flats, extreme thermal amplitude and aridity.",
       "local_data": "USGS geological maps and weather station series.",
-      "bbox": [
-        -116.97,
-        36.35,
-        -116.77,
-        36.55
-      ]
+      "lead_collector": "Diego"
     },
     {
       "id": "foret_congo",
@@ -590,6 +674,12 @@
       "role": "negative_control",
       "lat": 0.0,
       "lon": 22.0,
+      "bbox": [
+        21.9,
+        -0.1,
+        22.1,
+        0.1
+      ],
       "indicators": {
         "pente": 0.0,
         "rugosite": 0.0127,
@@ -647,82 +737,82 @@
       },
       "processes": "Dense equatorial canopy, high annual rainfall (>1800 mm), deep organic soils, total lack of planetary analog fidelity.",
       "local_data": "NASA/Copernicus global datasets for negative control verification.",
-      "bbox": [
-        21.9,
-        -0.1,
-        22.1,
-        0.1
-      ]
+      "lead_collector": "Bosworth"
     }
   ],
   "validation": {
     "expectations": {
-      "top_k": 4,
+      "top_k": 5,
       "known_analogs": {
         "hawaii": {
-          "rank": 7,
+          "rank": 8,
           "in_top": false
         },
         "lanzarote": {
-          "rank": 2,
+          "rank": 3,
           "in_top": true
         },
         "lava_beds": {
-          "rank": 5,
+          "rank": 6,
           "in_top": false
         }
       },
-      "negative_control_rank": 9,
+      "negative_control_rank": 10,
       "negative_control_last": true,
       "passed": false
     },
     "sensitivity": {
-      "spearman_mean": 0.9699999999999998,
+      "spearman_mean": 0.9768727272727273,
       "per_site": {
         "virunga": {
-          "rank_base": 8,
-          "rank_min": 5,
-          "rank_max": 8
-        },
-        "harrat_khaybar": {
-          "rank_base": 4,
-          "rank_min": 4,
-          "rank_max": 7
-        },
-        "suswa": {
-          "rank_base": 6,
-          "rank_min": 3,
-          "rank_max": 7
-        },
-        "hawaii": {
-          "rank_base": 7,
+          "rank_base": 9,
           "rank_min": 6,
-          "rank_max": 8
+          "rank_max": 9
         },
-        "lanzarote": {
-          "rank_base": 2,
-          "rank_min": 2,
-          "rank_max": 2
-        },
-        "lava_beds": {
-          "rank_base": 5,
-          "rank_min": 5,
-          "rank_max": 6
-        },
-        "atacama": {
-          "rank_base": 3,
-          "rank_min": 3,
-          "rank_max": 4
-        },
-        "vallee_mort": {
+        "tibesti": {
           "rank_base": 1,
           "rank_min": 1,
-          "rank_max": 1
+          "rank_max": 2
+        },
+        "harrat_khaybar": {
+          "rank_base": 5,
+          "rank_min": 5,
+          "rank_max": 8
+        },
+        "suswa": {
+          "rank_base": 7,
+          "rank_min": 4,
+          "rank_max": 8
+        },
+        "hawaii": {
+          "rank_base": 8,
+          "rank_min": 7,
+          "rank_max": 9
+        },
+        "lanzarote": {
+          "rank_base": 3,
+          "rank_min": 3,
+          "rank_max": 3
+        },
+        "lava_beds": {
+          "rank_base": 6,
+          "rank_min": 6,
+          "rank_max": 7
+        },
+        "atacama": {
+          "rank_base": 4,
+          "rank_min": 4,
+          "rank_max": 5
+        },
+        "vallee_mort": {
+          "rank_base": 2,
+          "rank_min": 1,
+          "rank_max": 2
         },
         "foret_congo": {
-          "rank_base": 9,
-          "rank_min": 9,
-          "rank_max": 9
+          "rank_base": 10,
+          "rank_min": 10,
+          "rank_max": 10
         }
       }
     }

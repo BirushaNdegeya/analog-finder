@@ -18,6 +18,14 @@ sites:
     processes: "Active alkaline volcanism, fresh basaltic lava flows, collapse pits, Nyamuragira lava tubes."
     local_data: "Field observations and ground truth by GeoCongo AI team (lava field mapping, collapse depressions)."
 
+  - id: tibesti
+    name: "Tibesti Volcanic Province (Chad)"
+    role: case_study
+    bbox: [16.275, 20.745, 16.912, 21.240]
+    lead_collector: "Gérard"
+    processes: "Saharan intraplate volcanism, Tarso Tousside black basaltic lava flows, giant Trou au Natron collapse caldera (8 km wide, 1000 m deep), hyper-arid aeolian erosion."
+    local_data: "Ground truth geological surveys, Copernicus DEM elevation, and Sentinel-2 multispectral satellite telemetry."
+
   - id: harrat_khaybar
     name: "Harrat Khaybar (Saudi Arabia)"
     role: candidate_lesser_known

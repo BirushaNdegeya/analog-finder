@@ -1290,7 +1290,10 @@ if "Earth Analog" in app_mode:
 
         with c2:
             st.markdown(f"### {s['name']}")
-            st.caption(f"Role: **{s['role']}**")
+            role_caption = f"Role: **{s['role']}**"
+            if s.get("lead_collector"):
+                role_caption += f" · Lead Collector: **{s['lead_collector']}**"
+            st.caption(role_caption)
             st.write(s["explanation"])
             st.write(f"**Data Confidence:** {s['confidence']:.0%} of indicators computed.")
             if s.get("processes"):

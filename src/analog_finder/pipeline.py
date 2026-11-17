@@ -240,6 +240,7 @@ def run(synthetic: bool) -> dict:
             "validity": S.validity_card(crit),
             "processes": meta[sid].get("processes"),
             "local_data": meta[sid].get("local_data"),
+            "lead_collector": meta[sid].get("lead_collector"),
         })
 
     # Validation
