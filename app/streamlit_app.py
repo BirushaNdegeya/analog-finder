@@ -1389,18 +1389,20 @@ if "Earth Analog" in app_mode:
             )
             target_key = "marius_hills" if "Marius" in target_opt else "jezero_crater"
 
+        candidate_options = [
+            "Custom Coordinates (Enter Bounding Box below)",
+            "Mount Etna, Italy (Active basaltic stratovolcano)",
+            "Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)",
+            "Piton de la Fournaise, Reunion (Basaltic shield caldera)",
+            "Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)",
+            "Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)",
+            "Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)",
+        ]
         with col_t2:
             preset_choice = st.selectbox(
                 "2. Choose Terrestrial Candidate Preset or Custom:",
-                [
-                    "Custom Coordinates (Enter Bounding Box below)",
-                    "Mount Etna, Italy (Active basaltic stratovolcano)",
-                    "Ol Doinyo Lengai, Tanzania (Unique natrocarbonatite volcanism)",
-                    "Piton de la Fournaise, Reunion (Basaltic shield caldera)",
-                    "Kilauea Caldera, Hawaii (Tholeiitic basalt & lava tubes)",
-                    "Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)",
-                    "Nyamuragira Volcano, DR Congo (Fresh basalt flows & lava tubes)",
-                ],
+                candidate_options,
+                index=candidate_options.index("Erg Chebbi, Morocco (Grand sand dunes & aeolian analog)"),
             )
 
         # Extraterrestrial Target Visual Banner (dynamically adapts to chosen Moon or Mars target)
