@@ -170,10 +170,13 @@ Developed by **GeoCongo AI** for the **NASA Space Apps Challenge 2026**.
 
 | Member | Role |
 |---|---|
-| **Gérard** | Lead Planetary Data Curator · Field Collector (Tibesti, Chad) · Planetary targets (Marius Hills / Moon, Jezero Crater / Mars) |
+| **Gérard** | Lead Backend Developer and Planetary Data Curator · Field Collector (Tibesti, Chad) · Planetary targets (Marius Hills / Moon, Jezero Crater / Mars) |
 | **Nicolas** | Lead Field Collector · Virunga Volcanic Province (DR Congo) · Harrat Khaybar (Saudi Arabia) · Atacama Desert |
 | **Diego** | Lead Field Collector · Suswa Caldera (Kenya) · Hawaii (Kilauea) · Death Valley |
 | **Bosworth** | Lead Data Collector · Lanzarote Timanfaya · Lava Beds National Monument · Negative control (Congo Rainforest) |
+| **Birusha** | Lead Frontend Developer and UI/UX designer |
+| **Remy** | Storyteller and Graphic Designer |
+
 
 ## Citation
 
